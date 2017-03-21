@@ -4,6 +4,9 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,26 +26,17 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        final EditText edUsername = (EditText)findViewById(R.id.txtUser);
-        final EditText edPassword = (EditText)findViewById(R.id.txtPassword);
+        final EditText edtxtMemeurLog = (EditText)findViewById(R.id.txtEmailLogin);
+        final EditText edtxtMoteDePasseLog = (EditText)findViewById(R.id.txtMDPLogin);
         final Button btnLogin = (Button)findViewById(R.id.btnLogin);
-        final TextView registrerLink = (TextView)findViewById(R.id.tvRegistrer);
-
-        registrerLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-                LoginActivity.this.startActivity(registerIntent);
-            }
-        });
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String username = edUsername.getText().toString();
-                final String password = edPassword.getText().toString();
+                final String memeurLog = edtxtMemeurLog.getText().toString();
+                final String motDePasseLog = edtxtMoteDePasseLog.getText().toString();
 
-                // Response received from the server
+                // Response est qu'ont recoit les données du serveur
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -51,18 +45,17 @@ public class LoginActivity extends AppCompatActivity {
                             boolean success = jsonResponse.getBoolean("success");
 
                             if (success) {
-                                String name = jsonResponse.getString("name");
-                                int age = jsonResponse.getInt("age");
+                                String memeur = jsonResponse.getString("memeur");
+                                String date = jsonResponse.getString("date");
 
                                 Intent intent = new Intent(LoginActivity.this, User_Area_Activity.class);
-                                intent.putExtra("name", name);
-                                intent.putExtra("age", age);
-                                intent.putExtra("username", username);
+                                intent.putExtra("memeur", memeur);
+                                intent.putExtra("date", date);
                                 LoginActivity.this.startActivity(intent);
                             } else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                                builder.setMessage("Login Failed")
-                                        .setNegativeButton("Retry", null)
+                                builder.setMessage("Le nom d'Utilisateur ou le mot de passe entré ne correspond à aucun compte.")
+                                        .setNegativeButton("Recommencer", null)
                                         .create()
                                         .show();
                             }
@@ -73,10 +66,30 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 };
 
-                LoginRequest loginRequest = new LoginRequest(username, password, responseListener);
+                LoginRequest loginRequest = new LoginRequest(memeurLog, motDePasseLog, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
                 queue.add(loginRequest);
             }
         });
+    }
+
+    @Override
+    public  boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.backarrow, menu);
+        return true;
+    }
+
+    @Override
+    public  boolean onOptionsItemSelected(MenuItem item){
+        //Handle item selection
+        switch (item.getItemId()){
+            case R.id.backarrowicon:
+                Intent intent = new Intent(this, HomePage.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

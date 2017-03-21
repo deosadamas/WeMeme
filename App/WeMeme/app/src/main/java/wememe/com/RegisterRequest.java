@@ -12,16 +12,16 @@ import java.util.Map;
 
 public class RegisterRequest extends StringRequest {
 
-    private static final String REGISTER_REQUEST_URL = "http://consummative-litres.000webhostapp.com/Register.php";
+    private static final String REGISTER_REQUEST_URL = "http://consummative-litres.000webhostapp.com/register.php";
     private Map<String, String> params;
 
-    public RegisterRequest(String name, String username, String password, int age, Response.Listener<String> listener) {
+    public RegisterRequest(String pEmailSign, String pMeneurSign, String pMotDePasseSign, String pDateSign, Response.Listener<String> listener) {
         super(Method.POST, REGISTER_REQUEST_URL, listener, null);
         params = new HashMap<>();
-        params.put("name", name);
-        params.put("username", username);
-        params.put("password", password);
-        params.put("age", age + "");
+        params.put("email", pEmailSign);
+        params.put("memeur", pMeneurSign);
+        params.put("password", pMotDePasseSign);
+        params.put("date", pDateSign);
     }
 
     @Override
