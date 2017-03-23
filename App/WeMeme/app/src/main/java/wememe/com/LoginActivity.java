@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,6 +32,22 @@ public class LoginActivity extends AppCompatActivity {
         final EditText edtxtMoteDePasseLog = (EditText)findViewById(R.id.txtMDPLogin);
         final Button btnLogin = (Button)findViewById(R.id.btnLogin);
         final TextView inscriptionLink = (TextView)findViewById(R.id.txtViewInscription);
+
+        edtxtMemeurLog.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                edtxtMemeurLog.setCompoundDrawablesWithIntrinsicBounds(R.drawable.username_over,0,0,0);
+                edtxtMoteDePasseLog.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
+            }
+        });
+
+        edtxtMoteDePasseLog.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                edtxtMoteDePasseLog.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock_over,0,0,0);
+                edtxtMemeurLog.setCompoundDrawablesWithIntrinsicBounds(R.drawable.username,0,0,0);
+            }
+        });
 
         inscriptionLink.setOnClickListener(new View.OnClickListener(){
             @Override
