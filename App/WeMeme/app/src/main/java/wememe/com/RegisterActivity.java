@@ -91,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
         //Handle item selection
         switch (item.getItemId()){
             case R.id.backarrowicon:
-                Intent intent = new Intent(this, HomePage.class);
+                Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 return true;
             default:

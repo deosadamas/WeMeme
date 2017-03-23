@@ -29,6 +29,15 @@ public class LoginActivity extends AppCompatActivity {
         final EditText edtxtMemeurLog = (EditText)findViewById(R.id.txtEmailLogin);
         final EditText edtxtMoteDePasseLog = (EditText)findViewById(R.id.txtMDPLogin);
         final Button btnLogin = (Button)findViewById(R.id.btnLogin);
+        final TextView inscriptionLink = (TextView)findViewById(R.id.txtViewInscription);
+
+        inscriptionLink.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent registrerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+                LoginActivity.this.startActivity(registrerIntent);
+            }
+        });
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,25 +80,5 @@ public class LoginActivity extends AppCompatActivity {
                 queue.add(loginRequest);
             }
         });
-    }
-
-    @Override
-    public  boolean onCreateOptionsMenu(Menu menu){
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.backarrow, menu);
-        return true;
-    }
-
-    @Override
-    public  boolean onOptionsItemSelected(MenuItem item){
-        //Handle item selection
-        switch (item.getItemId()){
-            case R.id.backarrowicon:
-                Intent intent = new Intent(this, HomePage.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 }
