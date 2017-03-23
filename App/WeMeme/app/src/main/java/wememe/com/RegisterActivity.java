@@ -35,8 +35,49 @@ public class RegisterActivity extends AppCompatActivity {
         final EditText edtxtEmailSign = (EditText) findViewById(R.id.txtEmailSign);
         final EditText edtxtMemeurSign = (EditText) findViewById(R.id.txtMemeurSign);
         final EditText edtxtMotDePasseSign = (EditText) findViewById(R.id.txtMDPSign);
+        final EditText edtxtMotDePasseSame = (EditText) findViewById(R.id.txtMDPCSign);
         final EditText edtxtDateSign = (EditText) findViewById(R.id.txtDateSign);
         final Button btnSign = (Button) findViewById(R.id.btnSign);
+
+        edtxtEmailSign.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                edtxtEmailSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.username_over,0,0,0);
+                edtxtEmailSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
+            }
+        });
+        edtxtMemeurSign.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                edtxtMemeurSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.username_over,0,0,0);
+                edtxtMemeurSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
+            }
+        });
+        edtxtMotDePasseSign.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                edtxtMotDePasseSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.username_over,0,0,0);
+                edtxtMotDePasseSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
+            }
+        });
+        edtxtMotDePasseSign.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                edtxtMotDePasseSame.setCompoundDrawablesWithIntrinsicBounds(R.drawable.username_over,0,0,0);
+                edtxtMotDePasseSame.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
+            }
+        });
+        edtxtDateSign.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                edtxtDateSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.username_over,0,0,0);
+                edtxtDateSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
+            }
+        });
+
+
+
+
 
         btnSign.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +86,7 @@ public class RegisterActivity extends AppCompatActivity {
                 final String emailSign = edtxtEmailSign.getText().toString();
                 final String memeurSign = edtxtMemeurSign.getText().toString();
                 final String motDePasseSign = edtxtMotDePasseSign.getText().toString();
+                final String motDePasseSame = edtxtMotDePasseSame.getText().toString();
                 final String dateSign = edtxtDateSign.getText().toString();
 
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -70,7 +112,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 };
 
-                if(isValid(dateSign)) {
+                if(isValid(dateSign) && isValidPassWord(motDePasseSign, motDePasseSame)) {
                     RegisterRequest registerRequest = new RegisterRequest(emailSign, memeurSign, motDePasseSign, dateSign, responseListener);
                     RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
                     queue.add(registerRequest);
@@ -100,15 +142,31 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public boolean isValid(String date) {
-        if (date.matches("^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.)(?:0?[1,3-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(\\/|-|\\.)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\\d|2[0-8])(\\/|-|\\.)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$")) {
+        if (date.matches("^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.)(?:0?[1,3-9]|1[0-2])\\2))" +
+                "(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(\\/|-|\\.)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))" +
+                "$|^(?:0?[1-9]|1\\d|2[0-8])(\\/|-|\\.)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$")) {
             return true;
-        } else {
+        }
+        else {
             AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
             builder.setMessage("Le format de date est invalide \nDD/MM/YYYY\nDD-MM-YYYY\nDD.MM.YYYY")
-                    .setNegativeButton("Retry", null)
+                    .setNegativeButton("Recommencer", null)
                     .create()
                     .show();
             return false;
+        }
+    }
+    public boolean isValidPassWord(String p1, String p2){
+        if(p1.equals(p2)){
+            return true;
+        }
+        else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+            builder.setMessage("Le Mot de passe n'est pas identique")
+                    .setNegativeButton("Recommencer", null)
+                    .create()
+                    .show();
+            return  false;
         }
     }
 }

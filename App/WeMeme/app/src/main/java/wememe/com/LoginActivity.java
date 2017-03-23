@@ -33,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
         final Button btnLogin = (Button)findViewById(R.id.btnLogin);
         final TextView inscriptionLink = (TextView)findViewById(R.id.txtViewInscription);
 
+
+        //COMENTAIRE https://material.io/icons/ IMPORTANT ICON !!!!!!!!!
         edtxtMemeurLog.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
