@@ -96,13 +96,23 @@ public class RegisterActivity extends AppCompatActivity {
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
-                            if (success) {
+                            boolean equal = jsonResponse.getBoolean("equal");
+                            if(!equal){
+                                if (success) {
                                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                     RegisterActivity.this.startActivity(intent);
-                            } else {
+                                } else {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                                    builder.setMessage("Register Failed")
+                                            .setNegativeButton("Retry", null)
+                                            .create()
+                                            .show();
+                                }
+                            }
+                            else{
                                 AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                                builder.setMessage("Register Failed")
-                                        .setNegativeButton("Retry", null)
+                                builder.setMessage("Le email est déja utiliser")
+                                        .setNegativeButton("Recommencer", null)
                                         .create()
                                         .show();
                             }
@@ -115,7 +125,10 @@ public class RegisterActivity extends AppCompatActivity {
                 if(isValid(dateSign) && isValidPassWord(motDePasseSign, motDePasseSame)) {
                     RegisterRequest registerRequest = new RegisterRequest(emailSign, memeurSign, motDePasseSign, dateSign, responseListener);
                     RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
+
+                    EmailRequest emailRequest = new EmailRequest(emailSign, responseListener);
                     queue.add(registerRequest);
+                    queue.add(emailRequest);
                 }
             }
         });

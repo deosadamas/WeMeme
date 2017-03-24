@@ -28,11 +28,6 @@ public class RegisterRequest extends StringRequest {
     public Map<String, String> getParams() {
         return params;
     }
-
-
-
-
-
 }
 
 
