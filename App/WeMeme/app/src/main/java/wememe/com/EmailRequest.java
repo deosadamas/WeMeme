@@ -12,11 +12,11 @@ import java.util.Map;
 
 public class EmailRequest  extends StringRequest {
 
-    private static final String LOGIN_REQUEST_URL = "http://consummative-litres.000webhostapp.com/emailVerification.php";
+    private static final String Email_REQUEST_URL = "http://consummative-litres.000webhostapp.com/emailVerification.php";
     private Map<String, String> params;
 
     public EmailRequest(String pEmail, Response.Listener<String> listener) {
-        super(Method.POST, LOGIN_REQUEST_URL, listener, null);
+        super(Method.POST, Email_REQUEST_URL, listener, null);
         params = new HashMap<>();
         params.put("email", pEmail);
     }

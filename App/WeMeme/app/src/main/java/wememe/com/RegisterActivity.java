@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -19,12 +18,10 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class RegisterActivity extends AppCompatActivity {
 
+    public boolean boolemail = false;
+//    public boolean boolmemeur = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,39 +39,49 @@ public class RegisterActivity extends AppCompatActivity {
         edtxtEmailSign.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                edtxtEmailSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.username_over,0,0,0);
-                edtxtEmailSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
+                edtxtEmailSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_email_over,0,0,0);
+                edtxtMemeurSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_memeur,0,0,0);
+                edtxtDateSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_datecalender,0,0,0);
             }
         });
         edtxtMemeurSign.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                edtxtMemeurSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.username_over,0,0,0);
-                edtxtMemeurSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
+                edtxtEmailSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_email,0,0,0);
+                edtxtMemeurSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_memeur_over,0,0,0);
+                edtxtDateSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_datecalender,0,0,0);
             }
         });
         edtxtMotDePasseSign.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                edtxtMotDePasseSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.username_over,0,0,0);
-                edtxtMotDePasseSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
-            }
-        });
-        edtxtMotDePasseSign.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                edtxtMotDePasseSame.setCompoundDrawablesWithIntrinsicBounds(R.drawable.username_over,0,0,0);
+                edtxtEmailSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_email,0,0,0);
+                edtxtMemeurSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_memeur,0,0,0);
+                edtxtMotDePasseSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock_over,0,0,0);
                 edtxtMotDePasseSame.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
+                edtxtDateSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_datecalender,0,0,0);
+            }
+        });
+        edtxtMotDePasseSame.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                edtxtEmailSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_email,0,0,0);
+                edtxtMemeurSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_memeur,0,0,0);
+                edtxtMotDePasseSame.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock_over,0,0,0);
+                edtxtMotDePasseSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
+                edtxtDateSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_datecalender,0,0,0);
             }
         });
         edtxtDateSign.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                edtxtDateSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.username_over,0,0,0);
-                edtxtDateSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
+                edtxtEmailSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_email,0,0,0);
+                edtxtMemeurSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_memeur,0,0,0);
+                edtxtMotDePasseSame.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
+                edtxtMotDePasseSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
+                edtxtDateSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_datecalender_over,0,0,0);
             }
         });
-
 
 
 
@@ -82,12 +89,35 @@ public class RegisterActivity extends AppCompatActivity {
         btnSign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             //   final String im = edNom.getText().toString();
                 final String emailSign = edtxtEmailSign.getText().toString();
                 final String memeurSign = edtxtMemeurSign.getText().toString();
                 final String motDePasseSign = edtxtMotDePasseSign.getText().toString();
                 final String motDePasseSame = edtxtMotDePasseSame.getText().toString();
                 final String dateSign = edtxtDateSign.getText().toString();
+
+                Response.Listener<String> responseListenerEmail = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getBoolean("success");
+                            if(!success){
+                                boolemail = true;
+                            }
+                            else{
+                                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                                builder.setMessage("Le email est déja utiliser")
+                                        .setNegativeButton("Recommencer", null)
+                                        .create()
+                                        .show();
+                                boolemail = false;
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+
 
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
 
@@ -96,39 +126,58 @@ public class RegisterActivity extends AppCompatActivity {
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
-                            boolean equal = jsonResponse.getBoolean("equal");
-                            if(!equal){
-                                if (success) {
-                                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                    RegisterActivity.this.startActivity(intent);
-                                } else {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                                    builder.setMessage("Register Failed")
-                                            .setNegativeButton("Retry", null)
-                                            .create()
-                                            .show();
+                            if(boolemail){
+                                    if (success) {
+                                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                        RegisterActivity.this.startActivity(intent);
+                                    } else {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                                        builder.setMessage("Register Failed")
+                                                .setNegativeButton("Retry", null)
+                                                .create()
+                                                .show();
+                                    }
                                 }
-                            }
-                            else{
-                                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                                builder.setMessage("Le email est déja utiliser")
-                                        .setNegativeButton("Recommencer", null)
-                                        .create()
-                                        .show();
-                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 };
 
+                /*
+                Response.Listener<String> responseListenerMemeur = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            if(boolemail){
+                                JSONObject jsonResponse = new JSONObject(response);
+                                boolean equal = jsonResponse.getBoolean("equal");
+                                if(!equal){
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                                    builder.setMessage("Le nom de memeur est déja utiliser")
+                                            .setNegativeButton("Recommencer", null)
+                                            .create()
+                                            .show();
+                                    boolmemeur = false;
+                                }
+                                else{
+                                    boolmemeur = true;
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+*/
                 if(isValid(dateSign) && isValidPassWord(motDePasseSign, motDePasseSame)) {
-                    RegisterRequest registerRequest = new RegisterRequest(emailSign, memeurSign, motDePasseSign, dateSign, responseListener);
+                    EmailRequest emailRequest = new EmailRequest(emailSign, responseListenerEmail);
+//                    MemeurRequest registerMemeur= new MemeurRequest(memeurSign, responseListenerMemeur);
+                   RegisterRequest registerRequest = new RegisterRequest(emailSign, memeurSign, motDePasseSign, dateSign, responseListener);
                     RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
-
-                    EmailRequest emailRequest = new EmailRequest(emailSign, responseListener);
-                    queue.add(registerRequest);
                     queue.add(emailRequest);
+//                    queue.add(registerMemeur);
+                   queue.add(registerRequest);
                 }
             }
         });
@@ -153,6 +202,7 @@ public class RegisterActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     public boolean isValid(String date) {
         if (date.matches("^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.)(?:0?[1,3-9]|1[0-2])\\2))" +

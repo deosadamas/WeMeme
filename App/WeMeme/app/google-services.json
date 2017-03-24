@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "12401939041",
+    "firebase_url": "https://wememe-175da.firebaseio.com",
+    "project_id": "wememe-175da",
+    "storage_bucket": "wememe-175da.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:12401939041:android:215361e9a6b6409f",
+        "android_client_info": {
+          "package_name": "com.weinnovate.wememe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "12401939041-gm2fc1l2a3tuumdrtdtoqt53m1ko0ejn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClWxTouNeia-VYFabSITaLpBx7bM2dAkQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:12401939041:android:76c0a3e55cf0ad85",
+        "android_client_info": {
+          "package_name": "wememe.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "12401939041-gm2fc1l2a3tuumdrtdtoqt53m1ko0ejn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClWxTouNeia-VYFabSITaLpBx7bM2dAkQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
