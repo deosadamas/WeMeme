@@ -101,4 +101,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void Test(View view) {
+
+        Intent intent = new Intent(LoginActivity.this, NewsFeed.class);
+
+        LoginActivity.this.startActivity(intent);
+
+    }
 }
