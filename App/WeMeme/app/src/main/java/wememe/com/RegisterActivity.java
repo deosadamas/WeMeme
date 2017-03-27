@@ -110,6 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         .setNegativeButton("Recommencer", null)
                                         .create()
                                         .show();
+                                edtxtEmailSign.setText("");
                                 boolemail = false;
                             }
                         } catch (JSONException e) {
@@ -133,6 +134,7 @@ public class RegisterActivity extends AppCompatActivity {
                                             .setNegativeButton("Recommencer", null)
                                             .create()
                                             .show();
+                                    edtxtMemeurSign.setText("");
                                     boolmemeur = false;
                                 }
                         } catch (JSONException e) {
@@ -149,16 +151,8 @@ public class RegisterActivity extends AppCompatActivity {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
                                     if (success) {
-                                        if(boolemail)
-                                        {
-                                            if(boolmemeur)
-                                            {
                                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                                 RegisterActivity.this.startActivity(intent);
-                                                boolmemeur = false;
-                                                boolemail = false;
-                                            }
-                                        }
                                     }
                                 } catch (JSONException e) {
                             e.printStackTrace();
@@ -166,14 +160,21 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 };
 
-                if(isValid(dateSign) && isValidPassWord(motDePasseSign, motDePasseSame)) {
+                if(isValid(dateSign) && isValidPassWord(motDePasseSign, motDePasseSame))
+                {
                     EmailRequest emailRequest = new EmailRequest(emailSign, responseListenerEmail);
                     MemeurRequest registerMemeur= new MemeurRequest(memeurSign, responseListenerMemeur);
-                   RegisterRequest registerRequest = new RegisterRequest(emailSign, memeurSign, motDePasseSign, dateSign, responseListener);
+
                     RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
                     queue.add(emailRequest);
                     queue.add(registerMemeur);
-                    queue.add(registerRequest);
+
+                    if(boolemail && boolmemeur){
+                        RegisterRequest registerRequest = new RegisterRequest(emailSign, memeurSign, motDePasseSign, dateSign, responseListener);
+                        queue.add(registerRequest);
+                        boolemail = false;
+                        boolmemeur = false;
+                    }
                 }
             }
         });

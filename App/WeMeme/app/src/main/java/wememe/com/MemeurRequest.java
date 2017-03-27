@@ -12,11 +12,11 @@ import java.util.Map;
 
 public class MemeurRequest extends StringRequest {
 
-    private static final String LOGIN_REQUEST_URL = "http://consummative-litres.000webhostapp.com/memeurVerification.php";
+    private static final String Memeur_REQUEST_URL = "http://consummative-litres.000webhostapp.com/memeurVerification.php";
     private Map<String, String> params;
 
     public MemeurRequest(String pmemeur, Response.Listener<String> listener) {
-        super(Method.POST, LOGIN_REQUEST_URL, listener, null);
+        super(Method.POST, Memeur_REQUEST_URL, listener, null);
         params = new HashMap<>();
         params.put("memeur", pmemeur);
     }
