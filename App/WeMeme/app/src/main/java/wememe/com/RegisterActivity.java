@@ -20,8 +20,8 @@ import org.json.JSONObject;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    public boolean boolemail = false;
-    public boolean boolmemeur = false;
+    public boolean boolemail;
+    public boolean boolmemeur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +94,11 @@ public class RegisterActivity extends AppCompatActivity {
                 final String motDePasseSign = edtxtMotDePasseSign.getText().toString();
                 final String motDePasseSame = edtxtMotDePasseSame.getText().toString();
                 final String dateSign = edtxtDateSign.getText().toString();
+                edtxtEmailSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_email,0,0,0);
+                edtxtMemeurSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_memeur,0,0,0);
+                edtxtMotDePasseSame.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
+                edtxtMotDePasseSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
+                edtxtDateSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_datecalender,0,0,0);
 
                 Response.Listener<String> responseListenerEmail = new Response.Listener<String>() {
                     @Override
@@ -106,12 +111,11 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                             else{
                                 AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                                builder.setMessage("Le email est déja utiliser")
+                                builder.setMessage("Le email est déjà utilisé")
                                         .setNegativeButton("Recommencer", null)
                                         .create()
                                         .show();
                                 edtxtEmailSign.setText("");
-                                boolemail = false;
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -128,14 +132,13 @@ public class RegisterActivity extends AppCompatActivity {
                                 if(!equal){
                                     boolmemeur = true;
                                 }
-                                else{
+                                else if(boolemail){
                                     AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                                    builder.setMessage("Le nom de memeur est déja utiliser")
+                                    builder.setMessage("Le nom de memeur est déjà utilisé")
                                             .setNegativeButton("Recommencer", null)
                                             .create()
                                             .show();
                                     edtxtMemeurSign.setText("");
-                                    boolmemeur = false;
                                 }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -168,7 +171,6 @@ public class RegisterActivity extends AppCompatActivity {
                     RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
                     queue.add(emailRequest);
                     queue.add(registerMemeur);
-
                     if(boolemail && boolmemeur){
                         RegisterRequest registerRequest = new RegisterRequest(emailSign, memeurSign, motDePasseSign, dateSign, responseListener);
                         queue.add(registerRequest);
@@ -186,7 +188,6 @@ public class RegisterActivity extends AppCompatActivity {
         inflater.inflate(R.menu.backarrow, menu);
         return true;
     }
-
     @Override
     public  boolean onOptionsItemSelected(MenuItem item){
         //Handle item selection
@@ -199,8 +200,6 @@ public class RegisterActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
     public boolean isValid(String date) {
         if (date.matches("^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.)(?:0?[1,3-9]|1[0-2])\\2))" +
                 "(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(\\/|-|\\.)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))" +
@@ -229,4 +228,6 @@ public class RegisterActivity extends AppCompatActivity {
             return  false;
         }
     }
+
+
 }
