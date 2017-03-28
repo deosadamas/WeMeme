@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class RegisterRequest extends StringRequest {
 
-    private static final String REGISTER_REQUEST_URL = "http://consummative-litres.000webhostapp.com/register.php";
+    private static final String REGISTER_REQUEST_URL = "http://consummative-litres.000webhostapp.com/reg.php";
     private Map<String, String> params;
 
     public RegisterRequest(String pEmailSign, String pMeneurSign, String pMotDePasseSign, String pDateSign, Response.Listener<String> listener) {

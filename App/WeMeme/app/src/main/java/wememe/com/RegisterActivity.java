@@ -22,6 +22,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     public boolean boolemail;
     public boolean boolmemeur;
+    PasswordHash passwordHash = new PasswordHash();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,8 @@ public class RegisterActivity extends AppCompatActivity {
                 edtxtEmailSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_email_over,0,0,0);
                 edtxtMemeurSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_memeur,0,0,0);
                 edtxtDateSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_datecalender,0,0,0);
+                edtxtMotDePasseSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
+                edtxtMotDePasseSame.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
             }
         });
         edtxtMemeurSign.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -49,6 +52,8 @@ public class RegisterActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 edtxtEmailSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_email,0,0,0);
                 edtxtMemeurSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_memeur_over,0,0,0);
+                edtxtMotDePasseSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
+                edtxtMotDePasseSame.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
                 edtxtDateSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_datecalender,0,0,0);
             }
         });
@@ -100,64 +105,34 @@ public class RegisterActivity extends AppCompatActivity {
                 edtxtMotDePasseSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.lock,0,0,0);
                 edtxtDateSign.setCompoundDrawablesWithIntrinsicBounds(R.drawable.register_datecalender,0,0,0);
 
-                Response.Listener<String> responseListenerEmail = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getBoolean("success");
-                            if(!success){
-                                boolemail = true;
-                            }
-                            else{
-                                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                                builder.setMessage("Le email est déjà utilisé")
-                                        .setNegativeButton("Recommencer", null)
-                                        .create()
-                                        .show();
-                                edtxtEmailSign.setText("");
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-
-                Response.Listener<String> responseListenerMemeur = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                                JSONObject jsonResponse = new JSONObject(response);
-                                boolean equal = jsonResponse.getBoolean("success");
-                                if(!equal){
-                                    boolmemeur = true;
-                                }
-                                else if(boolemail){
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                                    builder.setMessage("Le nom de memeur est déjà utilisé")
-                                            .setNegativeButton("Recommencer", null)
-                                            .create()
-                                            .show();
-                                    edtxtMemeurSign.setText("");
-                                }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
 
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getBoolean("success");
-                                    if (success) {
-                                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                                RegisterActivity.this.startActivity(intent);
-                                    }
-                                } catch (JSONException e) {
+                            boolean suc = jsonResponse.getBoolean("success");
+                            if(!suc){
+                                JSONObject errors = jsonResponse.getJSONObject("0");
+                                if(errors.has("error_mail"))
+                                {
+                                   AlertDialog.Builder d = new AlertDialog.Builder(RegisterActivity.this);
+                                    d.setMessage("Le email est déjà utilisé")
+                                            .setNegativeButton("Recommencer", null)
+                                            .create()
+                                            .show();
+                                }else if(errors.has("error_memeur")){
+                                    AlertDialog.Builder d = new AlertDialog.Builder(RegisterActivity.this);
+                                    d.setMessage("Le nom de memeur est déjà utilisé")
+                                            .setNegativeButton("Recommencer", null)
+                                            .create()
+                                            .show();
+                                }
+                            } else {
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                RegisterActivity.this.startActivity(intent);
+                            }
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
@@ -165,18 +140,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if(isValid(dateSign) && isValidPassWord(motDePasseSign, motDePasseSame))
                 {
-                    EmailRequest emailRequest = new EmailRequest(emailSign, responseListenerEmail);
-                    MemeurRequest registerMemeur= new MemeurRequest(memeurSign, responseListenerMemeur);
-
                     RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
-                    queue.add(emailRequest);
-                    queue.add(registerMemeur);
-                    if(boolemail && boolmemeur){
-                        RegisterRequest registerRequest = new RegisterRequest(emailSign, memeurSign, motDePasseSign, dateSign, responseListener);
-                        queue.add(registerRequest);
-                        boolemail = false;
-                        boolmemeur = false;
-                    }
+                    RegisterRequest registerRequest = new RegisterRequest(emailSign, memeurSign, motDePasseSign, dateSign, responseListener);
+                    queue.add(registerRequest);
                 }
             }
         });
@@ -228,6 +194,4 @@ public class RegisterActivity extends AppCompatActivity {
             return  false;
         }
     }
-
-
 }

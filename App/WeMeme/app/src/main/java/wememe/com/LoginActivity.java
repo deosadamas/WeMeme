@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
 
+    PasswordHash passwordHash = new PasswordHash();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
