@@ -20,8 +20,6 @@ import org.json.JSONObject;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    public boolean boolemail;
-    public boolean boolmemeur;
     PasswordHash passwordHash = new PasswordHash();
 
     @Override
@@ -112,16 +110,16 @@ public class RegisterActivity extends AppCompatActivity {
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean suc = jsonResponse.getBoolean("success");
+
                             if(!suc){
-                                JSONObject errors = jsonResponse.getJSONObject("0");
-                                if(errors.has("error_mail"))
+                                if(jsonResponse.has("error_mail"))
                                 {
                                    AlertDialog.Builder d = new AlertDialog.Builder(RegisterActivity.this);
                                     d.setMessage("Le email est déjà utilisé")
                                             .setNegativeButton("Recommencer", null)
                                             .create()
                                             .show();
-                                }else if(errors.has("error_memeur")){
+                                }else if(jsonResponse.has("error_memeur")){
                                     AlertDialog.Builder d = new AlertDialog.Builder(RegisterActivity.this);
                                     d.setMessage("Le nom de memeur est déjà utilisé")
                                             .setNegativeButton("Recommencer", null)

@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class LoginRequest extends StringRequest {
 
-    private static final String LOGIN_REQUEST_URL = "http://consummative-litres.000webhostapp.com/log.php";
+    private static final String LOGIN_REQUEST_URL = "http://bronze4life.ca/login.php";
     private Map<String, String> params;
 
     public LoginRequest(String pMemeurLog, String pMotDePasseLog, Response.Listener<String> listener) {
