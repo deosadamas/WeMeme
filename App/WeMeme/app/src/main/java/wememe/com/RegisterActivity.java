@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -21,6 +22,7 @@ import org.json.JSONObject;
 public class RegisterActivity extends AppCompatActivity {
 
     PasswordHash passwordHash = new PasswordHash();
+    public boolean boolemail = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +129,7 @@ public class RegisterActivity extends AppCompatActivity {
                                             .show();
                                 }
                             } else {
+                                boolemail = true;
                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                 RegisterActivity.this.startActivity(intent);
                             }
@@ -136,10 +139,16 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 };
 
+
                 if(isValid(dateSign) && isValidPassWord(motDePasseSign, motDePasseSame))
                 {
                     RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
                     RegisterRequest registerRequest = new RegisterRequest(emailSign, memeurSign, motDePasseSign, dateSign, responseListener);
+                    if(boolemail)
+                    {
+                        EmailRequest emailRequest = new EmailRequest(emailSign, responseListener);
+                        queue.add(emailRequest);
+                    }
                     queue.add(registerRequest);
                 }
             }
