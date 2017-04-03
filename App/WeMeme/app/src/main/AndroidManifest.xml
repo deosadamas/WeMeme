@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="wememe.com.LruBitmapCache.AppController"
+        android:name=".LruBitmapCache.AppController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -21,7 +21,8 @@
         </activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".User_Area_Activity" />
-        <activity android:name=".NewsFeed"></activity>
+        <activity android:name=".NewsFeed" />
+        <activity android:name=".CodeActivity"></activity>
     </application>
 
 </manifest>

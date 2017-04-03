@@ -21,15 +21,15 @@ import org.json.JSONObject;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    PasswordHash passwordHash = new PasswordHash();
-    public boolean boolemail = false;
+
+    public boolean emailFirst = false;
+    public boolean emailrequest = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
-    //    final ImageButton imgIns = (ImageButton) findViewById(R.id.imgInsPro);
+        //    final ImageButton imgIns = (ImageButton) findViewById(R.id.imgInsPro);
         final EditText edtxtEmailSign = (EditText) findViewById(R.id.txtEmailSign);
         final EditText edtxtMemeurSign = (EditText) findViewById(R.id.txtMemeurSign);
         final EditText edtxtMotDePasseSign = (EditText) findViewById(R.id.txtMDPSign);
@@ -116,7 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
                             if(!suc){
                                 if(jsonResponse.has("error_mail"))
                                 {
-                                   AlertDialog.Builder d = new AlertDialog.Builder(RegisterActivity.this);
+                                    AlertDialog.Builder d = new AlertDialog.Builder(RegisterActivity.this);
                                     d.setMessage("Le email est déjà utilisé")
                                             .setNegativeButton("Recommencer", null)
                                             .create()
@@ -128,10 +128,13 @@ public class RegisterActivity extends AppCompatActivity {
                                             .create()
                                             .show();
                                 }
-                            } else {
-                                boolemail = true;
-                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                RegisterActivity.this.startActivity(intent);
+                            }
+                            else {
+                                Intent intent = new Intent(RegisterActivity.this, CodeActivity.class);
+                                intent.putExtra("email",emailSign);
+                                intent.putExtra("nom",memeurSign);
+                                startActivity(intent);
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -139,16 +142,9 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 };
 
-
-                if(isValid(dateSign) && isValidPassWord(motDePasseSign, motDePasseSame))
-                {
+                if(isValid(dateSign) && isValidPassWord(motDePasseSign, motDePasseSame)) {
                     RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
                     RegisterRequest registerRequest = new RegisterRequest(emailSign, memeurSign, motDePasseSign, dateSign, responseListener);
-                    if(boolemail)
-                    {
-                        EmailRequest emailRequest = new EmailRequest(emailSign, responseListener);
-                        queue.add(emailRequest);
-                    }
                     queue.add(registerRequest);
                 }
             }

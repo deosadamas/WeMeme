@@ -20,7 +20,7 @@ public class RegisterRequest extends StringRequest {
         super(Method.POST, REGISTER_REQUEST_URL, listener, null);
         params = new HashMap<>();
         params.put("email", pEmailSign);
-        params.put("memeur", pMeneurSign);
+        params.put("nom", pMeneurSign);
         params.put("password", pMotDePasseSign);
         params.put("date", pDateSign);
     }
