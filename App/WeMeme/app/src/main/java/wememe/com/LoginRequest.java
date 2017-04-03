@@ -10,13 +10,13 @@ import java.util.Map;
 
 public class LoginRequest extends StringRequest {
 
-    private static final String LOGIN_REQUEST_URL = "http://bronze4life.ca/login.php";
+    private static final String LOGIN_REQUEST_URL = "http://bronze4life.ca/mobile_app/index.php?prefix=json&p=login";
     private Map<String, String> params;
 
     public LoginRequest(String pMemeurLog, String pMotDePasseLog, Response.Listener<String> listener) {
         super(Method.POST, LOGIN_REQUEST_URL, listener, null);
         params = new HashMap<>();
-        params.put("memeur", pMemeurLog);
+        params.put("email", pMemeurLog);
         params.put("password", pMotDePasseLog);
     }
 

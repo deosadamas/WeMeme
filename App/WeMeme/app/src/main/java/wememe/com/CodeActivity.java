@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -18,6 +19,9 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CodeActivity extends AppCompatActivity {
     @Override
@@ -33,44 +37,19 @@ public class CodeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        Button btne = (Button)findViewById(R.id.btnen);
-        btne.setOnClickListener(new View.OnClickListener() {
+        Response.Listener listener = new Response.Listener() {
             @Override
-            public void onClick(View v) {
-                JSONObject obj = new JSONObject();
-                try {
-                    String email = data.get("email").toString();
-                    String memeur = data.get("nom").toString();
-                    obj.put("email", email);
-                    obj.put("nom", memeur);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            public void onResponse(Object response) {
 
-                RequestQueue mRequestQueue = Volley.newRequestQueue(getApplicationContext());
-                JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
-                        "http://bronze4life.ca/mobile_app/index.php?prefix=json&p=emailsend", obj, new
-                        Response.Listener<JSONObject>() {
-                            public void onResponse(JSONObject jsonResults) {
-                                AlertDialog.Builder d = new AlertDialog.Builder(CodeActivity.this);
-                                d.setMessage(jsonResults.toString())
-                                        .setNegativeButton("Recommencer", null)
-                                        .create()
-                                        .show();
-                            }
-                        }, new Response.ErrorListener(){
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                }
-                );
-
-                int socketTimeout = 30000;//30 seconds - change to what you want
-                RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                request.setRetryPolicy(policy);
-                mRequestQueue.add(request);
             }
-        });
+        };/*
+        String email = data.getString("email");
+        String nom = data.getString("nom");
+        RequestQueue queue = Volley.newRequestQueue(CodeActivity.this);
+        EmailRequest emailRequest = new EmailRequest(email, nom, listener);
+        int socketTimeout = 30000;//30 seconds - change to what you want
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        emailRequest.setRetryPolicy(policy);
+        queue.add(emailRequest);*/
     }
 }

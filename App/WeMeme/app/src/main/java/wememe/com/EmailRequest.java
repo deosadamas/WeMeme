@@ -12,11 +12,11 @@ import java.util.Map;
 
 public class EmailRequest extends StringRequest {
 
-    private static final String EMAIL_REQUEST_URL = "http://bronze4life.ca/mobile_app/index.php?prefix=json&p=email";
+    private static final String EMAIL_REQUEST_URL = "http://bronze4life.ca/mobile_app/index.php?prefix=json&p=emailsend";
     private Map<String, String> params;
 
-    public EmailRequest(String pEmailSign, String pnom) {
-        super(Method.POST, EMAIL_REQUEST_URL, null,  null);
+    public EmailRequest(String pEmailSign, String pnom, Response.Listener<String> listener) {
+        super(Method.POST, EMAIL_REQUEST_URL, listener,  null);
         params = new HashMap<>();
         params.put("email", pEmailSign);
         params.put("nom", pnom);

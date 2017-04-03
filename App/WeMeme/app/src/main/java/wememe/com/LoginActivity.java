@@ -75,13 +75,15 @@ public class LoginActivity extends AppCompatActivity {
                             boolean success = jsonResponse.getBoolean("success");
 
                             if (success) {
-                                String memeur = jsonResponse.getString("memeur");
-                                String date = jsonResponse.getString("date");
+/*                                String memeur = jsonResponse.getString("memeur");
+                                String date = jsonResponse.getString("date");*/
 
-                                Intent intent = new Intent(LoginActivity.this, User_Area_Activity.class);
+/*                                Intent intent = new Intent(LoginActivity.this, User_Area_Activity.class);
                                 intent.putExtra("memeur", memeur);
                                 intent.putExtra("date", date);
-                                LoginActivity.this.startActivity(intent);
+                                LoginActivity.this.startActivity(intent);*/
+                                Intent intent = new Intent(LoginActivity.this, CodeActivity.class);
+                                startActivity(intent);
                             } else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                                 builder.setMessage("Le nom d'Utilisateur ou le mot de passe entré ne correspond à aucun compte.")

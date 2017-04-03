@@ -21,10 +21,6 @@ import org.json.JSONObject;
 
 public class RegisterActivity extends AppCompatActivity {
 
-
-    public boolean emailFirst = false;
-    public boolean emailrequest = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,7 +126,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 }
                             }
                             else {
-                                Intent intent = new Intent(RegisterActivity.this, CodeActivity.class);
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                 intent.putExtra("email",emailSign);
                                 intent.putExtra("nom",memeurSign);
                                 startActivity(intent);
