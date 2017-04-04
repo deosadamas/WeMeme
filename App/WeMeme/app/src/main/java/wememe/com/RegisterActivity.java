@@ -2,6 +2,10 @@ package wememe.com;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Handler;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,19 +16,27 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Random;
+
 public class RegisterActivity extends AppCompatActivity {
+
+    Random rdn;
+    int code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        rdn = new Random();
         //    final ImageButton imgIns = (ImageButton) findViewById(R.id.imgInsPro);
         final EditText edtxtEmailSign = (EditText) findViewById(R.id.txtEmailSign);
         final EditText edtxtMemeurSign = (EditText) findViewById(R.id.txtMemeurSign);
@@ -84,9 +96,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-
-
-
         btnSign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,13 +134,6 @@ public class RegisterActivity extends AppCompatActivity {
                                             .show();
                                 }
                             }
-                            else {
-                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                intent.putExtra("email",emailSign);
-                                intent.putExtra("nom",memeurSign);
-                                startActivity(intent);
-
-                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -139,32 +141,35 @@ public class RegisterActivity extends AppCompatActivity {
                 };
 
                 if(isValid(dateSign) && isValidPassWord(motDePasseSign, motDePasseSame)) {
+                    code = rdn.nextInt(9999 - 1000) +1000;
                     RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
-                    RegisterRequest registerRequest = new RegisterRequest(emailSign, memeurSign, motDePasseSign, dateSign, responseListener);
+                    RegisterRequest registerRequest = new RegisterRequest(emailSign, memeurSign, motDePasseSign, dateSign, code, responseListener);
                     queue.add(registerRequest);
+                    EmailRequest emailRequest = new EmailRequest(emailSign, memeurSign, code,new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {}
+                    });
+                    int socketTimeout = 30000;//30 seconds - change to what you want
+                    RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    emailRequest.setRetryPolicy(policy);
+                    queue.add(emailRequest);
+                    Snackbar snackbar;
+                    snackbar = Snackbar.make(v, "Le courriel a été envoyé", Snackbar.LENGTH_LONG);
+                    v = snackbar.getView();
+                    v.setBackgroundColor(Color.parseColor("#371e6d"));
+                    snackbar.show();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                        }
+                    }, 2000);
                 }
             }
         });
     }
 
-    @Override
-    public  boolean onCreateOptionsMenu(Menu menu){
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.backarrow, menu);
-        return true;
-    }
-    @Override
-    public  boolean onOptionsItemSelected(MenuItem item){
-        //Handle item selection
-        switch (item.getItemId()){
-            case R.id.backarrowicon:
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
     public boolean isValid(String date) {
         if (date.matches("^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.)(?:0?[1,3-9]|1[0-2])\\2))" +
                 "(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(\\/|-|\\.)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))" +

@@ -75,14 +75,8 @@ public class LoginActivity extends AppCompatActivity {
                             boolean success = jsonResponse.getBoolean("success");
 
                             if (success) {
-/*                                String memeur = jsonResponse.getString("memeur");
-                                String date = jsonResponse.getString("date");*/
-
-/*                                Intent intent = new Intent(LoginActivity.this, User_Area_Activity.class);
-                                intent.putExtra("memeur", memeur);
-                                intent.putExtra("date", date);
-                                LoginActivity.this.startActivity(intent);*/
                                 Intent intent = new Intent(LoginActivity.this, CodeActivity.class);
+                                intent.putExtra("nom", memeurLog);
                                 startActivity(intent);
                             } else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
@@ -97,7 +91,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 };
-
                 LoginRequest loginRequest = new LoginRequest(memeurLog, motDePasseLog, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
                 queue.add(loginRequest);

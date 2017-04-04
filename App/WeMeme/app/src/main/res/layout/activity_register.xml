@@ -145,5 +145,4 @@
         android:onClick="AddProfilPic" />
 
 
-
 </android.support.constraint.ConstraintLayout>

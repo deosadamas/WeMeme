@@ -16,13 +16,14 @@ public class RegisterRequest extends StringRequest {
     private static final String REGISTER_REQUEST_URL = "http://bronze4life.ca/mobile_app/index.php?prefix=json&p=register";
     private Map<String, String> params;
 
-    public RegisterRequest(String pEmailSign, String pMeneurSign, String pMotDePasseSign, String pDateSign, Response.Listener<String> listener) {
+    public RegisterRequest(String pEmailSign, String pMeneurSign, String pMotDePasseSign, String pDateSign, int pcode,Response.Listener<String> listener) {
         super(Method.POST, REGISTER_REQUEST_URL, listener, null);
         params = new HashMap<>();
         params.put("email", pEmailSign);
         params.put("nom", pMeneurSign);
         params.put("password", pMotDePasseSign);
         params.put("date", pDateSign);
+        params.put("code", String.valueOf(pcode));
     }
 
     @Override

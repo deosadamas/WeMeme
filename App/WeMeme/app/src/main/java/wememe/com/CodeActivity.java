@@ -2,10 +2,14 @@ package wememe.com;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -24,32 +28,59 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CodeActivity extends AppCompatActivity {
+    EditText edtxtCode;
+    View viewsnackbar;
+    int code;
+    String nom;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_code);
-        final Bundle data = getIntent().getExtras();
-        Button btnSuivant = (Button)findViewById(R.id.btnSuivant);
-        btnSuivant.setOnClickListener(new View.OnClickListener() {
+        Bundle data = getIntent().getExtras();
+        nom = data.get("nom").toString();
+        edtxtCode = (EditText) findViewById(R.id.edtxtCode);
+    }
+
+    public void Suivant(View view)
+    {
+        viewsnackbar = view;
+        code = Integer.parseInt(edtxtCode.getText().toString());
+        RequestQueue queue = Volley.newRequestQueue(CodeActivity.this);
+        CodeRequest codeRequest = new CodeRequest("", code, new Response.Listener<String>() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CodeActivity.this, LoginActivity.class);
-                startActivity(intent);
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    boolean success = jsonResponse.getBoolean("success");
+                    if(success)
+                    {
+                        Snackbar snackbar;
+                        snackbar = Snackbar.make(viewsnackbar, "Le code est valider", Snackbar.LENGTH_LONG);
+                        viewsnackbar = snackbar.getView();
+                        viewsnackbar.setBackgroundColor(Color.parseColor("#371e6d"));
+                        snackbar.show();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent(CodeActivity.this, User_Area_Activity.class);
+                                startActivity(intent);
+                            }
+                        }, 2000);
+                    }
+                    else
+                    {
+                        Snackbar snackbar;
+                        snackbar = Snackbar.make(viewsnackbar, "Erreur : Code invalide ", Snackbar.LENGTH_LONG);
+                        viewsnackbar = snackbar.getView();
+                        viewsnackbar.setBackgroundColor(Color.parseColor("#371e6d"));
+                        snackbar.show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
-        Response.Listener listener = new Response.Listener() {
-            @Override
-            public void onResponse(Object response) {
-
-            }
-        };/*
-        String email = data.getString("email");
-        String nom = data.getString("nom");
-        RequestQueue queue = Volley.newRequestQueue(CodeActivity.this);
-        EmailRequest emailRequest = new EmailRequest(email, nom, listener);
-        int socketTimeout = 30000;//30 seconds - change to what you want
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        emailRequest.setRetryPolicy(policy);
-        queue.add(emailRequest);*/
+        queue.add(codeRequest);
     }
 }
