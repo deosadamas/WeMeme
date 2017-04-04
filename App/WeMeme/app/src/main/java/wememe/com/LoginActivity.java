@@ -74,26 +74,44 @@ public class LoginActivity extends AppCompatActivity {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
 
-                            if (success) {
-                                Intent intent = new Intent(LoginActivity.this, CodeActivity.class);
-                                intent.putExtra("nom", memeurLog);
-                                startActivity(intent);
-                            } else {
+                            if (!success){
                                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                                 builder.setMessage("Le nom d'Utilisateur ou le mot de passe entré ne correspond à aucun compte.")
                                         .setNegativeButton("Recommencer", null)
                                         .create()
                                         .show();
                             }
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 };
+
+                Response.Listener<String> listener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getBoolean("success");
+                            if (success) {
+                                Intent intent = new Intent(LoginActivity.this, CodeActivity.class);
+                                intent.putExtra("nom", memeurLog);
+                                startActivity(intent);
+                            } else if (!success) {
+                                Intent intent = new Intent(LoginActivity.this, User_Area_Activity.class);
+                                startActivity(intent);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+
+                FirstLoginRequest firstLoginRequest = new FirstLoginRequest(memeurLog,listener);
                 LoginRequest loginRequest = new LoginRequest(memeurLog, motDePasseLog, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
                 queue.add(loginRequest);
+                queue.add(firstLoginRequest);
             }
         });
     }

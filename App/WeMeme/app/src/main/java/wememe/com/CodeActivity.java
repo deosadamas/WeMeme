@@ -47,7 +47,7 @@ public class CodeActivity extends AppCompatActivity {
         viewsnackbar = view;
         code = Integer.parseInt(edtxtCode.getText().toString());
         RequestQueue queue = Volley.newRequestQueue(CodeActivity.this);
-        CodeRequest codeRequest = new CodeRequest("", code, new Response.Listener<String>() {
+        CodeRequest codeRequest = new CodeRequest(nom, code, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
