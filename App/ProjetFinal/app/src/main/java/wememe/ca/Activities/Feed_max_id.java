@@ -21,7 +21,7 @@ public class Feed_max_id {
             try {
                 JSONArray array = new JSONArray(response);
                 JSONObject object = array.getJSONObject(0);
-                id = object.getInt("MAX(id)");
+                id = object.getInt("MAX(id)")+1;
             } catch (JSONException e) {
                 e.printStackTrace();
             }

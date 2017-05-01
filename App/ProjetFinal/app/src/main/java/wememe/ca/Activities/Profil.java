@@ -272,7 +272,6 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
         data_list.clear();
         datalike_list.clear();
         like_list.clear();
-        /*load_data_from_server(feed_max_id.id+1, view.getContext());*/
         load_data_from_server(feed_max_id.id, view_.getContext());
         adapter = new CustomAdapter(getView().getContext(), data_list, datalike_list, like_list);
         recyclerView.setAdapter(adapter);

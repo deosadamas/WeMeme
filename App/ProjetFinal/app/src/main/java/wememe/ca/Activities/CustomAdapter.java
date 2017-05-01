@@ -38,7 +38,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.memeform,parent,false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.test,parent,false);
 
         return new ViewHolder(itemView);
     }
@@ -166,7 +166,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             nom = (TextView) itemView.findViewById(R.id.nom);
             Like = (ImageView) itemView.findViewById(R.id.imageView4);
             imageView = (ImageView) itemView.findViewById(R.id.image);
-            imagePhoto = (ImageView) itemView.findViewById(R.id.imagePhotoProfil);
+            imagePhoto = (ImageView) itemView.findViewById(R.id.circleImageView);
             ID = (TextView) itemView.findViewById(R.id.txt_ID);
             like = (TextView) itemView.findViewById(R.id.txtlike);
         }
