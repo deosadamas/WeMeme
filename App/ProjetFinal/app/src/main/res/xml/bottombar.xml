@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <tabs>
+        <tab
+            id="@+id/tab_feed"
+            icon="@drawable/bottombar_feed"
+            title="Feed"
+            barColorWhenSelected="#000000" />
+        <tab
+            id="@+id/tab_recherche"
+            icon="@drawable/bottombar_recherche"
+            title="Recherche"
+            barColorWhenSelected="#000000" />
+        <tab
+            id="@+id/tab_publier"
+            icon="@drawable/bottombar_publier"
+            title="Publier"
+            barColorWhenSelected="#000000" />
+        <tab
+            id="@+id/tab_tendances"
+            icon="@drawable/bottombar_tendances"
+            title="Tendances"
+            barColorWhenSelected="#000000" />
+        <tab
+            id="@+id/tab_profil"
+            icon="@drawable/bottombar_profil"
+            title="Profil"
+            barColorWhenSelected="#000000" />
+    </tabs>
