@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class CodeRequest extends StringRequest {
 
-    private static final String Code_REQUEST_URL = "http://bronze4life.ca/mobile_app/index.php?prefix=json&p=code";
+    private static final String Code_REQUEST_URL = "http://wememe.ca/mobile_app/index.php?prefix=json&p=codewememe";
     private Map<String, String> params;
 
     public CodeRequest(String puser, int pcode,Response.Listener<String> listener) {

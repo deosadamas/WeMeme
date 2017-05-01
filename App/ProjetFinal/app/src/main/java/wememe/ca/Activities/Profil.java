@@ -299,6 +299,8 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
                 RequestQueue queue = Volley.newRequestQueue(view);
                 ProfilRequest registerRequest = new ProfilRequest(1, responseListener);
                 queue.add(registerRequest);
+                FollowRequest followRequest = new FollowRequest();
+                queue.add(followRequest.stringRequest);
                 return null;
             }
 

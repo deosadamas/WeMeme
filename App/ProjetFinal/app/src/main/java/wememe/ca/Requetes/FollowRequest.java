@@ -15,7 +15,7 @@ import java.util.List;
 
 public class FollowRequest {
 
-    public static final String user_REQUEST_URL = "http://wememe.ca/mobile_app/index.php?prefix=json&p=follow=";
+    public static final String user_REQUEST_URL = "http://wememe.ca/mobile_app/index.php?prefix=json&p=follow";
     public int followed;
     public int follower;
     public List<DataFollow> dataFollows;

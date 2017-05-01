@@ -1,5 +1,6 @@
 package wememe.ca.Activities;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.roughike.bottombar.BottomBar;
 
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     private List<DataLike> dataLike_list;
     private List<Like> like_list;
     private int id;
+    BottomBar bottomBar;
 
     public CustomAdapter(Context context, List<MyData> my_data, List<DataLike> likes, List<Like> like_list) {
         this.context = context;
@@ -44,7 +47,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         id = datameme_list.get(position).getId();
         holder.nom.setText(datameme_list.get(position).getNom());
         holder.like.setText(String.valueOf(like_list.get(position).getLike()));
@@ -52,8 +55,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         Glide.with(context).load(datameme_list.get(position).getImage_link()).into(holder.imagePhoto);
         Glide.with(context).load(datameme_list.get(position).getImage_link()).into(holder.imageView);
         Glide.with(context).load(R.drawable.nonelike).into(holder.Like);
-
-
 
         for (int i = 0; i <= dataLike_list.size()-1; i++){
             int b = dataLike_list.get(i).getMeme();
@@ -141,6 +142,15 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     notifyItemChanged(position);
                     likes = false;
                 }
+            }
+        });
+
+
+        holder.imagePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Image_click_feed clickimage = new Image_click_feed();
+                clickimage.replaceFragment();
             }
         });
     }
