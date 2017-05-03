@@ -87,7 +87,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         ///////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////
 
-        adapter = new CustomAdapter(view.getContext(),data_list, dataLike_list, like_list);
+        adapter = new CustomAdapter(view.getContext(),data_list, dataLike_list, like_list, activity);
         recyclerView.setAdapter(adapter);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -221,7 +221,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         like_list.clear();
         /*load_data_from_server(feed_max_id.id+1, view.getContext());*/
         load_data_from_server(feed_max_id.id, view_.getContext());
-        adapter = new CustomAdapter(getView().getContext(), data_list, dataLike_list, like_list);
+        adapter = new CustomAdapter(getView().getContext(), data_list, dataLike_list, like_list, null);
         recyclerView.setAdapter(adapter);
     }
 }

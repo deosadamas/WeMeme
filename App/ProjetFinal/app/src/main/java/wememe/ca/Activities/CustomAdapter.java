@@ -30,12 +30,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     private List<Like> like_list;
     private int id;
     BottomBar bottomBar;
+    private MainActivity activity;
 
-    public CustomAdapter(Context context, List<MyData> my_data, List<DataLike> likes, List<Like> like_list) {
+    public CustomAdapter(Context context, List<MyData> my_data, List<DataLike> likes, List<Like> like_list, MainActivity activity) {
         this.context = context;
         this.datameme_list = my_data;
         this.dataLike_list = likes;
         this.like_list = like_list;
+        this.activity = activity;
     }
 
     @Override
@@ -149,8 +151,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         holder.imagePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Image_click_feed clickimage = new Image_click_feed();
-                clickimage.replaceFragment();
+                BottomBar myBottomBar = activity.getBottomBar();
+                myBottomBar.selectTabAtPosition(4);
             }
         });
     }

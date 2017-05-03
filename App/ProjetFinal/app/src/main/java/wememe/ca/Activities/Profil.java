@@ -78,30 +78,30 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
 
         final View view = inflater.inflate(R.layout.fragment_profil, container, false);
 
-        recyclerView = (RecyclerView)view.findViewById(R.id.recycler_viewProfil);
+/*        recyclerView = (RecyclerView)view.findViewById(R.id.recycler_viewProfil);
         follow = (Button)view.findViewById(R.id.btnFollow);
         txtPost = (TextView)view.findViewById(R.id.txtPosts);
         txtFollowings = (TextView)view.findViewById(R.id.txtFollowings);
         txtLaughtPerPosts = (TextView)view.findViewById(R.id.txtLaughtPerPosts);
         txtFollowers = (TextView)view.findViewById(R.id.txtFollowers);
-        imgProfilPicture = (ImageView)view.findViewById(R.id.imgProfilPicture);
+        imgProfilPicture = (ImageView)view.findViewById(R.id.imgProfilPicture);*/
 
         data_list = new ArrayList<>();
         datalike_list = new ArrayList<>();
         like_list = new ArrayList<>();
         view_ = view;
 
-        MainActivity activity = (MainActivity) getActivity();
+/*          MainActivity activity = (MainActivity) getActivity();
         int myMaxID = activity.getMaxID();
         load_data_from_server(myMaxID, view.getContext());
 
-        load_data__profil(view.getContext());
+        load_data__profil(view.getContext());*/
 
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_Profil);
+/*        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_Profil);
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);*/
 
-        gridLayoutManager = new GridLayoutManager(view.getContext(), 1);
+/*        gridLayoutManager = new GridLayoutManager(view.getContext(), 1);
         recyclerView.setLayoutManager(gridLayoutManager);
 
         adapter = new CustomAdapter(view.getContext(), data_list, datalike_list, like_list);
@@ -115,9 +115,9 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
                     load_data_from_server(data_list.get(data_list.size() - 1).getId(), view.getContext());
                 }
             }
-        });
+        });*/
 
-        com.android.volley.Response.Listener<String> responseListener = new com.android.volley.Response.Listener<String>() {
+/*        com.android.volley.Response.Listener<String> responseListener = new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -135,11 +135,11 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
         RequestQueue queue = Volley.newRequestQueue(view.getContext());
         UserRequest userRequest = new UserRequest(iduser, responseListener);
         queue.add(userRequest);
-        FollowRequest followRequest = new FollowRequest();
+        FollowRequest followRequest = new FollowRequest();*/
 
 
-        final Drawable icon= getContext().getResources().getDrawable( R.drawable.connexion_lock_no_focus);
-        follow.setCompoundDrawablesWithIntrinsicBounds( icon, null, null, null );
+  //      final Drawable icon= getContext().getResources().getDrawable( R.drawable.connexion_lock_no_focus);
+/*        follow.setCompoundDrawablesWithIntrinsicBounds( icon, null, null, null );
         final Drawable icon2= getContext().getResources().getDrawable( R.drawable.connexion_lock_focus);
         follow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +156,7 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
                     }
 //                }
             }
-        });
+        });*/
 
         if (!first){
             initSwipe(recyclerView, view);
@@ -234,7 +234,7 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
 
             @Override
             protected void onPostExecute(Void aVoid) {
-                adapter.notifyDataSetChanged();
+//                adapter.notifyDataSetChanged();
             }
         };
 
@@ -273,7 +273,7 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
         datalike_list.clear();
         like_list.clear();
         load_data_from_server(feed_max_id.id, view_.getContext());
-        adapter = new CustomAdapter(getView().getContext(), data_list, datalike_list, like_list);
+     //   adapter = new CustomAdapter(getView().getContext(), data_list, datalike_list, like_list);
         recyclerView.setAdapter(adapter);
     }
 
