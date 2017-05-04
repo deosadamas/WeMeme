@@ -46,6 +46,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
     public boolean first = true;
     private View view_;
     MainActivity activity;
+    Splash splash;
 
     public Feed(){
     }
@@ -76,7 +77,13 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         //Bon le 36 doit etre changer par la variable dans la connection qui est feed_max_id.id
         //Passer intent de connextion a celle-ci
         activity = (MainActivity) getActivity();
-        load_data_from_server(activity.id_max_feed, view.getContext());
+        if(Splash.id_max == Splash.id_max)
+        {
+            load_data_from_server(Splash.id_max, view.getContext());
+        }else
+        {
+            load_data_from_server(activity.id_max_feed, view.getContext());
+        }
         ///////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////

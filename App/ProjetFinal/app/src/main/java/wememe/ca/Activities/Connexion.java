@@ -147,7 +147,7 @@ public class Connexion extends AppCompatActivity {
                                         else if(!validationNom)
                                         {
                                             SaveSharedPreference.setUserName(getApplication(), userText);
-                                            Intent intent3 = new Intent(Connexion.this, MainActivity.class);
+                                            Intent intent3 = new Intent(Connexion.this, Splash.class);
                                             intent3.putExtra("user", userText);
                                             intent3.putExtra("password", mdpText);
                                             startActivity(intent3);
@@ -175,7 +175,7 @@ public class Connexion extends AppCompatActivity {
         }
         else
         {
-                Intent intent = new Intent(Connexion.this, MainActivity.class);
+                Intent intent = new Intent(Connexion.this, Splash.class);
                 userText = userConnexion.getText().toString();
                 mdpText = mdpConnexion.getText().toString();
                 intent.putExtra("user", userText);

@@ -35,11 +35,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     public CustomAdapter(Context context, List<MyData> my_data, List<DataLike> likes, List<Like> like_list, MainActivity activity) {
         this.context = context;
+        this.activity = activity;
+        utilisateur = MainActivity.utilisateur;
         this.datameme_list = my_data;
         this.dataLike_list = likes;
         this.like_list = like_list;
-        this.activity = activity;
-        utilisateur = activity.getUtilisateur();
     }
 
     @Override

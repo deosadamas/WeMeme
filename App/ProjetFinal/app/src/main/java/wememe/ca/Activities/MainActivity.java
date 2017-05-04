@@ -50,7 +50,7 @@ public class MainActivity extends FragmentActivity {
     ////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
 
 
     public static final String UPLOAD_URL = "http://wememe.ca/image_serveur/image_upload.php";
@@ -62,9 +62,8 @@ public class MainActivity extends FragmentActivity {
     int id_max_feed;
     ImageView imageView;
     int id_max = 0;
-    Utilisateur utilisateur;
-    String user, password;
-
+    String user, password, a;
+    public static Utilisateur utilisateur;
 
     public Bitmap bitmap;
 
@@ -80,29 +79,8 @@ public class MainActivity extends FragmentActivity {
         Intent intent = getIntent();
         user = intent.getStringExtra("user");
         password = intent.getStringExtra("password");
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... Void) {
-                com.android.volley.Response.Listener<String> responseListener = new com.android.volley.Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONArray array = new JSONArray(response);
-                            JSONObject object = array.getJSONObject(0);
-                            utilisateur = new Utilisateur(String.valueOf(object.getInt("id")), object.getString("email"), object.getString("username"), object.getString("date"), object.getString("profilpic"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-                InformationUserRequest informationUserRequest = new InformationUserRequest(user,password ,responseListener);
-                queue.add(informationUserRequest);
-                return null;
-            }
-        };
-        task.execute();
-
+        a = intent.getStringExtra("id_max_feed");
+        utilisateur = Splash.utilisateur;
         bottomBar = (BottomBar)findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
@@ -128,7 +106,7 @@ public class MainActivity extends FragmentActivity {
                 }
             }
         });
-        bottomBar.selectTabAtPosition(2);
+        bottomBar.selectTabAtPosition(0);
     }
 
     public void changerFragment(Fragment fragment){
@@ -309,11 +287,6 @@ public class MainActivity extends FragmentActivity {
         return bottomBar;
     }
 
-
-    public Utilisateur getUtilisateur()
-    {
-        return this.utilisateur;
-    }
 
 
     public int load_data_from_server() {
