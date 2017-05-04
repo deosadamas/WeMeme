@@ -62,7 +62,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Id_personne"
-                                android:textColor="@color/white" />
+                                android:textColor="@color/colorTexte" />
 
                             <TextView
                                 android:id="@+id/textView8"
@@ -76,14 +76,14 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="ID"
-                                android:textColor="@color/white" />
+                                android:textColor="@color/colorTexte" />
 
                             <TextView
                                 android:id="@+id/nom"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Nom"
-                                android:textColor="@color/white" />
+                                android:textColor="@color/colorTexte" />
 
                             <TextView
                                 android:id="@+id/textView7"
@@ -224,7 +224,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Tamere"
                                 android:textAlignment="center"
-                                android:textColor="@color/white" />
+                                android:textColor="@color/colorTexte" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -264,7 +264,8 @@
                                         android:layout_height="wrap_content"
                                         android:text="0"
                                         android:textAlignment="textEnd"
-                                        android:textColor="@color/white" />
+                                        android:layout_gravity="end"
+                                        android:textColor="@color/colorTexte" />
 
                                     <TextView
                                         android:id="@+id/textView19"
@@ -272,7 +273,8 @@
                                         android:layout_height="wrap_content"
                                         android:text="Likes"
                                         android:textAlignment="textEnd"
-                                        android:textColor="@color/white" />
+                                        android:layout_gravity="end"
+                                        android:textColor="@color/colorTexte" />
                                 </LinearLayout>
                             </LinearLayout>
 

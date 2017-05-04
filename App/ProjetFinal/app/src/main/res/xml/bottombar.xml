@@ -3,27 +3,28 @@
     <tabs>
         <tab
             id="@+id/tab_feed"
-            icon="@drawable/bottombar_feed"
+            icon="@drawable/feed_icon"
             title="Feed"
-            barColorWhenSelected="#ffffff" />
+            barColorWhenSelected="#494356"
+            tabIndicatorColor="#000000" />
         <tab
             id="@+id/tab_recherche"
-            icon="@drawable/bottombar_recherche"
+            icon="@drawable/recherche_icon"
             title="Recherche"
-            barColorWhenSelected="#ffffff" />
+            barColorWhenSelected="#494356" />
         <tab
             id="@+id/tab_publier"
-            icon="@drawable/bottombar_publier"
+            icon="@drawable/upload_icon"
             title="Publier"
-            barColorWhenSelected="#ffffff" />
+            barColorWhenSelected="#494356" />
         <tab
             id="@+id/tab_tendances"
-            icon="@drawable/bottombar_tendances"
+            icon="@drawable/tendances_icon"
             title="Tendances"
-            barColorWhenSelected="#ffffff" />
+            barColorWhenSelected="#494356" />
         <tab
             id="@+id/tab_profil"
-            icon="@drawable/bottombar_profil"
+            icon="@drawable/profil_icon"
             title="Profil"
-            barColorWhenSelected="#ffffff" />
+            barColorWhenSelected="#494356" />
     </tabs>

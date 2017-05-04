@@ -15,10 +15,10 @@
     <com.roughike.bottombar.BottomBar
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
-        android:layout_height="32dp"
+        android:layout_height="47dp"
         android:layout_above="@id/fragment_container"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="-40dp"
+        android:layout_marginBottom="-44dp"
         app:bb_behavior="underNavbar|shy"
         app:bb_tabXmlResource="@xml/bottombar" />
 

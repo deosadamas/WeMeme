@@ -91,6 +91,7 @@ public class MainActivity extends FragmentActivity {
                 switch (tabId){
                     case R.id.tab_feed:
                         id_personne = load_data_from_server();
+                        bottomBar.setActiveTabColor(getResources().getColor(R.color.colorAccent));
                         changerFragment(new Feed());
                         break;
                     case R.id.tab_recherche:
@@ -108,7 +109,6 @@ public class MainActivity extends FragmentActivity {
                 }
             }
         });
-        //bottomBar.setDefaultTab(R.id.tab_feed);
         bottomBar.selectTabAtPosition(4);
     }
 

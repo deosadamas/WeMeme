@@ -21,7 +21,7 @@
                     android:layout_marginRight="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:src="@drawable/bottombar_profil"
+                    android:src="@drawable/upload_icon"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="0.042"
                     app:layout_constraintLeft_toLeftOf="parent"
