@@ -2,6 +2,7 @@ package wememe.ca.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -50,6 +51,8 @@ public class Connexion extends AppCompatActivity {
             //Initialisation des variables
             final EditText userConnexion = (EditText)findViewById(R.id.fieldUserConnexion);
             final EditText mdpConnexion = (EditText)findViewById(R.id.fieldMDPConnexion);
+            userConnexion.getBackground().setColorFilter(getResources().getColor(R.color.colorTexte), PorterDuff.Mode.SRC_IN);
+            mdpConnexion.getBackground().setColorFilter(getResources().getColor(R.color.colorTexte), PorterDuff.Mode.SRC_IN);
             final Button btnConnexion = (Button)findViewById(R.id.btnConnexion);
             final TextView creerCompteConnexion = (TextView)findViewById(R.id.txtCreerCompteConnexion);
             userConnexion_information = userConnexion.getText().toString();
@@ -60,7 +63,9 @@ public class Connexion extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     userConnexion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.connexion_user_focus,0,0,0);
+                    userConnexion.getBackground().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_IN);
                     mdpConnexion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.connexion_lock_no_focus,0,0,0);
+                    mdpConnexion.getBackground().setColorFilter(getResources().getColor(R.color.colorTexte), PorterDuff.Mode.SRC_IN);
                 }
             });
 
@@ -69,7 +74,9 @@ public class Connexion extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     mdpConnexion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.connexion_lock_focus,0,0,0);
+                    mdpConnexion.getBackground().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_IN);
                     userConnexion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.connexion_user_no_focus,0,0,0);
+                    userConnexion.getBackground().setColorFilter(getResources().getColor(R.color.colorTexte), PorterDuff.Mode.SRC_IN);
                 }
             });
 

@@ -48,6 +48,7 @@ public class photo extends Fragment{
         btnGallery = (Button)view.findViewById(R.id.btnGallery);
         btnUpload = (Button)view.findViewById(R.id.btnUpload);
         edtDescription = (EditText)view.findViewById(R.id.fieldDescription);
+        edtDescription.getBackground().setColorFilter(getResources().getColor(R.color.colorTexte), PorterDuff.Mode.SRC_IN);
         btnGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
