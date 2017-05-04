@@ -109,7 +109,7 @@ public class MainActivity extends FragmentActivity {
             }
         });
         //bottomBar.setDefaultTab(R.id.tab_feed);
-        bottomBar.selectTabAtPosition(0);
+        bottomBar.selectTabAtPosition(4);
     }
 
     public void changerFragment(Fragment fragment){
