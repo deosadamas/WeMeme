@@ -50,6 +50,7 @@
         app:layout_constraintTop_toBottomOf="@+id/fieldUserConnexion"
         android:backgroundTint="@color/colorTexte" />
 
+
     <Button
         android:id="@+id/btnConnexion"
         android:layout_width="0dp"
@@ -57,6 +58,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:text="Connexion"
+
         android:textColor="@android:color/background_dark"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
@@ -64,7 +66,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="14dp"
         app:layout_constraintTop_toBottomOf="@+id/fieldMDPConnexion"
-        app:layout_constraintHorizontal_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.0"
+        android:background="@drawable/button" />
 
     <TextView
         android:id="@+id/txtMDPOublieConnexion"
