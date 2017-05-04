@@ -128,7 +128,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
                         MyData data = new MyData(object.getInt("id"), object.getString("sujet"), object.getString("nom"),
                                 object.getString("description"),
-                                object.getString("images"), object.getInt("nbreLike"));
+                                object.getString("images"), object.getInt("nbreLike"), object.getInt("id_user_post"));
 
                         Like likes = new Like(object.getInt("id"), object.getInt("nbreLike"));
 
@@ -152,22 +152,11 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                         dataLike_list.add(dataLikes);
 
                     }
-                    ///////////////////////////////////////////////////////////////
-                    ///////////////////////////////////////////////////////////////
-                    ///////////////////////////////////////////////////////////////
-                    ///////////////////////////////////////////////////////////////
-                    ///////////////////////////////////////////////////////////////
                     feed_max_id = new Feed_max_id();
                     RequestQueue queue = Volley.newRequestQueue(view);//// View a changer
                     // RequestQueue queue = Volley.newRequestQueue(SecondActivity.this);
                     //La ligne est la ligne que j'ai faite mais la jai besoin de changer le view pour le contexte de l'application
                     queue.add(feed_max_id.stringRequest);
-                    //////////////////////////////////////////////////////
-                    ///////////////////////////////////////////////////////////////
-                    ///////////////////////////////////////////////////////////////
-                    ///////////////////////////////////////////////////////////////
-                    ///////////////////////////////////////////////////////////////
-
 
                 }catch (IOException e) {
                     e.printStackTrace();

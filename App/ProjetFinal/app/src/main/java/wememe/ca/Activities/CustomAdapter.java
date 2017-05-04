@@ -1,6 +1,5 @@
 package wememe.ca.Activities;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -52,6 +51,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         id = datameme_list.get(position).getId();
         holder.nom.setText(datameme_list.get(position).getNom());
+        holder.id_user_post.setText(String.valueOf(datameme_list.get(position).getId_user_post()));
         holder.like.setText(String.valueOf(like_list.get(position).getLike()));
         holder.ID.setText(String.valueOf(datameme_list.get(position).getId()));
         Glide.with(context).load(datameme_list.get(position).getImage_link()).into(holder.imagePhoto);
@@ -153,6 +153,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             public void onClick(View v) {
                 BottomBar myBottomBar = activity.getBottomBar();
                 myBottomBar.selectTabAtPosition(4);
+                activity.id_user_post(datameme_list.get(position).getId_user_post());
             }
         });
     }
@@ -165,6 +166,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     public  class ViewHolder extends  RecyclerView.ViewHolder{
 
         public TextView ID;
+        public TextView id_user_post;
         public TextView nom;
         public TextView like;
         public ImageView imageView;
@@ -175,6 +177,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         public ViewHolder(View itemView) {
             super(itemView);
 
+            id_user_post = (TextView)itemView.findViewById(R.id.txt_id_user_post);
             nom = (TextView) itemView.findViewById(R.id.nom);
             Like = (ImageView) itemView.findViewById(R.id.imageView4);
             imageView = (ImageView) itemView.findViewById(R.id.image);

@@ -6,10 +6,11 @@
     tools:context="wememe.ca.Activities.Recherche">
 
         <TextView
+            android:id="@+id/txtTest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:text="Recherche"
-            android:textColor="#ff0000"/>
+            android:textColor="#ff0000" />
 
 </FrameLayout>

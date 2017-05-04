@@ -16,10 +16,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Base64;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -32,6 +43,19 @@ public class MainActivity extends FragmentActivity {
     private float x1,x2;
     static final int MIN_DISTANCE = 150;
 
+    /////////////////////////////
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+    private Fragment fragment = new photo();
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     public static final String UPLOAD_URL = "http://wememe.ca/image_serveur/image_upload.php";
     public static final String UPLOAD_KEY = "image";
@@ -41,13 +65,14 @@ public class MainActivity extends FragmentActivity {
     String description;
     String nom;
     String sujet;
+    int id_user_post;
+    int id_personne;
+    Button btnGallerie;
+    ImageView imageView;
+    Feed_max_id feed_max_id;
 
-    boolean dernierFeed = false;
-    boolean dernierRecherche = false;
-    boolean dernierTendances = false;
-    boolean dernierProfil = false;
 
-    private Bitmap bitmap;
+    public Bitmap bitmap;
 
     private Uri filePath;
 
@@ -57,6 +82,25 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final String Id_REQUEST_URL = "http://wememe.ca/mobile_app/index.php?prefix=json&p=feed_id";
+
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, Id_REQUEST_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray array = new JSONArray(response);
+                    JSONObject object = array.getJSONObject(0);
+                    id_personne = object.getInt("MAX(id)")+1;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        },null);
+        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+        queue.add(stringRequest);
+
+
         bottomBar = (BottomBar)findViewById(R.id.bottomBar);
 
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
@@ -65,43 +109,23 @@ public class MainActivity extends FragmentActivity {
                 switch (tabId){
                     case R.id.tab_feed:
                         changerFragment(new Feed());
-                        dernierFeed = true;
-                        dernierRecherche = false;
-                        dernierTendances = false;
-                        dernierProfil = false;
                         break;
                     case R.id.tab_recherche:
                         changerFragment(new Recherche());
-                        dernierFeed = false;
-                        dernierRecherche = true;
-                        dernierTendances = false;
-                        dernierProfil = false;
                         break;
                     case R.id.tab_tendances:
                         changerFragment(new Tendances());
-                        dernierFeed = false;
-                        dernierRecherche = false;
-                        dernierTendances = true;
-                        dernierProfil = false;
                         break;
                     case R.id.tab_profil:
                         changerFragment(new Profil());
-                        dernierFeed = false;
-                        dernierRecherche = false;
-                        dernierTendances = false;
-                        dernierProfil = true;
                         break;
                     case R.id.tab_publier:
-                        description = "La description du test";
-                        sujet = "Le sujet du test";
-                        nom = "Le nom du test";
-                        showFileChooser();
+                        changerFragment(fragment);
                         break;
                 }
             }
         });
         bottomBar.setDefaultTab(R.id.tab_feed);
-        dernierFeed = true;
     }
 
     private void changerFragment(Fragment fragment){
@@ -121,12 +145,6 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
-    private void showFileChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -136,23 +154,22 @@ public class MainActivity extends FragmentActivity {
 
             filePath = data.getData();
             try {
+                ////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////
+                imageView = (ImageView) fragment.getView().findViewById(R.id.imageGallery);
+                ////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                uploadImage();
-                if (dernierFeed){
-                    bottomBar.setDefaultTab(R.id.tab_feed);
-                }
-                else if (dernierRecherche)
-                {
-                    bottomBar.setDefaultTab(R.id.tab_recherche);
-                }
-                else if (dernierTendances)
-                {
-                    bottomBar.setDefaultTab(R.id.tab_tendances);
-                }
-                else if (dernierProfil)
-                {
-                    bottomBar.setDefaultTab(R.id.tab_profil);
-                }
+                imageView.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -167,7 +184,7 @@ public class MainActivity extends FragmentActivity {
         return encodedImage;
     }
 
-    private void uploadImage(){
+    public void uploadImage(){
         class UploadImage extends AsyncTask<Bitmap,Void,String> {
 
             ProgressDialog loading;
@@ -194,9 +211,11 @@ public class MainActivity extends FragmentActivity {
                 HashMap<String,String> data = new HashMap<>();
 
                 data.put(UPLOAD_KEY, uploadImage);
-                data.put("sujet", sujet);
-                data.put("nom", nom);
-                data.put("description", description);
+                data.put("sujet", "a");
+                data.put("nom", "nom");
+                data.put("description", "des");
+                data.put("$id_user_post", "0");
+                data.put("$id_user_photo", "http://wememe.ca/image_serveur/image_feed/121.png");
                 String result = rh.sendPostRequest(UPLOAD_URL,data);
 
                 return result;
@@ -205,6 +224,14 @@ public class MainActivity extends FragmentActivity {
 
         UploadImage ui = new UploadImage();
         ui.execute(bitmap);
+    }
+
+
+    public void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
     @Override
@@ -223,43 +250,36 @@ public class MainActivity extends FragmentActivity {
                     // Left to Right swipe action
                     if (x2 > x1)
                     {
-                        if (dernierRecherche){
+                        if (bottomBar.getCurrentTabPosition() == 1){
                             bottomBar.selectTabAtPosition(0);
-                            dernierFeed = true;
-                            dernierRecherche = false;
-                            dernierTendances = false;
-                            dernierProfil = false;
+
                         }
-                        else if (dernierTendances){
-                            showFileChooser();
-                            description = "La description du test";
-                            sujet = "Le sujet du test";
-                            nom = "Le nom du test";
+                        else if (bottomBar.getCurrentTabPosition() == 2){
+                            bottomBar.selectTabAtPosition(1);
                         }
-                        else if (dernierProfil){
+                        else if (bottomBar.getCurrentTabPosition() == 3){
+                            bottomBar.selectTabAtPosition(2);
+                        }
+                        else if (bottomBar.getCurrentTabPosition() == 4) {
                             bottomBar.selectTabAtPosition(3);
-                            dernierFeed = false;
-                            dernierRecherche = false;
-                            dernierTendances = true;
-                            dernierProfil = false;
                         }
                     }
 
                     // Right to left swipe action
                     else
                     {
-                        if (dernierRecherche){
-                            showFileChooser();
-                            description = "La description du test";
-                            sujet = "Le sujet du test";
-                            nom = "Le nom du test";
+                        if (bottomBar.getCurrentTabPosition() == 0){
+                            bottomBar.selectTabAtPosition(1);
+
                         }
-                        else if (dernierTendances){
+                        else if (bottomBar.getCurrentTabPosition() == 1){
+                            bottomBar.selectTabAtPosition(2);
+                        }
+                        else if (bottomBar.getCurrentTabPosition() == 2){
+                            bottomBar.selectTabAtPosition(3);
+                        }
+                        else if (bottomBar.getCurrentTabPosition() == 3) {
                             bottomBar.selectTabAtPosition(4);
-                            dernierFeed = false;
-                            dernierRecherche = false;
-                            dernierTendances = false;
-                            dernierProfil = true;
                         }
                     }
                 }
@@ -275,7 +295,11 @@ public class MainActivity extends FragmentActivity {
     public int getMaxID(){
         //Get max ID from Connexion
         String maxID = getIntent().getStringExtra("maxID");
-        return Integer.parseInt(maxID);
+        return id_personne;
+    }
+
+    public void id_user_post(int id_user_post){
+        this.id_user_post = id_user_post;
     }
 
     public BottomBar getBottomBar(){
