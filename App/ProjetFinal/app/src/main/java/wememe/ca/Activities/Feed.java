@@ -41,14 +41,11 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
     private List<MyData> data_list;
     private List<DataLike> dataLike_list;
     private List<Like> like_list;
-    Button btnBack;
-    private int id;
-    private int max_id;
     public SwipeRefreshLayout swipeRefreshLayout;
     Feed_max_id feed_max_id;
     public boolean first = true;
     private View view_;
-    Connexion connexion;
+    MainActivity activity;
 
     public Feed(){
     }
@@ -78,9 +75,8 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         ///////////////////////////////////////////////////////////////////////
         //Bon le 36 doit etre changer par la variable dans la connection qui est feed_max_id.id
         //Passer intent de connextion a celle-ci
-        MainActivity activity = (MainActivity) getActivity();
-        int myMaxID = activity.id_personne;
-        load_data_from_server(myMaxID, view.getContext());
+        activity = (MainActivity) getActivity();
+        load_data_from_server(activity.id_max_feed, view.getContext());
         ///////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////
@@ -147,17 +143,11 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                     for (int i = 0; i < arrays.length(); i++) {
                         JSONObject object = arrays.getJSONObject(i);
 
-                        DataLike dataLikes = new DataLike(object.getInt("UserLaught"), object.getInt("MemeLaught"),
-                                object.getString("couleur"));
+                        DataLike dataLikes = new DataLike(String.valueOf(object.getInt("UserLaught")), object.getInt("MemeLaught"));
                         dataLike_list.add(dataLikes);
 
                     }
-                    feed_max_id = new Feed_max_id();
-                    RequestQueue queue = Volley.newRequestQueue(view);//// View a changer
-                    // RequestQueue queue = Volley.newRequestQueue(SecondActivity.this);
-                    //La ligne est la ligne que j'ai faite mais la jai besoin de changer le view pour le contexte de l'application
-                    queue.add(feed_max_id.stringRequest);
-
+                    activity.load_data_from_server();
                 }catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -208,9 +198,9 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         data_list.clear();
         dataLike_list.clear();
         like_list.clear();
-        /*load_data_from_server(feed_max_id.id+1, view.getContext());*/
-        load_data_from_server(feed_max_id.id, view_.getContext());
-        adapter = new CustomAdapter(getView().getContext(), data_list, dataLike_list, like_list, null);
+        activity.load_data_from_server();
+        load_data_from_server(activity.id_max_feed, view_.getContext());
+        adapter = new CustomAdapter(getView().getContext(), data_list, dataLike_list, like_list, activity);
         recyclerView.setAdapter(adapter);
     }
 }

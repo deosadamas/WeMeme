@@ -19,6 +19,7 @@ import java.util.List;
 import wememe.ca.R;
 import wememe.ca.Requetes.CodeRequest;
 import wememe.ca.Requetes.DataLike;
+import wememe.ca.Requetes.LikeRequest;
 
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
@@ -28,8 +29,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     private List<DataLike> dataLike_list;
     private List<Like> like_list;
     private int id;
-    BottomBar bottomBar;
     private MainActivity activity;
+    Utilisateur utilisateur;
+
 
     public CustomAdapter(Context context, List<MyData> my_data, List<DataLike> likes, List<Like> like_list, MainActivity activity) {
         this.context = context;
@@ -37,6 +39,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         this.dataLike_list = likes;
         this.like_list = like_list;
         this.activity = activity;
+        utilisateur = activity.getUtilisateur();
     }
 
     @Override
@@ -60,9 +63,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         for (int i = 0; i <= dataLike_list.size()-1; i++){
             int b = dataLike_list.get(i).getMeme();
-            int c = dataLike_list.get(i).getUser();
+            String c = dataLike_list.get(i).getUser();
 
-            if (id == b && 10 == c){
+            if (id == b && utilisateur.getId().equals(c)){
                 Glide.with(context).load(R.drawable.testlike).into(holder.Like);
             }
         }
@@ -83,15 +86,15 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                 int pos = position;//Pour refresh la position
                 int id_like = datameme_list.get(pos).getId();
                 int nbrelike = 0;
-                CodeRequest codeRequest = new CodeRequest("10", id_like, new Response.Listener<String>() {
+                LikeRequest likeRequest = new LikeRequest(utilisateur.getId(), id_like, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
                     }
                 });
-                queue.add(codeRequest);
+                queue.add(likeRequest);
 
-                DataLike dataLike = new DataLike(10, id_like, "");
+                DataLike dataLike = new DataLike(utilisateur.getId(), id_like);
                 boolean image = false;
                 int cpt = 0;
                 for(int i = 0; i < dataLike_list.size(); i++)

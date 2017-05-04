@@ -1,6 +1,5 @@
 package wememe.ca.Activities;
 
-import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,12 +16,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Base64;
 import android.view.MotionEvent;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -36,6 +32,7 @@ import java.util.HashMap;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import wememe.ca.R;
+import wememe.ca.Requetes.InformationUserRequest;
 
 public class MainActivity extends FragmentActivity {
 
@@ -61,15 +58,12 @@ public class MainActivity extends FragmentActivity {
 
     private int PICK_IMAGE_REQUEST = 1;
 
-    String description;
-    String nom;
-    String sujet;
     int id_user_post;
-    int id_personne;
-    Button btnGallerie;
+    int id_max_feed;
     ImageView imageView;
-    Feed_max_id feed_max_id;
     int id_max = 0;
+    Utilisateur utilisateur;
+    String user, password;
 
 
     public Bitmap bitmap;
@@ -82,15 +76,40 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        id_personne = load_data_from_server();
-        bottomBar = (BottomBar)findViewById(R.id.bottomBar);
 
+        Intent intent = getIntent();
+        user = intent.getStringExtra("user");
+        password = intent.getStringExtra("password");
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... Void) {
+                com.android.volley.Response.Listener<String> responseListener = new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray array = new JSONArray(response);
+                            JSONObject object = array.getJSONObject(0);
+                            utilisateur = new Utilisateur(String.valueOf(object.getInt("id")), object.getString("email"), object.getString("username"), object.getString("date"), object.getString("profilpic"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+                InformationUserRequest informationUserRequest = new InformationUserRequest(user,password ,responseListener);
+                queue.add(informationUserRequest);
+                return null;
+            }
+        };
+        task.execute();
+
+        bottomBar = (BottomBar)findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
                 switch (tabId){
                     case R.id.tab_feed:
-                        id_personne = load_data_from_server();
+                        id_max_feed = load_data_from_server();
                         bottomBar.setActiveTabColor(getResources().getColor(R.color.colorAccent));
                         changerFragment(new Feed());
                         break;
@@ -109,7 +128,7 @@ public class MainActivity extends FragmentActivity {
                 }
             }
         });
-        bottomBar.selectTabAtPosition(4);
+        bottomBar.selectTabAtPosition(2);
     }
 
     public void changerFragment(Fragment fragment){
@@ -279,7 +298,7 @@ public class MainActivity extends FragmentActivity {
     public int getMaxID(){
         //Get max ID from Connexion
         String maxID = getIntent().getStringExtra("maxID");
-        return id_personne;
+        return id_max_feed;
     }
 
     public void id_user_post(int id_user_post){
@@ -291,6 +310,12 @@ public class MainActivity extends FragmentActivity {
     }
 
 
+    public Utilisateur getUtilisateur()
+    {
+        return this.utilisateur;
+    }
+
+
     public int load_data_from_server() {
         AsyncTask<Integer, Integer, Integer> task = new AsyncTask<Integer, Integer, Integer>() {
             @Override
@@ -299,7 +324,6 @@ public class MainActivity extends FragmentActivity {
                 Request request = new Request.Builder()
                         .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=feed_id")
                         .build();
-
                 try {
                     okhttp3.Response response = client.newCall(request).execute();
                     JSONArray array = new JSONArray(response.body().string());

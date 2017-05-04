@@ -190,8 +190,7 @@ public class Profil2 extends Fragment {
                     for (int i = 0; i < arrays.length(); i++) {
                         JSONObject object = arrays.getJSONObject(i);
 
-                        DataLike dataLikes = new DataLike(object.getInt("UserLaught"), object.getInt("MemeLaught"),
-                                object.getString("couleur"));
+                        DataLike dataLikes = new DataLike(String.valueOf(object.getInt("UserLaught")), object.getInt("MemeLaught"));
 
                     }
                 } catch (IOException e) {

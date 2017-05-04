@@ -5,24 +5,19 @@ package wememe.ca.Requetes;
  */
 
 public class DataLike {
-    private int user, meme;
-    private String image;
+    private int meme;
+    private String user;
 
-    public DataLike(int user, int meme, String image) {
+    public DataLike(String user, int meme) {
         this.user = user;
         this.meme = meme;
-        this.image = image;
     }
 
-    public int getUser() {
+    public String getUser() {
         return user;
     }
 
     public int getMeme() {
         return meme;
-    }
-
-    public String getImage() {
-        return image;
     }
 }

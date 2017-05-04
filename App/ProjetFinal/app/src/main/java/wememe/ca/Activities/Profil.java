@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 
@@ -44,8 +45,9 @@ import wememe.ca.Requetes.UserRequest;
 
 /**
  * A simple {@link Fragment} subclass.
+ * implements SwipeRefreshLayout.OnRefreshListener
  */
-public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class Profil extends Fragment  {
 
 
     public RecyclerView recyclerView;
@@ -95,7 +97,7 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
         /*int myMaxID = activity.getMaxID();
         load_data_from_server(myMaxID, view.getContext());*/
 
-        load_data__profil(view.getContext(), activity);
+      //  load_data__profil(view.getContext(), activity);
 
 /*        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_Profil);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -216,14 +218,11 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
                     for (int i = 0; i < arrays.length(); i++) {
                         JSONObject object = arrays.getJSONObject(i);
 
-                        DataLike dataLikes = new DataLike(object.getInt("UserLaught"), object.getInt("MemeLaught"),
-                                object.getString("couleur"));
+                        DataLike dataLikes = new DataLike(String.valueOf(object.getInt("UserLaught")), object.getInt("MemeLaught"));
                         datalike_list.add(dataLikes);
 
                     }
-                    feed_max_id = new Feed_max_id();
-                    RequestQueue queue = Volley.newRequestQueue(view);
-                    queue.add(feed_max_id.stringRequest);
+                 //   activity.load_data_from_server();
                 }catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -261,7 +260,7 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-    public void onRefresh() {
+/*    public void onRefresh() {
         swipeRefreshLayout.setRefreshing(true);
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -315,5 +314,5 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
             }
         };
         task.execute();
-    }
+    }*/
 }

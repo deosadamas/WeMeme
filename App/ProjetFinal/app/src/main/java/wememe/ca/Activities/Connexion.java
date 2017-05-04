@@ -35,22 +35,20 @@ public class Connexion extends AppCompatActivity {
     static final int MIN_DISTANCE = 150;
     Feed_max_id feed_max_id;
     private String userConnexion_information, mdpConnexion_information;
+    EditText userConnexion;
+    EditText mdpConnexion;
+    String userText, mdpText;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connexion);
 
+        userConnexion = (EditText)findViewById(R.id.fieldUserConnexion);
+        mdpConnexion = (EditText)findViewById(R.id.fieldMDPConnexion);
         if(SaveSharedPreference.getUserName(Connexion.this).length() == 0)
         {
-            // call Login Activity
-            feed_max_id = new Feed_max_id();
-            RequestQueue queue = Volley.newRequestQueue(Connexion.this);
-            queue.add(feed_max_id.stringRequest);
-
             //Initialisation des variables
-            final EditText userConnexion = (EditText)findViewById(R.id.fieldUserConnexion);
-            final EditText mdpConnexion = (EditText)findViewById(R.id.fieldMDPConnexion);
             userConnexion.getBackground().setColorFilter(getResources().getColor(R.color.colorTexte), PorterDuff.Mode.SRC_IN);
             mdpConnexion.getBackground().setColorFilter(getResources().getColor(R.color.colorTexte), PorterDuff.Mode.SRC_IN);
             final Button btnConnexion = (Button)findViewById(R.id.btnConnexion);
@@ -93,8 +91,8 @@ public class Connexion extends AppCompatActivity {
             btnConnexion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final String userText = userConnexion.getText().toString();
-                    final String mdpText = mdpConnexion.getText().toString();
+                    userText = userConnexion.getText().toString();
+                    mdpText = mdpConnexion.getText().toString();
 
                     //Response recois les reponses des fichiers php dans un tableau
                     Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -133,7 +131,8 @@ public class Connexion extends AppCompatActivity {
                                         else if(!validationEmail)
                                         {
                                             Intent intent3 = new Intent(Connexion.this, MainActivity.class);
-                                            intent3.putExtra("maxID", String.valueOf(feed_max_id.id));
+                                            intent3.putExtra("user", userText);
+                                            intent3.putExtra("password", mdpText);
                                             startActivity(intent3);
                                         }
                                     }
@@ -149,7 +148,8 @@ public class Connexion extends AppCompatActivity {
                                         {
                                             SaveSharedPreference.setUserName(getApplication(), userText);
                                             Intent intent3 = new Intent(Connexion.this, MainActivity.class);
-                                            intent3.putExtra("maxID", String.valueOf(feed_max_id.id));
+                                            intent3.putExtra("user", userText);
+                                            intent3.putExtra("password", mdpText);
                                             startActivity(intent3);
                                         }
                                     }
@@ -175,46 +175,12 @@ public class Connexion extends AppCompatActivity {
         }
         else
         {
-/*            feed_max_id = new Feed_max_id();
-            RequestQueue queue = Volley.newRequestQueue(Connexion.this);
-            queue.add(feed_max_id.stringRequest);*/
-
-
-                Intent intent3 = new Intent(Connexion.this, MainActivity.class);
-//                intent3.putExtra("maxID", String.valueOf(feed_max_id.id));
-                startActivity(intent3);
+                Intent intent = new Intent(Connexion.this, MainActivity.class);
+                userText = userConnexion.getText().toString();
+                mdpText = mdpConnexion.getText().toString();
+                intent.putExtra("user", userText);
+                intent.putExtra("password", mdpText);
+                startActivity(intent);
         }
-    }
-
-
-    private void load_data__profil(final Context view, final MainActivity mainactivity) {
-
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... Void) {
-                com.android.volley.Response.Listener<String> responseListener = new com.android.volley.Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONArray array = new JSONArray(response);
-                            JSONObject object = array.getJSONObject(0);
-                            String profil = object.getString("profilpic");
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-                RequestQueue queue = Volley.newRequestQueue(view);
-                InformationUserRequest informationUserRequest = new InformationUserRequest(userConnexion_information, mdpConnexion_information,responseListener);
-                queue.add(informationUserRequest);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-            }
-        };
-        task.execute();
     }
 }
