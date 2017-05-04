@@ -1,5 +1,6 @@
 package wememe.ca.Activities;
 
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,26 +17,24 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Base64;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import wememe.ca.R;
 
 public class MainActivity extends FragmentActivity {
@@ -70,6 +69,7 @@ public class MainActivity extends FragmentActivity {
     Button btnGallerie;
     ImageView imageView;
     Feed_max_id feed_max_id;
+    int id_max = 0;
 
 
     public Bitmap bitmap;
@@ -82,25 +82,7 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        final String Id_REQUEST_URL = "http://wememe.ca/mobile_app/index.php?prefix=json&p=feed_id";
-
-        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, Id_REQUEST_URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONArray array = new JSONArray(response);
-                    JSONObject object = array.getJSONObject(0);
-                    id_personne = object.getInt("MAX(id)")+1;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        },null);
-        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
-        queue.add(stringRequest);
-
-
+        id_personne = load_data_from_server();
         bottomBar = (BottomBar)findViewById(R.id.bottomBar);
 
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
@@ -108,6 +90,7 @@ public class MainActivity extends FragmentActivity {
             public void onTabSelected(@IdRes int tabId) {
                 switch (tabId){
                     case R.id.tab_feed:
+                        id_personne = load_data_from_server();
                         changerFragment(new Feed());
                         break;
                     case R.id.tab_recherche:
@@ -125,10 +108,11 @@ public class MainActivity extends FragmentActivity {
                 }
             }
         });
-        bottomBar.setDefaultTab(R.id.tab_feed);
+        //bottomBar.setDefaultTab(R.id.tab_feed);
+        bottomBar.selectTabAtPosition(0);
     }
 
-    private void changerFragment(Fragment fragment){
+    public void changerFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
@@ -304,5 +288,32 @@ public class MainActivity extends FragmentActivity {
 
     public BottomBar getBottomBar(){
         return bottomBar;
+    }
+
+
+    public int load_data_from_server() {
+        AsyncTask<Integer, Integer, Integer> task = new AsyncTask<Integer, Integer, Integer>() {
+            @Override
+            protected Integer doInBackground(Integer... Integer) {
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder()
+                        .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=feed_id")
+                        .build();
+
+                try {
+                    okhttp3.Response response = client.newCall(request).execute();
+                    JSONArray array = new JSONArray(response.body().string());
+                    JSONObject object = array.getJSONObject(0);
+                    id_max = object.getInt("MAX(id)")+1;
+                }catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    System.out.println("End of content");
+                }
+                return id_max;
+            }
+        };
+        task.execute();
+        return id_max;
     }
 }

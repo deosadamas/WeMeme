@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 public class Feed_max_id {
     private static final String Id_REQUEST_URL = "http://wememe.ca/mobile_app/index.php?prefix=json&p=feed_id";
-    public int id;
+    public int id = 0;
 
     public StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, Id_REQUEST_URL, new Response.Listener<String>() {
         @Override

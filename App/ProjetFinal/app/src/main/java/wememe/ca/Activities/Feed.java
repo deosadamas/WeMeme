@@ -79,7 +79,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         //Bon le 36 doit etre changer par la variable dans la connection qui est feed_max_id.id
         //Passer intent de connextion a celle-ci
         MainActivity activity = (MainActivity) getActivity();
-        int myMaxID = activity.getMaxID();
+        int myMaxID = activity.id_personne;
         load_data_from_server(myMaxID, view.getContext());
         ///////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////
