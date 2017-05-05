@@ -82,7 +82,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
             load_data_from_server(Splash.id_max, view.getContext());
         }else
         {
-            load_data_from_server(activity.id_max_feed, view.getContext());
+            load_data_from_server(activity.id_max, view.getContext());
         }
         ///////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////
@@ -206,7 +206,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         dataLike_list.clear();
         like_list.clear();
         activity.load_data_from_server();
-        load_data_from_server(activity.id_max_feed, view_.getContext());
+        load_data_from_server(activity.id_max, view_.getContext());
         adapter = new CustomAdapter(getView().getContext(), data_list, dataLike_list, like_list, activity);
         recyclerView.setAdapter(adapter);
     }

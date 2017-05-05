@@ -47,7 +47,7 @@ import wememe.ca.Requetes.UserRequest;
  * A simple {@link Fragment} subclass.
  * implements SwipeRefreshLayout.OnRefreshListener
  */
-public class Profil extends Fragment  {
+public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshListener  {
 
 
     public RecyclerView recyclerView;
@@ -70,6 +70,7 @@ public class Profil extends Fragment  {
     private static final String trouveUser = "http://wememe.ca/mobile_app/index.php?prefix=json&p=follow=";
     public boolean first = true;
     private View view_;
+    MainActivity activity;
 
     public Profil(){
 
@@ -79,9 +80,8 @@ public class Profil extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
         final View view = inflater.inflate(R.layout.fragment_profil, container, false);
-
-/*        recyclerView = (RecyclerView)view.findViewById(R.id.recycler_viewProfil);
-        follow = (Button)view.findViewById(R.id.btnFollow);
+        recyclerView = (RecyclerView)view.findViewById(R.id.recycler_viewProfil);
+       /* follow = (Button)view.findViewById(R.id.btnFollow);
         txtPost = (TextView)view.findViewById(R.id.txtPosts);
         txtFollowings = (TextView)view.findViewById(R.id.txtFollowings);
         txtLaughtPerPosts = (TextView)view.findViewById(R.id.txtLaughtPerPosts);
@@ -93,20 +93,19 @@ public class Profil extends Fragment  {
         like_list = new ArrayList<>();
         view_ = view;
 
-        MainActivity activity = (MainActivity) getActivity();
-        /*int myMaxID = activity.getMaxID();
-        load_data_from_server(myMaxID, view.getContext());*/
+        activity = (MainActivity) getActivity();
+        load_data_from_server(Splash.id_max, view.getContext());
 
-      //  load_data__profil(view.getContext(), activity);
+        load_data__profil(view.getContext(), activity);
 
-/*        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_Profil);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
 
-/*        gridLayoutManager = new GridLayoutManager(view.getContext(), 1);
+        gridLayoutManager = new GridLayoutManager(view.getContext(), 1);
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        adapter = new CustomAdapter(view.getContext(), data_list, datalike_list, like_list);
+        adapter = new CustomAdapter(view.getContext(), data_list, datalike_list, like_list, activity);
         recyclerView.setAdapter(adapter);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -117,9 +116,9 @@ public class Profil extends Fragment  {
                     load_data_from_server(data_list.get(data_list.size() - 1).getId(), view.getContext());
                 }
             }
-        });*/
+        });
 
-/*        com.android.volley.Response.Listener<String> responseListener = new com.android.volley.Response.Listener<String>() {
+        com.android.volley.Response.Listener<String> responseListener = new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -134,7 +133,7 @@ public class Profil extends Fragment  {
             }
         };
 
-        RequestQueue queue = Volley.newRequestQueue(view.getContext());
+/*        RequestQueue queue = Volley.newRequestQueue(view.getContext());
         UserRequest userRequest = new UserRequest(iduser, responseListener);
         queue.add(userRequest);
         FollowRequest followRequest = new FollowRequest();*/
@@ -222,7 +221,7 @@ public class Profil extends Fragment  {
                         datalike_list.add(dataLikes);
 
                     }
-                 //   activity.load_data_from_server();
+                    activity.load_data_from_server();
                 }catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -233,7 +232,7 @@ public class Profil extends Fragment  {
 
             @Override
             protected void onPostExecute(Void aVoid) {
-//                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
             }
         };
 
@@ -260,7 +259,7 @@ public class Profil extends Fragment  {
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-/*    public void onRefresh() {
+    public void onRefresh() {
         swipeRefreshLayout.setRefreshing(true);
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -271,8 +270,8 @@ public class Profil extends Fragment  {
         data_list.clear();
         datalike_list.clear();
         like_list.clear();
-        load_data_from_server(feed_max_id.id, view_.getContext());
-     //   adapter = new CustomAdapter(getView().getContext(), data_list, datalike_list, like_list);
+        load_data_from_server(activity.id_max, view_.getContext());
+        adapter = new CustomAdapter(getView().getContext(), data_list, datalike_list, like_list, activity);
         recyclerView.setAdapter(adapter);
     }
 
@@ -294,18 +293,11 @@ public class Profil extends Fragment  {
                         }
                     }
                 };
-
                 RequestQueue queue = Volley.newRequestQueue(view);
-                if(mainactivity.id_user_post == 0)
-                {
-                    ProfilRequest registerRequest = new ProfilRequest(mainactivity.id_user_post, responseListener);
-                    queue.add(registerRequest);
-                }else
-                {
-
-                }
-                FollowRequest followRequest = new FollowRequest();
-                queue.add(followRequest.stringRequest);
+                ProfilRequest registerRequest = new ProfilRequest(String.valueOf(MainActivity.id_user_post), responseListener);
+                queue.add(registerRequest);
+/*                FollowRequest followRequest = new FollowRequest();
+                queue.add(followRequest.stringRequest);*/
                 return null;
             }
 
@@ -314,5 +306,5 @@ public class Profil extends Fragment  {
             }
         };
         task.execute();
-    }*/
+    }
 }

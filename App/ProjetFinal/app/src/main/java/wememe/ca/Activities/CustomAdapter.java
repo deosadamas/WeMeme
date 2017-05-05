@@ -156,7 +156,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             public void onClick(View v) {
                 BottomBar myBottomBar = activity.getBottomBar();
                 myBottomBar.selectTabAtPosition(4);
-                activity.id_user_post(datameme_list.get(position).getId_user_post());
+                MainActivity.id_user_post = datameme_list.get(position).getId_user_post();
             }
         });
     }

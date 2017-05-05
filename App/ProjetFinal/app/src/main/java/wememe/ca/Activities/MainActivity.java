@@ -58,8 +58,7 @@ public class MainActivity extends FragmentActivity {
 
     private int PICK_IMAGE_REQUEST = 1;
 
-    int id_user_post;
-    int id_max_feed;
+    public static int id_user_post;
     ImageView imageView;
     int id_max = 0;
     String user, password, a;
@@ -81,13 +80,15 @@ public class MainActivity extends FragmentActivity {
         password = intent.getStringExtra("password");
         a = intent.getStringExtra("id_max_feed");
         utilisateur = Splash.utilisateur;
+
         bottomBar = (BottomBar)findViewById(R.id.bottomBar);
+        load_data_from_server();
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
                 switch (tabId){
                     case R.id.tab_feed:
-                        id_max_feed = load_data_from_server();
+                        load_data_from_server();
                         bottomBar.setActiveTabColor(getResources().getColor(R.color.colorAccent));
                         changerFragment(new Feed());
                         break;
@@ -98,6 +99,7 @@ public class MainActivity extends FragmentActivity {
                         changerFragment(new Tendances());
                         break;
                     case R.id.tab_profil:
+                        load_data_from_server();
                         changerFragment(new Profil());
                         break;
                     case R.id.tab_publier:
@@ -271,16 +273,6 @@ public class MainActivity extends FragmentActivity {
                 break;
         }
         return super.onTouchEvent(event);
-    }
-
-    public int getMaxID(){
-        //Get max ID from Connexion
-        String maxID = getIntent().getStringExtra("maxID");
-        return id_max_feed;
-    }
-
-    public void id_user_post(int id_user_post){
-        this.id_user_post = id_user_post;
     }
 
     public BottomBar getBottomBar(){
