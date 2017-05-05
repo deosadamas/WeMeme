@@ -66,7 +66,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             String c = dataLike_list.get(i).getUser();
 
             if (id == b && utilisateur.getId().equals(c)){
-                Glide.with(context).load(R.drawable.testlike).into(holder.Like);
+                Glide.with(context).load(R.drawable.tbk).into(holder.Like);
             }
         }
 
@@ -156,7 +156,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             public void onClick(View v) {
                 BottomBar myBottomBar = activity.getBottomBar();
                 myBottomBar.selectTabAtPosition(4);
-                MainActivity.id_user_post = datameme_list.get(position).getId_user_post();
+                MainActivity.id_user_post = String.valueOf(datameme_list.get(position).getId_user_post());
             }
         });
     }

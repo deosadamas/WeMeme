@@ -24,6 +24,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.roughike.bottombar.BottomBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,7 +58,6 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
     private List<DataLike> datalike_list;
     private List<Like> like_list;
     public SwipeRefreshLayout swipeRefreshLayout;
-    Feed_max_id feed_max_id;
     private int iduser;
     private List<DataFollow> dataFollow;
 
@@ -68,7 +68,6 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
     private TextView txtLaughtPerPosts;
     private TextView txtFollowers;
     private static final String trouveUser = "http://wememe.ca/mobile_app/index.php?prefix=json&p=follow=";
-    public boolean first = true;
     private View view_;
     MainActivity activity;
 
@@ -159,9 +158,7 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
             }
         });*/
 
-        if (!first){
-            initSwipe(recyclerView, view);
-        }
+        initSwipe(recyclerView, view);
 
         return view;
     }
@@ -240,7 +237,7 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
         }
 
     private void initSwipe(RecyclerView recyclerView, final View view){
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -249,9 +246,10 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                if (direction == ItemTouchHelper.LEFT){
-                    Toast.makeText(view.getContext(), "Swipe error", Toast.LENGTH_LONG).show();
-                    first = false;
+                if (direction == ItemTouchHelper.RIGHT){
+                    MainActivity activity = (MainActivity) getActivity();
+                    BottomBar myBottomBar = activity.getBottomBar();
+                    myBottomBar.selectTabAtPosition(3);
                 }
             }
         };
@@ -294,10 +292,17 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
                     }
                 };
                 RequestQueue queue = Volley.newRequestQueue(view);
-                ProfilRequest registerRequest = new ProfilRequest(String.valueOf(MainActivity.id_user_post), responseListener);
-                queue.add(registerRequest);
-/*                FollowRequest followRequest = new FollowRequest();
+                if(!(MainActivity.id_user_post.equals(MainActivity.utilisateur.getId())))
+                {
+                    ProfilRequest registerRequest = new ProfilRequest(MainActivity.id_user_post, responseListener);
+                    queue.add(registerRequest);
+/*               FollowRequest followRequest = new FollowRequest();
                 queue.add(followRequest.stringRequest);*/
+
+                }else{
+                    ProfilRequest registerRequest = new ProfilRequest(MainActivity.utilisateur.getId(), responseListener);
+                    queue.add(registerRequest);
+                }
                 return null;
             }
 

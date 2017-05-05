@@ -18,7 +18,7 @@
         android:layout_height="47dp"
         android:layout_above="@id/fragment_container"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="-44dp"
+        android:layout_marginBottom="-39.5dp"
         app:bb_behavior="underNavbar|shy"
         app:bb_tabXmlResource="@xml/bottombar" />
 

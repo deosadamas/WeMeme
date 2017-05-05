@@ -42,11 +42,8 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
     private List<DataLike> dataLike_list;
     private List<Like> like_list;
     public SwipeRefreshLayout swipeRefreshLayout;
-    Feed_max_id feed_max_id;
-    public boolean first = true;
     private View view_;
     MainActivity activity;
-    Splash splash;
 
     public Feed(){
     }
@@ -103,9 +100,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
             }
         });
 
-        if (first){
-            initSwipe(recyclerView, view);
-        }
+        initSwipe(recyclerView, view);
 
         return view;
     }
@@ -186,7 +181,6 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                     MainActivity activity = (MainActivity) getActivity();
                     BottomBar myBottomBar = activity.getBottomBar();
                     myBottomBar.selectTabAtPosition(1);
-                    first = false;
                 }
             }
         };

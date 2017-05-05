@@ -58,11 +58,11 @@ public class MainActivity extends FragmentActivity {
 
     private int PICK_IMAGE_REQUEST = 1;
 
-    public static int id_user_post;
     ImageView imageView;
     int id_max = 0;
     String user, password, a;
     public static Utilisateur utilisateur;
+    public static String id_user_post;
 
     public Bitmap bitmap;
 
@@ -80,7 +80,6 @@ public class MainActivity extends FragmentActivity {
         password = intent.getStringExtra("password");
         a = intent.getStringExtra("id_max_feed");
         utilisateur = Splash.utilisateur;
-
         bottomBar = (BottomBar)findViewById(R.id.bottomBar);
         load_data_from_server();
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
@@ -100,6 +99,8 @@ public class MainActivity extends FragmentActivity {
                         break;
                     case R.id.tab_profil:
                         load_data_from_server();
+                        String id_utilisateur = utilisateur.getId();
+                        id_user_post = id_utilisateur;
                         changerFragment(new Profil());
                         break;
                     case R.id.tab_publier:
