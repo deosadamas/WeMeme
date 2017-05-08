@@ -159,6 +159,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                 MainActivity.id_user_post = String.valueOf(datameme_list.get(position).getId_user_post());
             }
         });
+
+        holder.Option.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
@@ -175,7 +182,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         public ImageView imageView;
         public ImageView imagePhoto;
         public ImageView Like;
-
+        public ImageView Option;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -187,6 +194,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             imagePhoto = (ImageView) itemView.findViewById(R.id.circleImageView);
             ID = (TextView) itemView.findViewById(R.id.txt_ID);
             like = (TextView) itemView.findViewById(R.id.txtlike);
+            Option = (ImageView) itemView.findViewById(R.id.iv_Option);
         }
     }
 

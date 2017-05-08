@@ -183,4 +183,8 @@ public class Connexion extends AppCompatActivity {
                 startActivity(intent);
         }
     }
+
+    public void test(View view) {
+        startActivity(new Intent(Connexion.this, Repport.class));
+    }
 }

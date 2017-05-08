@@ -115,7 +115,6 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 Request request = new Request.Builder()
                         .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=feed&id=" + integers[0])
                         .build();
-
                 try {
                     Response response = client.newCall(request).execute();
 
