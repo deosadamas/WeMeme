@@ -1,4 +1,4 @@
-package wememe.ca.Activities;
+package wememe.ca.Class;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -16,16 +16,18 @@ import com.roughike.bottombar.BottomBar;
 
 import java.util.List;
 
+import wememe.ca.Class.Data_Feed;
+import wememe.ca.Class.Like;
+import wememe.ca.Class.Utilisateur;
 import wememe.ca.R;
-import wememe.ca.Requetes.CodeRequest;
-import wememe.ca.Requetes.DataLike;
+import wememe.ca.Class.DataLike;
 import wememe.ca.Requetes.LikeRequest;
 
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
 
     private Context context;
-    private List<MyData> datameme_list;
+    private List<Data_Feed> datameme_list;
     private List<DataLike> dataLike_list;
     private List<Like> like_list;
     private int id;
@@ -33,7 +35,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     Utilisateur utilisateur;
 
 
-    public CustomAdapter(Context context, List<MyData> my_data, List<DataLike> likes, List<Like> like_list, MainActivity activity) {
+    public CustomAdapter(Context context, List<Data_Feed> my_data, List<DataLike> likes, List<Like> like_list, MainActivity activity) {
         this.context = context;
         this.activity = activity;
         utilisateur = MainActivity.utilisateur;

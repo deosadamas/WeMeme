@@ -1,7 +1,5 @@
 package wememe.ca.Activities;
 
-
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,10 +11,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.roughike.bottombar.BottomBar;
 
 import org.json.JSONArray;
@@ -30,17 +24,23 @@ import java.util.List;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import wememe.ca.Class.Data_Feed;
+import wememe.ca.Class.Like;
 import wememe.ca.R;
-import wememe.ca.Requetes.DataLike;
+import wememe.ca.Class.DataLike;
 
 public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
+    //Variable pour les objects du layout feed
     private RecyclerView recyclerView;
     private GridLayoutManager gridLayoutManager;
     private CustomAdapter adapter;
-    private List<MyData> data_list;
+
+    // Les listes pour stocker les information du  serveurs
+    private List<Data_Feed> data_list;
     private List<DataLike> dataLike_list;
     private List<Like> like_list;
+
     public SwipeRefreshLayout swipeRefreshLayout;
     private View view_;
     MainActivity activity;
@@ -52,50 +52,55 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
         final View view = inflater.inflate(R.layout.fragment_feed, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_viewFeed);
+
+        // Initialiser les listes pour les utiliser
         data_list = new ArrayList<>();
         dataLike_list = new ArrayList<>();
         like_list = new ArrayList<>();
         view_ = view;
 
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_viewFeed);
+
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        //////////////////////////////////
+        /////////////////////////////////
+        /////////////////////////////////
+        /////////////////////////////////
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);//MODIFIER
+        /////////////////////////////////
+        /////////////////////////////////
+        /////////////////////////////////
+        /////////////////////////////////
 
 
         gridLayoutManager = new GridLayoutManager(view.getContext(), 1);
         recyclerView.setLayoutManager(gridLayoutManager);
-
-
-
-        ///////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////
-        //Bon le 36 doit etre changer par la variable dans la connection qui est feed_max_id.id
-        //Passer intent de connextion a celle-ci
         activity = (MainActivity) getActivity();
+
+        // La premiere fois que ce fragement est utiliser elle va chercher l'id le plus haut dans la table Feed
+        // La deuxieme fois que ce fragement est utiliser elle relance la requete pour aller chercher encore l'id le plus haut
+        // Simplement rafraichit si il y a de nouvelle information dans la table Feed
         if(Splash.id_max == Splash.id_max)
         {
-            load_data_from_server(Splash.id_max, view.getContext());
+            load_data_from_server(Splash.id_max);
         }else
         {
-            load_data_from_server(activity.id_max, view.getContext());
+            load_data_from_server(activity.id_max);
         }
-        ///////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////
 
+        //Dans le Custom adapter, celui-ci a besoin du context du layout feed, des 3 listes d'information et de le contexte de la MainActivity
         adapter = new CustomAdapter(view.getContext(),data_list, dataLike_list, like_list, activity);
         recyclerView.setAdapter(adapter);
 
+        // A chaque fois que la personne scroll down et atteind le dernier element afficher
+        // la methode load_data_from_server est alors enclencher pour aller checher d'autre element
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
                 if (gridLayoutManager.findLastCompletelyVisibleItemPosition() == data_list.size() - 1) {
-                    load_data_from_server(data_list.get(data_list.size() - 1).getId(), view.getContext());
+                    load_data_from_server(data_list.get(data_list.size() - 1).getId());
                 }
             }
         });
@@ -105,25 +110,31 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         return view;
     }
 
-    private void load_data_from_server(int id, final Context view) {
+    //Cette methode va simplement aller chercher l'information du serveur et les ajoutes dans les 3 listes
+    // 1 data_list dans la Table Feed, la classe Data_Feed(id, sujet, nom, description, images, nbrelike, id_user_post)
+    // 2 like_list dans la Table Feed, la classe Like(id, nbreLike)
+    // 3 dataLike_list dans la Table Laught, la classe DataLike(UserLaught, MemeLaught)
+    private void load_data_from_server(final int id) {
 
+        //Utilise le AsyncTask simplement pour  télécharger l'information dans le background de l'application
         AsyncTask<Integer, Void, Void> task = new AsyncTask<Integer, Void, Void>() {
             @Override
             protected Void doInBackground(Integer... integers) {
 
                 OkHttpClient client = new OkHttpClient();
                 Request request = new Request.Builder()
-                        .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=feed&id=" + integers[0])
-                        .build();
+                        .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=feed&id=" + id)// Avec la requete php id descend de -3
+                        .build();                                                                // A chaque fois que la requete est appeller
                 try {
                     Response response = client.newCall(request).execute();
 
+                    //Converti la reponse du serveur (JSON) dans un tableau de json pour ensuite etre capable de trier l'information
                     JSONArray array = new JSONArray(response.body().string());
                     for (int i = 0; i < array.length(); i++) {
 
                         JSONObject object = array.getJSONObject(i);
 
-                        MyData data = new MyData(object.getInt("id"), object.getString("sujet"), object.getString("nom"),
+                        Data_Feed data = new Data_Feed(object.getInt("id"), object.getString("sujet"), object.getString("nom"),
                                 object.getString("description"),
                                 object.getString("images"), object.getInt("nbreLike"), object.getInt("id_user_post"));
 
@@ -148,7 +159,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                         dataLike_list.add(dataLikes);
 
                     }
-                    activity.load_data_from_server();
+                    activity.load_data_from_server();// Cette methode va chercher id_max du serveur en d'autre mot rafraichit
                 }catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -157,13 +168,13 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 return null;
             }
 
+            //A chaque fois qu'il a de nouvelle information sa les ajoutes et rafraichit le recycleview
             @Override
             protected void onPostExecute(Void aVoid) {
                 adapter.notifyDataSetChanged();
             }
         };
-
-        task.execute(id);
+        task.execute(id);//Execute la asynctaks
     }
 
     private void initSwipe(RecyclerView recyclerView, final View view){
@@ -187,7 +198,9 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
+    //Cette method rafraichit les donnees du serveur va chercher les nouvelle information s'il y en a
     public void onRefresh() {
+        //Un thread qui force un delai de 1,5 seconde pour que cette méthode soit utiliser a nouveau
         swipeRefreshLayout.setRefreshing(true);
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -195,11 +208,16 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 swipeRefreshLayout.setRefreshing(false);
             }
         }, 1500);
+
+        //Vide les liste
         data_list.clear();
         dataLike_list.clear();
         like_list.clear();
+        // Remplit les liste avec de nouvelle information
         activity.load_data_from_server();
-        load_data_from_server(activity.id_max, view_.getContext());
+        load_data_from_server(activity.id_max);
+
+        //Ajouter dans le CustomAdapter les nouvelle listes
         adapter = new CustomAdapter(getView().getContext(), data_list, dataLike_list, like_list, activity);
         recyclerView.setAdapter(adapter);
     }

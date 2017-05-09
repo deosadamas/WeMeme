@@ -1,12 +1,14 @@
-package wememe.ca.Activities;
+package wememe.ca.Class;
 
 
-public class MyData {
+public class Data_Feed {
 
+    //Variable de la classe Data_Feed
     private int id, like, id_user_post;
     private String sujet, nom, description,image_link;
 
-    public MyData(int id, String sujet, String nom, String description, String image_link, int like, int id_user_post) {
+    //Constructeur de la classe Data_Feed
+    public Data_Feed(int id, String sujet, String nom, String description, String image_link, int like, int id_user_post) {
         this.id = id;
         this.sujet = sujet;
         this.nom = nom;
@@ -15,15 +17,16 @@ public class MyData {
         this.like = like;
         this.id_user_post = id_user_post;
     }
+    //Methode pour get et set les paramettre de la classe Data_Feed
 
     public int getId() {
         return id;
     }
 
-
     public int getId_user_post() {
         return id_user_post;
     }
+
     public void setId(int id) {
         this.id = id;
     }

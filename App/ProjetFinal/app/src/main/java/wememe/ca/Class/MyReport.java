@@ -1,4 +1,4 @@
-package wememe.ca.Activities;
+package wememe.ca.Class;
 
 /**
  * Created by Jacob on 2017-05-08.

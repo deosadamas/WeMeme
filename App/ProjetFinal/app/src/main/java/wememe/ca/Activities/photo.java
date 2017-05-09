@@ -29,14 +29,14 @@ import wememe.ca.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class photo extends Fragment{
+public class Photo extends Fragment{
 
     Button btnGallery;
     Button btnUpload;
     EditText edtDescription;
     View view;
 
-    public photo() {
+    public Photo() {
         // Required empty public constructor
     }
 

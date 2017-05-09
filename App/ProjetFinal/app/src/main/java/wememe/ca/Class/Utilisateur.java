@@ -1,9 +1,11 @@
-package wememe.ca.Activities;
+package wememe.ca.Class;
 
 public class Utilisateur {
+    //Variable de la classe Utilisateur
     private int id;
     private String email, username, date, profilpic;
 
+    //Constructeur de la classe Utilisateur
     public Utilisateur(int id , String email, String username, String date, String profilpic) {
         this.id = id;
         this.email = email;
@@ -12,6 +14,7 @@ public class Utilisateur {
         this.profilpic = profilpic;
     }
 
+    //Methode pour get les paramettre de la classe Utilisateur
     public int getId() {
         return id;
     }

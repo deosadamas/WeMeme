@@ -18,9 +18,7 @@ import android.util.Base64;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.Toast;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 import org.json.JSONArray;
@@ -32,8 +30,8 @@ import java.util.HashMap;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import wememe.ca.Class.Utilisateur;
 import wememe.ca.R;
-import wememe.ca.Requetes.InformationUserRequest;
 
 public class MainActivity extends FragmentActivity {
 
@@ -46,7 +44,7 @@ public class MainActivity extends FragmentActivity {
     ////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////
-    private Fragment fragment = new photo();
+    private Fragment fragment = new Photo();
     ////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////

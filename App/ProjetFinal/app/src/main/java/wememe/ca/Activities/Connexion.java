@@ -17,6 +17,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import wememe.ca.Class.SaveSharedPreference;
 import wememe.ca.R;
 import wememe.ca.Requetes.LoginRequest;
 
@@ -26,7 +27,6 @@ public class Connexion extends AppCompatActivity {
 
     private float x1,x2;
     static final int MIN_DISTANCE = 150;
-    Feed_max_id feed_max_id;
     private String userConnexion_information, mdpConnexion_information;
     EditText userConnexion;
     EditText mdpConnexion;
@@ -39,6 +39,8 @@ public class Connexion extends AppCompatActivity {
 
         userConnexion = (EditText)findViewById(R.id.fieldUserConnexion);
         mdpConnexion = (EditText)findViewById(R.id.fieldMDPConnexion);
+
+        //Une condition qui vérifie si l'utilisateur est déja connecter
         if(SaveSharedPreference.getUserName(Connexion.this).length() == 0)
         {
             //Initialisation des variables
@@ -99,7 +101,7 @@ public class Connexion extends AppCompatActivity {
                                 Boolean validationEmailNull = jsonResponse.getBoolean("validationEmailNull");
                                 Boolean validationEmail = null;
                                 Boolean validationNom = null;
-                                //
+
                                 //Verifier si on utilise le username ou l'email
                                 if(!validationEmailNull)
                                 {
@@ -159,7 +161,7 @@ public class Connexion extends AppCompatActivity {
                             }
                         }
                     };
-
+                    // Une requete qui vérifie si les informations de la personne sont correcte
                     LoginRequest loginRequest = new LoginRequest(userText, mdpText, responseListener);
                     RequestQueue queue = Volley.newRequestQueue(Connexion.this);
                     queue.add(loginRequest);
@@ -168,6 +170,7 @@ public class Connexion extends AppCompatActivity {
         }
         else
         {
+                //Ajouter l'information nécessaire dans la prochaine activité pour sauvegarder les informations de l'utilisateur
                 Intent intent = new Intent(Connexion.this, Splash.class);
                 userText = userConnexion.getText().toString();
                 mdpText = mdpConnexion.getText().toString();

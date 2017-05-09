@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import wememe.ca.Class.Utilisateur;
 import wememe.ca.R;
 import wememe.ca.Requetes.InformationUserRequest;
 
