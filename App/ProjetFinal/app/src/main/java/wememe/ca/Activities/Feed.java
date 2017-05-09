@@ -144,7 +144,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                     for (int i = 0; i < arrays.length(); i++) {
                         JSONObject object = arrays.getJSONObject(i);
 
-                        DataLike dataLikes = new DataLike(String.valueOf(object.getInt("UserLaught")), object.getInt("MemeLaught"));
+                        DataLike dataLikes = new DataLike(object.getInt("UserLaught"), object.getInt("MemeLaught"));
                         dataLike_list.add(dataLikes);
 
                     }

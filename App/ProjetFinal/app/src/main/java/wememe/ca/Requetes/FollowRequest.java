@@ -3,40 +3,26 @@ package wememe.ca.Requetes;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Created by info1 on 2017-04-27.
+ * Created by dnksj on 2017-05-08.
  */
 
-public class FollowRequest {
+public class FollowRequest extends StringRequest {
 
-    public static final String user_REQUEST_URL = "http://wememe.ca/mobile_app/index.php?prefix=json&p=follow";
-    public int followed;
-    public int follower;
-    public List<DataFollow> dataFollows;
+    private static final String EMAIL_REQUEST_URL = "http://wememe.ca/mobile_app/index.php?prefix=json&p=followRequest";
+    private Map<String, String> params;
 
-    public StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, user_REQUEST_URL, new Response.Listener<String>() {
-        @Override
-        public void onResponse(String response) {
-            try{
-                JSONArray array = new JSONArray(response);
-                JSONObject object = array.getJSONObject(0);
-                followed = object.getInt("UserFollowed");
-                follower = object.getInt("UserFollowing");
-                for (int i = 0; i <= array.length(); i++){
-                    JSONObject object2 = array.getJSONObject(1);
-                    DataFollow dataFollow = new DataFollow(object2.getInt("UserFollowed"), object2.getInt("UserFollowing"), object2.getString("DateFollow"));
-                    dataFollows.add(dataFollow);
-                }
-            } catch (JSONException ex){
-                ex.printStackTrace();
-            }
-        }
-    },null);
+    public FollowRequest(int UserFollowed, int UserFollowing, Response.Listener<String> listener) {
+        super(Method.POST, EMAIL_REQUEST_URL, listener,  null);
+        params = new HashMap<>();
+        params.put("UserFollowed", String.valueOf(UserFollowed));
+        params.put("UserFollowing", String.valueOf(UserFollowing));
+    }
+    @Override
+    public Map<String, String> getParams() {
+        return params;
+    }
 }
-

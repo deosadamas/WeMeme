@@ -63,9 +63,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         for (int i = 0; i <= dataLike_list.size()-1; i++){
             int b = dataLike_list.get(i).getMeme();
-            String c = dataLike_list.get(i).getUser();
+            int c = dataLike_list.get(i).getUser();
 
-            if (id == b && utilisateur.getId().equals(c)){
+            if (id == b && utilisateur.getId() == c){
                 Glide.with(context).load(R.drawable.tbk).into(holder.Like);
             }
         }
@@ -156,7 +156,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             public void onClick(View v) {
                 BottomBar myBottomBar = activity.getBottomBar();
                 myBottomBar.selectTabAtPosition(4);
-                MainActivity.id_user_post = String.valueOf(datameme_list.get(position).getId_user_post());
+                MainActivity.id_user_post = datameme_list.get(position).getId_user_post();
             }
         });
 

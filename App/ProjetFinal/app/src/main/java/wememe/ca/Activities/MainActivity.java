@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.Toast;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -62,7 +63,7 @@ public class MainActivity extends FragmentActivity {
     int id_max = 0;
     String user, password, a;
     public static Utilisateur utilisateur;
-    public static String id_user_post;
+    public static int id_user_post;
 
     public Bitmap bitmap;
 
@@ -99,7 +100,7 @@ public class MainActivity extends FragmentActivity {
                         break;
                     case R.id.tab_profil:
                         load_data_from_server();
-                        String id_utilisateur = utilisateur.getId();
+                        int id_utilisateur = utilisateur.getId();
                         id_user_post = id_utilisateur;
                         changerFragment(new Profil());
                         break;
@@ -198,14 +199,12 @@ public class MainActivity extends FragmentActivity {
                 data.put("sujet", "a");
                 data.put("nom", "nom");
                 data.put("description", "des");
-                data.put("$id_user_post", "0");
-                data.put("$id_user_photo", "http://wememe.ca/image_serveur/image_feed/121.png");
+                data.put("$id_user_post", String.valueOf(utilisateur.getId()));
+                data.put("$id_user_photo", utilisateur.getProfilpic());
                 String result = rh.sendPostRequest(UPLOAD_URL,data);
-
                 return result;
             }
         }
-
         UploadImage ui = new UploadImage();
         ui.execute(bitmap);
     }

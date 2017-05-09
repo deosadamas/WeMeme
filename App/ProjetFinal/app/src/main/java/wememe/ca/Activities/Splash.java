@@ -8,7 +8,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
+import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -50,14 +52,16 @@ public class Splash extends Activity {
                         try {
                             JSONArray array = new JSONArray(response);
                             JSONObject object = array.getJSONObject(0);
-                            utilisateur = new Utilisateur(String.valueOf(object.getInt("id")), object.getString("email"), object.getString("username"), object.getString("date"), object.getString("profilpic"));
+                            utilisateur = new Utilisateur(object.getInt("id"), object.getString("email"), object.getString("username"), object.getString("date"), object.getString("profilpic"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 };
                 RequestQueue queue = Volley.newRequestQueue(Splash.this);
+                RetryPolicy policy = new DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
                 InformationUserRequest informationUserRequest = new InformationUserRequest(user,password ,responseListener);
+                informationUserRequest.setRetryPolicy(policy);
                 queue.add(informationUserRequest);
                 return null;
             }

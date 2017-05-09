@@ -1,9 +1,7 @@
 package wememe.ca.Activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,17 +13,12 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import wememe.ca.R;
-import wememe.ca.Requetes.FollowRequest;
-import wememe.ca.Requetes.InformationUserRequest;
 import wememe.ca.Requetes.LoginRequest;
-import wememe.ca.Requetes.ProfilRequest;
 
 public class Connexion extends AppCompatActivity {
 

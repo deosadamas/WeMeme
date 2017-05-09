@@ -15,10 +15,10 @@ public class LikeRequest extends StringRequest {
     private static final String Code_REQUEST_URL = "http://wememe.ca/mobile_app/index.php?prefix=json&p=like";
     private Map<String, String> params;
 
-    public LikeRequest(String puser, int pcode, Response.Listener<String> listener) {
+    public LikeRequest(int puser, int pcode, Response.Listener<String> listener) {
         super(Method.POST, Code_REQUEST_URL, listener,  null);
         params = new HashMap<>();
-        params.put("userid", puser);
+        params.put("userid", String.valueOf(puser));
         params.put("memeid", String.valueOf(pcode));
     }
     @Override

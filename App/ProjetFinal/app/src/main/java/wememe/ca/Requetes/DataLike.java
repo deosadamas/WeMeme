@@ -5,15 +5,14 @@ package wememe.ca.Requetes;
  */
 
 public class DataLike {
-    private int meme;
-    private String user;
+    private int user, meme;
 
-    public DataLike(String user, int meme) {
+    public DataLike(int user, int meme) {
         this.user = user;
         this.meme = meme;
     }
 
-    public String getUser() {
+    public int getUser() {
         return user;
     }
 

@@ -1,9 +1,10 @@
 package wememe.ca.Activities;
 
 public class Utilisateur {
-    private String id, email, username, date, profilpic;
+    private int id;
+    private String email, username, date, profilpic;
 
-    public Utilisateur(String id , String email, String username, String date, String profilpic) {
+    public Utilisateur(int id , String email, String username, String date, String profilpic) {
         this.id = id;
         this.email = email;
         this.username = username;
@@ -11,7 +12,7 @@ public class Utilisateur {
         this.profilpic = profilpic;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
