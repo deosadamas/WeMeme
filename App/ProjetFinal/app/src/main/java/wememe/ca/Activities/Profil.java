@@ -194,10 +194,9 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
                         data_list.add(data);
                         like_list.add(likes);
                     }
-
                     OkHttpClient clients = new OkHttpClient();
                     Request requests = new Request.Builder()
-                            .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=datelike")
+                            .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=datelike&id_utilisateur=" + MainActivity.utilisateur.getId())
                             .build();
                     okhttp3.Response responses = clients.newCall(requests).execute();
 

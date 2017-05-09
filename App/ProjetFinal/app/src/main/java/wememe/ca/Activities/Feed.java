@@ -146,7 +146,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
                     OkHttpClient clients = new OkHttpClient();
                     Request requests = new Request.Builder()
-                            .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=datelike")
+                            .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=datelike&id_utilisateur=" + MainActivity.utilisateur.getId())
                             .build();
                     okhttp3.Response responses = clients.newCall(requests).execute();
 

@@ -39,36 +39,14 @@ public class Splash extends Activity {
         final Animation an = AnimationUtils.loadAnimation(getBaseContext(),R.anim.rotate);
         final Animation an2 = AnimationUtils.loadAnimation(getBaseContext(),R.anim.abc_fade_out);
 
-        Intent intent = getIntent();
-        user = intent.getStringExtra("user");
-        password = intent.getStringExtra("password");
+        // Cette methode met dans un object static Utilisateur c'est information
+        load_information_utilisateur();
+        // Cette methode va chercher l'id max de la table feed et l'assigne dans la variable static id_max
         load_data_from_server();
 
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... Void) {
-                com.android.volley.Response.Listener<String> responseListener = new com.android.volley.Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONArray array = new JSONArray(response);
-                            JSONObject object = array.getJSONObject(0);
-                            utilisateur = new Utilisateur(object.getInt("id"), object.getString("email"), object.getString("username"), object.getString("date"), object.getString("profilpic"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-                RequestQueue queue = Volley.newRequestQueue(Splash.this);
-                RetryPolicy policy = new DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                InformationUserRequest informationUserRequest = new InformationUserRequest(user,password ,responseListener);
-                informationUserRequest.setRetryPolicy(policy);
-                queue.add(informationUserRequest);
-                return null;
-            }
-        };
-        task.execute();
 
+        //Commence l'animation
+        // Simplement dans le dosssier anim j'ai le rotate.xml avec les caracteristique que jai donner
         iv.startAnimation(an);
         an.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -78,13 +56,20 @@ public class Splash extends Activity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                iv.startAnimation(an2);
-                finish();
-                Intent i = new Intent(getBaseContext(),MainActivity.class);
-                i.putExtra("user", user);
-                i.putExtra("password", password);
-                i.putExtra("id_max_feed", String.valueOf(id_max));
-                startActivity(i);
+                //A la fin de l'animation je regarde si l'utilisateur est pas null sinon je recmmence l'animation tant que
+                // l'utilisateur n'est pas null
+                    if(utilisateur != null)
+                    {
+                        iv.startAnimation(an2);
+                        finish();
+                        Intent i = new Intent(getBaseContext(),MainActivity.class);
+                        startActivity(i);
+
+                    }else
+                    {
+                        animation.setDuration(500);
+                        iv.startAnimation(an);
+                    }
             }
 
             @Override
@@ -94,6 +79,7 @@ public class Splash extends Activity {
         });
     }
 
+    //Une fonction qui retourne id_max dans la base de donnee de la table Feed
     public int load_data_from_server() {
         AsyncTask<Integer, Integer, Integer> task = new AsyncTask<Integer, Integer, Integer>() {
             @Override
@@ -117,6 +103,40 @@ public class Splash extends Activity {
         };
         task.execute();
         return id_max;
+    }
+
+    //Une methode qui va chercher les informations de l'utilisateur dans la base de donnee dans la table Register
+    private void load_information_utilisateur()
+    {
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... Void) {
+                com.android.volley.Response.Listener<String> responseListener = new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray array = new JSONArray(response);
+                            JSONObject object = array.getJSONObject(0);
+                            //Assigne les object json de la reponse du serveur dans la object Utilisateur
+                             utilisateur = new Utilisateur(object.getInt("id"), object.getString("email"), object.getString("username"), object.getString("date"), object.getString("profilpic"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                RequestQueue queue = Volley.newRequestQueue(Splash.this);
+                //Simplement 3 paramettre important,
+                // Le temps pour chaque requete
+                // Le nombre d'essais
+                // Le temps exponentiel du socket pour chaque essais reessayer
+                RetryPolicy policy = new DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                InformationUserRequest informationUserRequest = new InformationUserRequest(user,password ,responseListener);
+                informationUserRequest.setRetryPolicy(policy);
+                queue.add(informationUserRequest);
+                return null;
+            }
+        };
+        task.execute();
     }
 
 }

@@ -59,7 +59,6 @@ public class MainActivity extends FragmentActivity {
 
     ImageView imageView;
     int id_max = 0;
-    String user, password, a;
     public static Utilisateur utilisateur;
     public static int id_user_post;
 
@@ -74,10 +73,6 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = getIntent();
-        user = intent.getStringExtra("user");
-        password = intent.getStringExtra("password");
-        a = intent.getStringExtra("id_max_feed");
         utilisateur = Splash.utilisateur;
         bottomBar = (BottomBar)findViewById(R.id.bottomBar);
         load_data_from_server();
