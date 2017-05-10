@@ -298,4 +298,10 @@ public class MainActivity extends FragmentActivity {
         task.execute();
         return id_max;
     }
+
+    public void StartReport(int id){
+        Intent intent = new Intent(MainActivity.this, Repport.class);
+        intent.putExtra("id",id);
+        startActivity(intent);
+    }
 }

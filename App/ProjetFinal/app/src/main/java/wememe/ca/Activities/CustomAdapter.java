@@ -1,6 +1,7 @@
 package wememe.ca.Activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -215,7 +216,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         holder.Option.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+              int id_meme = datameme_list.get(position).getId();
+                activity.StartReport(id_meme);
             }
         });
     }
