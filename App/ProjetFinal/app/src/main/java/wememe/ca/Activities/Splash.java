@@ -39,6 +39,10 @@ public class Splash extends Activity {
         final Animation an = AnimationUtils.loadAnimation(getBaseContext(),R.anim.rotate);
         final Animation an2 = AnimationUtils.loadAnimation(getBaseContext(),R.anim.abc_fade_out);
 
+        Intent intent = getIntent();
+        user = intent.getStringExtra("user");
+        password = intent.getStringExtra("password");
+
         // Cette methode met dans un object static Utilisateur c'est information
         load_information_utilisateur();
         // Cette methode va chercher l'id max de la table feed et l'assigne dans la variable static id_max
@@ -67,7 +71,8 @@ public class Splash extends Activity {
 
                     }else
                     {
-                        animation.setDuration(500);
+                        animation.setDuration(1000);
+                        load_information_utilisateur();
                         iv.startAnimation(an);
                     }
             }
