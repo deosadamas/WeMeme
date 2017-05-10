@@ -123,7 +123,7 @@ public class Splash extends Activity {
                             JSONArray array = new JSONArray(response);
                             JSONObject object = array.getJSONObject(0);
                             //Assigne les object json de la reponse du serveur dans la object Utilisateur
-                             utilisateur = new Utilisateur(object.getInt("id"), object.getString("email"), object.getString("username"), object.getString("date"), object.getString("profilpic"));
+                            utilisateur = new Utilisateur(object.getInt("id"), object.getString("email"), object.getString("username"), object.getString("date"), object.getString("profilpic"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

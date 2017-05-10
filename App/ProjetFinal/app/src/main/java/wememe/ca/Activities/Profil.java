@@ -62,6 +62,7 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
     private List<Data_Feed> data_list;
     private List<DataLike> datalike_list;
     private List<Like> like_list;
+    private int compteurButtonFollow = 0;
 
 
     public SwipeRefreshLayout swipeRefreshLayout;
@@ -126,21 +127,27 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
             @Override
             public void onClick(View v) {
                 RequestQueue queue = Volley.newRequestQueue(view.getContext());
-                // Cette condition change de couleur si l'utilisateur clique 1 fois et
-                // la deuxieme fois elle redevient a la couleur initiale
-                if(buttonFollow)
-                {
-                    follow.setBackgroundColor(Color.GREEN);
-                    buttonFollow = false;
-                }else{
-                    follow.setBackgroundColor(Color.WHITE);
-                    buttonFollow = true;
-                }
                 //Envoit une requete au serveur avec l'id de l'utilisateur et l'id du profil de la personne que l'utilisateur est dessus
                 FollowRequest followRequest = new FollowRequest(MainActivity.utilisateur.getId(), MainActivity.id_user_post, new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Toast.makeText(activity, response, Toast.LENGTH_SHORT).show();
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            Boolean validattiondejafollow = jsonResponse.getBoolean("dejafollow");
+                            if(!validattiondejafollow)
+                            {
+                                follow.setBackgroundColor(Color.GREEN);
+                                load_data__profil(view.getContext());
+                            }
+                            else
+                            {
+                                follow.setBackgroundColor(Color.WHITE);
+                                load_data__profil(view.getContext());
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
                 queue.add(followRequest);
@@ -349,6 +356,8 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
                             {
                                 int moyennelaughtspost = number / numberpost;
                                 txtLaughtPerPosts.setText(String.valueOf(moyennelaughtspost));
+                            }else {
+                                txtLaughtPerPosts.setText(String.valueOf(number));
                             }
 
                         } catch (JSONException e) {
@@ -361,6 +370,7 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
                     @Override
                     public void onResponse(String response) {
                         try {
+                            follow_list.clear();
                             // Ajoute toute l'information de la table follow dans la liste follow_list
                             JSONArray array = new JSONArray(response);
                             for (int i = 0; i < array.length(); i++) {
@@ -374,9 +384,16 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
                                 //Cette condition vérifie que si un element de la liste et pareil avec l'id de l'utlisateur
                                 // ou du profil de la personne dont l'utilisateur est dessus
                                 // elle affiche la couleur du button car celle-ci veut simplement dire qu'il follow déja cette personne
-                                    if (following ==  MainActivity.id_user_post || following ==  MainActivity.utilisateur.getId()){
+                                if(!(MainActivity.id_user_post == MainActivity.utilisateur.getId()))
+                                {
+                                    if (following ==  MainActivity.id_user_post){
                                         follow.setBackgroundColor(Color.GREEN);
                                     }
+                                }else{
+                                    if (following ==   MainActivity.utilisateur.getId()){
+                                        follow.setBackgroundColor(Color.GREEN);
+                                    }
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -389,7 +406,7 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
                 {
                     laugthsPost = new LaugthsPost(MainActivity.id_user_post, responseListenerLaugthsPost);
                 }else{
-                    laugthsPost = new LaugthsPost(MainActivity.id_user_post, responseListenerLaugthsPost);
+                    laugthsPost = new LaugthsPost(MainActivity.utilisateur.getId(), responseListenerLaugthsPost);
                 }
                 followListRequest = new FollowListRequest(responseListenerFollow);
                 queue.add(laugthsPost);
