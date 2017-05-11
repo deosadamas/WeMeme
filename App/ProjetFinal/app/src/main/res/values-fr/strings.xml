@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WeMeme</string>
+    <string name="likes">J\'aime</string>
+    <string name="nom">Nom</string>
+</resources>

@@ -137,13 +137,15 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
                             Boolean validattiondejafollow = jsonResponse.getBoolean("dejafollow");
                             if(!validattiondejafollow)
                             {
-                                follow.setBackgroundColor(Color.GREEN);
+                                follow.setBackgroundResource(R.drawable.folloon);
+                                follow.setText("unfollow ");
                                 load_data__profil(view.getContext());
                             }
                             else
                             {
-                                follow.setBackgroundColor(Color.WHITE);
+                                follow.setBackgroundResource(R.drawable.follooff);
                                 load_data__profil(view.getContext());
+                                follow.setText("follow ");
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -387,11 +389,13 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
                                 if(!(MainActivity.id_user_post == MainActivity.utilisateur.getId()))
                                 {
                                     if (following ==  MainActivity.id_user_post){
-                                        follow.setBackgroundColor(Color.GREEN);
+                                        follow.setBackgroundResource(R.drawable.folloon);
+                                        follow.setText("unfollow");
                                     }
                                 }else{
                                     if (following ==   MainActivity.utilisateur.getId()){
-                                        follow.setBackgroundColor(Color.GREEN);
+                                        follow.setBackgroundResource(R.drawable.folloon);
+                                        follow.setText("unfollow");
                                     }
                                 }
                             }

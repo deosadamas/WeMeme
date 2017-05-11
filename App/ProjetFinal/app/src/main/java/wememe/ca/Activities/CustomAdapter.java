@@ -64,6 +64,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         // On recherche un objec selon la postion du onBinViewHolder et on lui
         // assigne son type selon les choses qu'ont veux
         id = datameme_list.get(position).getId();
+        holder.Option.setImageResource(R.drawable.troispoints);
         holder.nom.setText(datameme_list.get(position).getNom());
         holder.id_user_post.setText(String.valueOf(datameme_list.get(position).getId_user_post()));
         holder.like.setText(String.valueOf(like_list.get(position).getLike()));
@@ -135,7 +136,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                         break;
                     }
                 }
-                boolean likes = false;// Un boolean pour voir si le nbreLike d'une Photo a été rechercher
+                boolean likes = false;// Un boolean pour voir si le nbreLike d'une 0hoto a été rechercher
                 int compteur = 0;//Initialise la variable int du compteur
                 // Une boucle qui parcoure la liste like_list pour trouver sa postion selon id_meme qui est rechercher
                 for(int i = 0; i < like_list.size(); i++)
@@ -179,7 +180,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     /*
                         Explication plus détailler :
 
-                        Photo 23 like (Utilisateur la pas like)
+                        0hoto 23 like (Utilisateur la pas like)
                         donc int nbrelike = 23;
                         mais utilisateur decide de like cette photo
                         nbrelike = 23 + 1(Like de l'utilisateur);

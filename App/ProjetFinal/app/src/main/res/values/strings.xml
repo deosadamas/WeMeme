@@ -39,4 +39,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="_0">0</string>
+    <string name="fr">francais</string>
+    <string name="id">ID</string>
+    <string name="id_personne">Id_personne</string>
+    <string name="likes">Likes</string>
+    <string name="nom">Nom</string>
+    <string name="textview">TextView</string>
 </resources>
