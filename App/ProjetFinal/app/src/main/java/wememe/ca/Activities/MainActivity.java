@@ -300,7 +300,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void StartReport(int id){
-        Intent intent = new Intent(MainActivity.this, Repport.class);
+        Intent intent = new Intent(MainActivity.this, Report.class);
         intent.putExtra("id",id);
         startActivity(intent);
     }

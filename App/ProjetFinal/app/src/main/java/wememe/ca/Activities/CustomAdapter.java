@@ -1,13 +1,11 @@
 package wememe.ca.Activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -52,7 +50,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.test,parent,false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.card,parent,false);
 
         return new ViewHolder(itemView);
     }
@@ -137,7 +135,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                         break;
                     }
                 }
-                boolean likes = false;// Un boolean pour voir si le nbreLike d'une photo a été rechercher
+                boolean likes = false;// Un boolean pour voir si le nbreLike d'une Photo a été rechercher
                 int compteur = 0;//Initialise la variable int du compteur
                 // Une boucle qui parcoure la liste like_list pour trouver sa postion selon id_meme qui est rechercher
                 for(int i = 0; i < like_list.size(); i++)

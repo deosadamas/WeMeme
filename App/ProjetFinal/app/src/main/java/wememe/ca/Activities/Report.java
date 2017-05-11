@@ -1,36 +1,19 @@
 package wememe.ca.Activities;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.AsyncTask;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioButton;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import wememe.ca.Class.DataLike;
-import wememe.ca.Class.Data_Feed;
-import wememe.ca.Class.Like;
-import wememe.ca.Class.MyReport;
 import wememe.ca.R;
 import wememe.ca.Requetes.ReportRequest;
 
-public class Repport extends AppCompatActivity {
+public class Report extends AppCompatActivity {
     // Déclaration des differentes variables
     private RadioButton Porno;
     private int ID;
@@ -45,7 +28,10 @@ public class Repport extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repport);
         Bundle bundle = getIntent().getExtras();
+        // Prends le ID du poste a report et l'asigne a une variable
         ID = bundle.getInt("id");
+
+        //Assignation des differentes variable
         Confidentielle = (RadioButton)findViewById(R.id.rbtn_Confidentielle);
         Autre = (RadioButton)findViewById(R.id.rbtn_Autre);
         Porno = (RadioButton)findViewById(R.id.rbtn_Porno);
@@ -75,11 +61,11 @@ public class Repport extends AppCompatActivity {
    }
 
    public void Traitement(final int id ,final Context context){
-       //Utilise le AsyncTask simplement pour  télécharger l'information dans le background de l'application
+       //Utilise le AsyncTask pour executer la requete php qui mets a jours les champ conserner pour les diffrents report
        AsyncTask<Integer, Void, Void> task = new AsyncTask<Integer, Void, Void>() {
            @Override
            protected Void doInBackground(Integer... integers) {
-                   RequestQueue queue = Volley.newRequestQueue(Repport.this);
+                   RequestQueue queue = Volley.newRequestQueue(wememe.ca.Activities.Report.this);
                    ReportRequest request1 = new ReportRequest(String.valueOf(id),String.valueOf(Report[0]),String.valueOf(Report[1]),String.valueOf(Report[2]),String.valueOf(Report[3]), new com.android.volley.Response.Listener<String>() {
                        @Override
                        public void onResponse(String response) {
@@ -90,7 +76,7 @@ public class Repport extends AppCompatActivity {
                return null;
            }
 
-           //A chaque fois qu'il a de nouvelle information sa les ajoutes et rafraichit le recycleview
+
            @Override
            protected void onPostExecute(Void aVoid) {
 

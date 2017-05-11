@@ -1,5 +1,6 @@
 package wememe.ca.Activities;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +29,8 @@ import wememe.ca.Class.Data_Feed;
 import wememe.ca.Class.Like;
 import wememe.ca.R;
 import wememe.ca.Class.DataLike;
+
+import static android.graphics.Color.*;
 
 public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -108,6 +111,8 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         initSwipe(recyclerView, view);
 
         return view;
+
+
     }
 
     //Cette methode va simplement aller chercher l'information du serveur et les ajoutes dans les 3 listes
