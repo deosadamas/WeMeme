@@ -2,14 +2,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="8dp"
     tools:context="wememe.ca.Activities.Tendances">
 
-        <TextView
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Tendances"
-            android:textColor="@color/colorTexte"/>
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/btnBack"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+            >
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_viewFeed"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+
 
 </FrameLayout>

@@ -3,4 +3,21 @@
     <string name="app_name">WeMeme</string>
     <string name="likes">Likes</string>
     <string name="nom">Name</string>
+    <string name="followers">Followers</string>
+    <string name="mot_de_passe_oubl">Forgot password ?</string>
+    <string name="connexion">Log in</string>
+    <string name="cr_er_un_compte">Create a account</string>
+    <string name="confirmer_mot_de_passe">Confirm password</string>
+    <string name="q">q</string>
+    <string name="adresse_courriel">E-mail address</string>
+    <string name="inscription">Register</string>
+    <string name="justin">Justin</string>
+    <string name="mot_de_passe">Passord</string>
+    <string name="nom_de_memeur">Memer Name</string>
+    <string name="divulgation_informations_confidentielles">Confidential infromation</string>
+    <string name="autre">Other</string>
+    <string name="envoyer">Send</string>
+    <string name="nudit">Nudity</string>
+    <string name="pornograhpy">Pornograhpy</string>
+    <string name="id" translatable="false"></string>
 </resources>

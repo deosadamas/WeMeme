@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     tools:context="wememe.ca.Activities.Report">
 
     <LinearLayout
         android:layout_width="395dp"
-        android:layout_height="587dp"
+        android:layout_height="495dp"
         android:orientation="vertical"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="9dp"
         tools:layout_editor_absoluteY="8dp">
 
@@ -18,7 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            tools:ignore="HardcodedText" />
 
         <RadioButton
             android:id="@+id/rbtn_Confidentielle"
@@ -30,7 +33,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Divulgation informations confidentielles"
+            android:text="@string/divulgation_informations_confidentielles"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.03"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -48,7 +51,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Pornograhpy"
+            android:text="@string/pornograhpy"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.03"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -66,7 +69,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Nudité"
+            android:text="@string/nudit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -84,7 +87,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Autre"
+            android:text="@string/autre"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.917"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -94,10 +97,10 @@
 
         <Button
             android:id="@+id/btn_Envoyer"
-            android:layout_width="match_parent"
+            android:layout_width="364dp"
             android:layout_height="wrap_content"
             android:onClick="Envoyer"
-            android:text="Envoyer" />
+            android:text="@string/envoyer" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
