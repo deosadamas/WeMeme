@@ -62,9 +62,8 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
     private List<Data_Feed> data_list;
     private List<DataLike> datalike_list;
     private List<Like> like_list;
-    private int compteurButtonFollow = 0;
 
-
+    private ConnectionDectetor connectionDectetor;
     public SwipeRefreshLayout swipeRefreshLayout;
     private Button follow;
     private ImageView imgProfilPicture;
@@ -72,10 +71,11 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
     private TextView txtFollowings;
     private TextView txtLaughtPerPosts;
     private TextView txtFollowers;
+    private TextView txtNom;
+    private TextView txtModfierProfil;
     private View view_;
     private int numberpost;
     MainActivity activity;
-    private boolean buttonFollow = true;
 
     public Profil(){
 
@@ -94,6 +94,8 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
         txtFollowings = (TextView)view.findViewById(R.id.txtfollowings);
         txtFollowers = (TextView)view.findViewById(R.id.txtfollowers);
         imgProfilPicture = (ImageView)view.findViewById(R.id.imgProfilPicture);
+        txtNom = (TextView)view.findViewById(R.id.txtNom);
+        txtModfierProfil = (TextView)view.findViewById(R.id.txtModifierProfil);
 
         // Initialiser les listes pour les utiliser et les variables
         data_list = new ArrayList<>();
@@ -102,10 +104,17 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
         follow_list = new ArrayList<>();
         view_ = view;
         activity = (MainActivity) getActivity();
-
+        connectionDectetor = new ConnectionDectetor(activity);
         // Telecharge les information du serveur pour le feed profil et les inforamtion personnelle du profil de la personne
         load_data_from_server(view.getContext());
         load_data__profil(view.getContext());
+
+        if(!(MainActivity.id_user_post == MainActivity.utilisateur.getId()))
+        {
+            txtModfierProfil.setVisibility(View.GONE);
+        }else{
+            txtModfierProfil.setVisibility(View.VISIBLE);
+        }
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -117,10 +126,6 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
         //Dans le Custom adapter, celui-ci a besoin du context du layout feed, des 3 listes d'information et de le contexte de la MainActivity
         adapter = new CustomAdapter(view.getContext(), data_list, datalike_list, like_list, activity);
         recyclerView.setAdapter(adapter);
-
-/*        final Drawable icon= getContext().getResources().getDrawable( R.drawable.connexion_lock_no_focus);
-        follow.setCompoundDrawablesWithIntrinsicBounds( icon, null, null, null );
-        final Drawable icon2= getContext().getResources().getDrawable( R.drawable.connexion_lock_focus);*/
 
         //Lorsque que l'utilisateur clique sur le button follow
         follow.setOnClickListener(new View.OnClickListener() {
@@ -156,6 +161,12 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
             }
         });
 
+        txtModfierProfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.StartProfilModifier();
+            }
+        });
         initSwipe(recyclerView, view);
 
         return view;
@@ -257,27 +268,32 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
 
     //Cette method rafraichit les donnees du serveur va chercher les nouvelle information s'il y en a
     public void onRefresh() {
-        //Un thread qui force un delai de 1,5 seconde pour que cette méthode soit utiliser a nouveau
-        swipeRefreshLayout.setRefreshing(true);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        }, 1500);
+        if(connectionDectetor.isConnected()) {
+            //Un thread qui force un delai de 1,5 seconde pour que cette méthode soit utiliser a nouveau
+            swipeRefreshLayout.setRefreshing(true);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            }, 1500);
 
-        //Vide les liste
-        data_list.clear();
-        datalike_list.clear();
-        like_list.clear();
-        follow_list.clear();
-        // Remplit les liste avec de nouvelle information
-        load_data_from_server(view_.getContext());
-        load_data__profil(view_.getContext());
+            //Vide les liste
+            data_list.clear();
+            datalike_list.clear();
+            like_list.clear();
+            follow_list.clear();
+            // Remplit les liste avec de nouvelle information
+            load_data_from_server(view_.getContext());
+            load_data__profil(view_.getContext());
 
-        //Ajouter dans le CustomAdapter les nouvelle listes
-        adapter = new CustomAdapter(getView().getContext(), data_list, datalike_list, like_list, activity);
-        recyclerView.setAdapter(adapter);
+            //Ajouter dans le CustomAdapter les nouvelle listes
+            adapter = new CustomAdapter(getView().getContext(), data_list, datalike_list, like_list, activity);
+            recyclerView.setAdapter(adapter);
+        }else
+        {
+            activity.showSnack();
+        }
     }
 
     // Cette methode va chercher l'information de l'utilisateur et l'affiche
@@ -300,6 +316,8 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
                             numberpost = object.getInt("numberpost");
                             int numberFollowed = object.getInt("numberFollowed");
                             int numberFollowing = object.getInt("numberFollowing");
+                            String nom = object.getString("username");
+                            txtNom.setText(nom);
                             txtPost.setText(String.valueOf(numberpost));
                             txtFollowings.setText(String.valueOf(numberFollowing));
                             txtFollowers.setText(String.valueOf(numberFollowed));
@@ -423,4 +441,5 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
         };
         task.execute();
     }
+
 }

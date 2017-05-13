@@ -3,13 +3,14 @@
     package="wememe.ca">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:hardwareAccelerated="false"
-        android:largeHeap="true"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@drawable/logo"
         android:label="WeMeme"
+        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.Connexion">
@@ -22,10 +23,9 @@
         <activity android:name=".Activities.Inscription" />
         <activity android:name=".Activities.Splash" />
         <activity android:name=".Activities.VerificationCompte" />
-        <activity
-            android:name=".Activities.MainActivity"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".Activities.Report"></activity>
+        <activity android:name=".Activities.MainActivity" android:theme="@style/AppTheme" />
+        <activity android:name=".Activities.Report" />
+        <activity android:name=".Activities.ProfilModifier"></activity>
     </application>
 
 </manifest>

@@ -3,12 +3,16 @@ package wememe.ca.Activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.IdRes;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -16,6 +20,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Base64;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -37,7 +42,7 @@ public class MainActivity extends FragmentActivity {
 
     private float x1,x2;
     static final int MIN_DISTANCE = 150;
-
+    public CoordinatorLayout coordinatorLayout;
     /////////////////////////////
     ////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////
@@ -57,11 +62,12 @@ public class MainActivity extends FragmentActivity {
 
     private int PICK_IMAGE_REQUEST = 1;
 
+    ConnectionDectetor connectionDectetor;
+
     ImageView imageView;
     int id_max = 0;
     public static Utilisateur utilisateur;
     public static int id_user_post;
-
     public Bitmap bitmap;
 
     private Uri filePath;
@@ -72,7 +78,8 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorlayout);
+        connectionDectetor = new ConnectionDectetor(this);
         utilisateur = Splash.utilisateur;
         bottomBar = (BottomBar)findViewById(R.id.bottomBar);
         load_data_from_server();
@@ -81,9 +88,15 @@ public class MainActivity extends FragmentActivity {
             public void onTabSelected(@IdRes int tabId) {
                 switch (tabId){
                     case R.id.tab_feed:
-                        load_data_from_server();
-                        bottomBar.setActiveTabColor(getResources().getColor(R.color.colorAccent));
-                        changerFragment(new Feed());
+                        if(connectionDectetor.isConnected())
+                        {
+                            load_data_from_server();
+                            bottomBar.setActiveTabColor(getResources().getColor(R.color.colorAccent));
+                            changerFragment(new Feed());
+                        }
+                        else{
+                            showSnack();
+                        }
                         break;
                     case R.id.tab_recherche:
                         changerFragment(new Recherche());
@@ -92,10 +105,16 @@ public class MainActivity extends FragmentActivity {
                         changerFragment(new Tendances());
                         break;
                     case R.id.tab_profil:
-                        load_data_from_server();
-                        int id_utilisateur = utilisateur.getId();
-                        id_user_post = id_utilisateur;
-                        changerFragment(new Profil());
+                        if(connectionDectetor.isConnected())
+                        {
+                            load_data_from_server();
+                            int id_utilisateur = utilisateur.getId();
+                            id_user_post = id_utilisateur;
+                            changerFragment(new Profil());
+                        }
+                        else{
+                            showSnack();
+                        }
                         break;
                     case R.id.tab_publier:
                         changerFragment(fragment);
@@ -202,7 +221,6 @@ public class MainActivity extends FragmentActivity {
         ui.execute(bitmap);
     }
 
-
     public void showFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -272,8 +290,6 @@ public class MainActivity extends FragmentActivity {
         return bottomBar;
     }
 
-
-
     public int load_data_from_server() {
         AsyncTask<Integer, Integer, Integer> task = new AsyncTask<Integer, Integer, Integer>() {
             @Override
@@ -303,5 +319,39 @@ public class MainActivity extends FragmentActivity {
         Intent intent = new Intent(MainActivity.this, Report.class);
         intent.putExtra("id",id);
         startActivity(intent);
+    }
+
+    public void StartProfilModifier(){
+        Intent intent = new Intent(MainActivity.this, ProfilModifier.class);
+        startActivity(intent);
+    }
+
+
+    public void showSnack() {
+        bottomBar.setVisibility(View.GONE);
+        final Snackbar snackBar = Snackbar.make(coordinatorLayout, getString(R.string.no_internet_connected), Snackbar.LENGTH_INDEFINITE);
+
+        snackBar.setAction("Dismiss", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(connectionDectetor.isConnected()) {
+                    snackBar.dismiss();
+                    bottomBar.setVisibility(View.VISIBLE);
+                }else
+                {
+                    showSnack();
+                    Toast.makeText(MainActivity.this, getString(R.string.no_internet_connected), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        snackBar.show();
+/*        Snackbar.make(coordinatorLayout, getString(R.string.no_internet_connected), Snackbar.LENGTH_INDEFINITE)
+                .setAction(getString(R.string.settings), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+                    }
+                }).setActionTextColor(Color.RED)
+                .show();*/
     }
 }

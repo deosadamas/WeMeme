@@ -38,6 +38,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
     private RecyclerView recyclerView;
     private GridLayoutManager gridLayoutManager;
     private CustomAdapter adapter;
+    private ConnectionDectetor connectionDectetor;
 
     // Les listes pour stocker les information du  serveurs
     private List<Data_Feed> data_list;
@@ -80,7 +81,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         gridLayoutManager = new GridLayoutManager(view.getContext(), 1);
         recyclerView.setLayoutManager(gridLayoutManager);
         activity = (MainActivity) getActivity();
-
+        connectionDectetor = new ConnectionDectetor(activity);
         // La premiere fois que ce fragement est utiliser elle va chercher l'id le plus haut dans la table Feed
         // La deuxieme fois que ce fragement est utiliser elle relance la requete pour aller chercher encore l'id le plus haut
         // Simplement rafraichit si il y a de nouvelle information dans la table Feed
@@ -120,66 +121,65 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
     // 2 like_list dans la Table Feed, la classe Like(id, nbreLike)
     // 3 dataLike_list dans la Table Laught, la classe DataLike(UserLaught, MemeLaught)
     private void load_data_from_server(final int id) {
+            //Utilise le AsyncTask simplement pour  télécharger l'information dans le background de l'application
+            AsyncTask<Integer, Void, Void> task = new AsyncTask<Integer, Void, Void>() {
+                @Override
+                protected Void doInBackground(Integer... integers) {
 
-        //Utilise le AsyncTask simplement pour  télécharger l'information dans le background de l'application
-        AsyncTask<Integer, Void, Void> task = new AsyncTask<Integer, Void, Void>() {
-            @Override
-            protected Void doInBackground(Integer... integers) {
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder()
+                            .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=feed&id=" + id)// Avec la requete php id descend de -3
+                            .build();                                                                // A chaque fois que la requete est appeller
+                    try {
+                        Response response = client.newCall(request).execute();
 
-                OkHttpClient client = new OkHttpClient();
-                Request request = new Request.Builder()
-                        .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=feed&id=" + id)// Avec la requete php id descend de -3
-                        .build();                                                                // A chaque fois que la requete est appeller
-                try {
-                    Response response = client.newCall(request).execute();
+                        //Converti la reponse du serveur (JSON) dans un tableau de json pour ensuite etre capable de trier l'information
+                        JSONArray array = new JSONArray(response.body().string());
+                        for (int i = 0; i < array.length(); i++) {
 
-                    //Converti la reponse du serveur (JSON) dans un tableau de json pour ensuite etre capable de trier l'information
-                    JSONArray array = new JSONArray(response.body().string());
-                    for (int i = 0; i < array.length(); i++) {
+                            JSONObject object = array.getJSONObject(i);
 
-                        JSONObject object = array.getJSONObject(i);
+                            Data_Feed data = new Data_Feed(object.getInt("id"), object.getString("sujet"), object.getString("nom"),
+                                    object.getString("description"),
+                                    object.getString("images"), object.getInt("nbreLike"), object.getInt("id_user_post"));
 
-                        Data_Feed data = new Data_Feed(object.getInt("id"), object.getString("sujet"), object.getString("nom"),
-                                object.getString("description"),
-                                object.getString("images"), object.getInt("nbreLike"), object.getInt("id_user_post"));
+                            Like likes = new Like(object.getInt("id"), object.getInt("nbreLike"));
 
-                        Like likes = new Like(object.getInt("id"), object.getInt("nbreLike"));
+                            data_list.add(data);
+                            like_list.add(likes);
+                        }
 
-                        data_list.add(data);
-                        like_list.add(likes);
+                        OkHttpClient clients = new OkHttpClient();
+                        Request requests = new Request.Builder()
+                                .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=datelike&id_utilisateur=" + MainActivity.utilisateur.getId())
+                                .build();
+                        okhttp3.Response responses = clients.newCall(requests).execute();
+
+                        JSONArray arrays = new JSONArray(responses.body().string());
+                        dataLike_list.clear();
+                        for (int i = 0; i < arrays.length(); i++) {
+                            JSONObject object = arrays.getJSONObject(i);
+
+                            DataLike dataLikes = new DataLike(object.getInt("UserLaught"), object.getInt("MemeLaught"));
+                            dataLike_list.add(dataLikes);
+
+                        }
+                        activity.load_data_from_server();// Cette methode va chercher id_max du serveur en d'autre mot rafraichit
+                    }catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        System.out.println("End of content");
                     }
-
-                    OkHttpClient clients = new OkHttpClient();
-                    Request requests = new Request.Builder()
-                            .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=datelike&id_utilisateur=" + MainActivity.utilisateur.getId())
-                            .build();
-                    okhttp3.Response responses = clients.newCall(requests).execute();
-
-                    JSONArray arrays = new JSONArray(responses.body().string());
-                    dataLike_list.clear();
-                    for (int i = 0; i < arrays.length(); i++) {
-                        JSONObject object = arrays.getJSONObject(i);
-
-                        DataLike dataLikes = new DataLike(object.getInt("UserLaught"), object.getInt("MemeLaught"));
-                        dataLike_list.add(dataLikes);
-
-                    }
-                    activity.load_data_from_server();// Cette methode va chercher id_max du serveur en d'autre mot rafraichit
-                }catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    System.out.println("End of content");
+                    return null;
                 }
-                return null;
-            }
 
-            //A chaque fois qu'il a de nouvelle information sa les ajoutes et rafraichit le recycleview
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                adapter.notifyDataSetChanged();
-            }
-        };
-        task.execute(id);//Execute la asynctaks
+                //A chaque fois qu'il a de nouvelle information sa les ajoutes et rafraichit le recycleview
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    adapter.notifyDataSetChanged();
+                }
+            };
+            task.execute(id);//Execute la asynctaks
     }
 
     private void initSwipe(RecyclerView recyclerView, final View view){
@@ -205,25 +205,31 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
     //Cette method rafraichit les donnees du serveur va chercher les nouvelle information s'il y en a
     public void onRefresh() {
-        //Un thread qui force un delai de 1,5 seconde pour que cette méthode soit utiliser a nouveau
-        swipeRefreshLayout.setRefreshing(true);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        }, 1500);
+        if(connectionDectetor.isConnected())
+        {
+            //Un thread qui force un delai de 1,5 seconde pour que cette méthode soit utiliser a nouveau
+            swipeRefreshLayout.setRefreshing(true);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            }, 1500);
 
-        //Vide les liste
-        data_list.clear();
-        dataLike_list.clear();
-        like_list.clear();
-        // Remplit les liste avec de nouvelle information
-        activity.load_data_from_server();
-        load_data_from_server(activity.id_max);
+            //Vide les liste
+            data_list.clear();
+            dataLike_list.clear();
+            like_list.clear();
+            // Remplit les liste avec de nouvelle information
+            activity.load_data_from_server();
+            load_data_from_server(activity.id_max);
 
-        //Ajouter dans le CustomAdapter les nouvelle listes
-        adapter = new CustomAdapter(getView().getContext(), data_list, dataLike_list, like_list, activity);
-        recyclerView.setAdapter(adapter);
+            //Ajouter dans le CustomAdapter les nouvelle listes
+            adapter = new CustomAdapter(getView().getContext(), data_list, dataLike_list, like_list, activity);
+            recyclerView.setAdapter(adapter);
+        }else
+        {
+            activity.showSnack();
+        }
     }
 }
