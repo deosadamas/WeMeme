@@ -23,9 +23,13 @@
         <activity android:name=".Activities.Inscription" />
         <activity android:name=".Activities.Splash" />
         <activity android:name=".Activities.VerificationCompte" />
-        <activity android:name=".Activities.MainActivity" android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Activities.MainActivity"
+            android:theme="@style/AppTheme" />
         <activity android:name=".Activities.Report" />
-        <activity android:name=".Activities.ProfilModifier"></activity>
+        <activity android:name=".Activities.ProfilModifier" />
+        <activity android:name=".Activities.BigImage"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

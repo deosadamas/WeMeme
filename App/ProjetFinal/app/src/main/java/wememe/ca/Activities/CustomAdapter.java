@@ -1,12 +1,15 @@
 package wememe.ca.Activities;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -34,6 +37,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     private int id;
     private MainActivity activity;
     Utilisateur utilisateur;
+    boolean doubleClick  = false;
 
 
     //Constructeur qui permet d'assigner les variable en haut pour les assigner
@@ -60,6 +64,16 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     // Le deuxieme est la position, simplment la position de l'élément dont il est dans la recycleview
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleClick = false;
+                handler.postDelayed(this, 500);
+            }
+        }, 500);
+
         //Selon la position  du onBindViewHolder
         // On recherche un objec selon la postion du onBinViewHolder et on lui
         // assigne son type selon les choses qu'ont veux
@@ -217,6 +231,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             public void onClick(View v) {
               int id_meme = datameme_list.get(position).getId();
                 activity.StartReport(id_meme);
+            }
+        });
+
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (doubleClick){
+                    Intent myIntent = new Intent(context, BigImage.class);
+                    context.startActivity(myIntent);
+                }
+                doubleClick = true;
             }
         });
     }
