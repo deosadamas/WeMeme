@@ -69,6 +69,7 @@ public class MainActivity extends FragmentActivity {
     public static Utilisateur utilisateur;
     public static int id_user_post;
     public Bitmap bitmap;
+    public Bitmap bitmapResize;
 
     private Uri filePath;
 
@@ -166,7 +167,8 @@ public class MainActivity extends FragmentActivity {
                 ////////////////////////////////////////////////////////////////
                 ////////////////////////////////////////////////////////////////
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                imageView.setImageBitmap(bitmap);
+                bitmapResize = bitmap.createScaledBitmap(bitmap, 1000, 1000, true);
+                imageView.setImageBitmap(bitmapResize);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -218,7 +220,7 @@ public class MainActivity extends FragmentActivity {
             }
         }
         UploadImage ui = new UploadImage();
-        ui.execute(bitmap);
+        ui.execute(bitmapResize);
     }
 
     public void showFileChooser() {
