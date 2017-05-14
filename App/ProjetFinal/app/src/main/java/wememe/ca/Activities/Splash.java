@@ -21,12 +21,12 @@ import java.io.IOException;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import wememe.ca.Class.SaveSharedPreference;
 import wememe.ca.Class.Utilisateur;
 import wememe.ca.R;
 import wememe.ca.Requetes.InformationUserRequest;
 
 public class Splash extends Activity {
-    String user, password;
     public static int id_max;
     public  static Utilisateur utilisateur;
 
@@ -39,10 +39,6 @@ public class Splash extends Activity {
         final Animation an = AnimationUtils.loadAnimation(getBaseContext(),R.anim.rotate);
         final Animation an2 = AnimationUtils.loadAnimation(getBaseContext(),R.anim.abc_fade_out);
 
-        Intent intent = getIntent();
-        user = intent.getStringExtra("user");
-        password = intent.getStringExtra("password");
-
         // Cette methode met dans un object static Utilisateur c'est information
         load_information_utilisateur();
         // Cette methode va chercher l'id max de la table feed et l'assigne dans la variable static id_max
@@ -50,7 +46,7 @@ public class Splash extends Activity {
 
 
         //Commence l'animation
-        // Simplement dans le dosssier anim j'ai le rotate.xml avec les caracteristique que jai donner
+        // Simplement dans le dossier anim j'ai le rotate.xml avec les caracteristique que jai donner
         iv.startAnimation(an);
         an.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -135,9 +131,9 @@ public class Splash extends Activity {
                 // Le temps pour chaque requete
                 // Le nombre d'essais
                 // Le temps exponentiel du socket pour chaque essais reessayer
-                RetryPolicy policy = new DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                InformationUserRequest informationUserRequest = new InformationUserRequest(user,password ,responseListener);
-                informationUserRequest.setRetryPolicy(policy);
+//                RetryPolicy policy = new DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                InformationUserRequest informationUserRequest = new InformationUserRequest(SaveSharedPreference.getUserName(getApplication()),SaveSharedPreference.getUserPassword(getApplication()) ,responseListener);
+//                informationUserRequest.setRetryPolicy(policy);
                 queue.add(informationUserRequest);
                 return null;
             }

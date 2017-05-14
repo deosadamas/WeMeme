@@ -41,7 +41,8 @@ public class Connexion extends AppCompatActivity {
         mdpConnexion = (EditText)findViewById(R.id.fieldMDPConnexion);
 
         //Une condition qui vérifie si l'utilisateur est déja connecter
-        if(SaveSharedPreference.getUserName(Connexion.this).length() == 0)
+        if(SaveSharedPreference.getUserName(Connexion.this).length() == 0 && SaveSharedPreference.getUserPassword(Connexion.this).length()== 0)
+
         {
             //Initialisation des variables
             userConnexion.getBackground().setColorFilter(getResources().getColor(R.color.colorTexte), PorterDuff.Mode.SRC_IN);
@@ -126,8 +127,8 @@ public class Connexion extends AppCompatActivity {
                                         else if(!validationEmail)
                                         {
                                             Intent intent3 = new Intent(Connexion.this, MainActivity.class);
-                                            intent3.putExtra("user", userText);
-                                            intent3.putExtra("password", mdpText);
+                                            SaveSharedPreference.setUserName(getApplication(), userText);
+                                            SaveSharedPreference.setPassword(getApplication(), mdpText);
                                             startActivity(intent3);
                                         }
                                     }
@@ -142,9 +143,8 @@ public class Connexion extends AppCompatActivity {
                                         else if(!validationNom)
                                         {
                                             SaveSharedPreference.setUserName(getApplication(), userText);
+                                            SaveSharedPreference.setPassword(getApplication(), mdpText);
                                             Intent intent3 = new Intent(Connexion.this, Splash.class);
-                                            intent3.putExtra("user", userText);
-                                            intent3.putExtra("password", mdpText);
                                             startActivity(intent3);
                                         }
                                     }
@@ -162,6 +162,7 @@ public class Connexion extends AppCompatActivity {
                         }
                     };
                     // Une requete qui vérifie si les informations de la personne sont correcte
+
                     LoginRequest loginRequest = new LoginRequest(userText, mdpText, responseListener);
                     RequestQueue queue = Volley.newRequestQueue(Connexion.this);
                     queue.add(loginRequest);
@@ -172,10 +173,6 @@ public class Connexion extends AppCompatActivity {
         {
                 //Ajouter l'information nécessaire dans la prochaine activité pour sauvegarder les informations de l'utilisateur
                 Intent intent = new Intent(Connexion.this, Splash.class);
-                userText = userConnexion.getText().toString();
-                mdpText = mdpConnexion.getText().toString();
-                intent.putExtra("user", userText);
-                intent.putExtra("password", mdpText);
                 startActivity(intent);
         }
     }

@@ -81,7 +81,7 @@ public class ProfilModifier extends AppCompatActivity {
                     });
                     RequestQueue queue = Volley.newRequestQueue(ProfilModifier.this);
                     queue.add(modificationProfilRequest);
-                    SaveSharedPreference.setUserName(getApplication(), null);
+                    SaveSharedPreference.setPassword(getApplication(), password.getText().toString());
                 }else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(ProfilModifier.this);
                     builder.setMessage("Les mot de passe ne sont pas identiques")
