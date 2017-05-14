@@ -292,6 +292,7 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
             recyclerView.setAdapter(adapter);
         }else
         {
+            swipeRefreshLayout.setRefreshing(false);
             activity.showSnack();
         }
     }

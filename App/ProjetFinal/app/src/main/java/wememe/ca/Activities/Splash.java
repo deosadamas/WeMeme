@@ -62,7 +62,7 @@ public class Splash extends Activity {
             public void onAnimationEnd(Animation animation) {
                 //A la fin de l'animation je regarde si l'utilisateur est pas null sinon je recmmence l'animation tant que
                 // l'utilisateur n'est pas null
-                    if(utilisateur != null)
+                    if(utilisateur != null && id_max != 0)
                     {
                         iv.startAnimation(an2);
                         finish();
@@ -73,6 +73,7 @@ public class Splash extends Activity {
                     {
                         animation.setDuration(1000);
                         load_information_utilisateur();
+                        load_data_from_server();
                         iv.startAnimation(an);
                     }
             }

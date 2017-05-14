@@ -15,17 +15,18 @@
         tools:layout_editor_absoluteY="8dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
+            android:layout_width="378dp"
+            android:layout_height="126dp"
             android:orientation="horizontal"
             tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp">
+            tools:layout_editor_absoluteY="8dp"
+            android:layout_weight="0.31">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/imageProfilModifier"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_weight="0.86"
                 app:srcCompat="@mipmap/ic_launcher_round" />
 
             <Button
@@ -66,11 +67,11 @@
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.00"
+            android:layout_width="372dp"
+            android:layout_height="166dp"
             android:text="TextView"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            android:layout_weight="0.15" />
 
         <Button
             android:id="@+id/btn_Enregistre_Modi_Profil"

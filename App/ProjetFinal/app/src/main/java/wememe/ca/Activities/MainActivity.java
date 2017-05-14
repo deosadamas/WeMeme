@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.IdRes;
@@ -19,8 +20,10 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Base64;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -70,6 +73,7 @@ public class MainActivity extends FragmentActivity {
     public static int id_user_post;
     public Bitmap bitmap;
     public Bitmap bitmapResize;
+    private boolean bottomBarGone = false;
 
     private Uri filePath;
 
@@ -330,30 +334,29 @@ public class MainActivity extends FragmentActivity {
 
 
     public void showSnack() {
-        bottomBar.setVisibility(View.GONE);
-        final Snackbar snackBar = Snackbar.make(coordinatorLayout, getString(R.string.no_internet_connected), Snackbar.LENGTH_INDEFINITE);
-
-        snackBar.setAction("Dismiss", new View.OnClickListener() {
+        /*bottomBar.setVisibility(View.INVISIBLE);*/
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void onClick(View v) {
-                if(connectionDectetor.isConnected()) {
-                    snackBar.dismiss();
-                    bottomBar.setVisibility(View.VISIBLE);
-                }else
-                {
-                    showSnack();
-                    Toast.makeText(MainActivity.this, getString(R.string.no_internet_connected), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        snackBar.show();
-/*        Snackbar.make(coordinatorLayout, getString(R.string.no_internet_connected), Snackbar.LENGTH_INDEFINITE)
-                .setAction(getString(R.string.settings), new View.OnClickListener() {
+            public void run() {
+                final Snackbar snackBar = Snackbar.make(findViewById(R.id.placeSnackBar), getString(R.string.no_internet_connected), Snackbar.LENGTH_INDEFINITE);
+                View view = snackBar.getView();
+                view.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                snackBar.setActionTextColor(getResources().getColor(R.color.colorAccent));
+                snackBar.setAction("Dismiss", new View.OnClickListener() {
                     @Override
-                    public void onClick(View view) {
-                        startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+                    public void onClick(View v) {
+                        if(connectionDectetor.isConnected()) {
+                            snackBar.dismiss();
+                            /*bottomBar.setVisibility(View.VISIBLE);*/
+                        }else
+                        {
+                            showSnack();
+                            Toast.makeText(MainActivity.this, getString(R.string.no_internet_connected), Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }).setActionTextColor(Color.RED)
-                .show();*/
+                });
+                snackBar.show();
+            }
+        }, 0);
     }
 }

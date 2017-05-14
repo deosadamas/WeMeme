@@ -180,7 +180,4 @@ public class Connexion extends AppCompatActivity {
         }
     }
 
-    public void test(View view) {
-        startActivity(new Intent(Connexion.this, Report.class));
-    }
 }

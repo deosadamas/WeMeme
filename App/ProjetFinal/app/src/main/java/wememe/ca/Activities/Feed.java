@@ -229,6 +229,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
             recyclerView.setAdapter(adapter);
         }else
         {
+            swipeRefreshLayout.setRefreshing(false);
             activity.showSnack();
         }
     }
