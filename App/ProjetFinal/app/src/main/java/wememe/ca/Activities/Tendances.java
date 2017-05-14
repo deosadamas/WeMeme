@@ -186,7 +186,7 @@ public class Tendances extends Fragment implements SwipeRefreshLayout.OnRefreshL
     }
 
     private void initSwipe(RecyclerView recyclerView, final View view){
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -198,7 +198,12 @@ public class Tendances extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 if (direction == ItemTouchHelper.LEFT){
                     MainActivity activity = (MainActivity) getActivity();
                     BottomBar myBottomBar = activity.getBottomBar();
-                    myBottomBar.selectTabAtPosition(1);
+                    myBottomBar.selectTabAtPosition(4);
+                }
+                else {
+                    MainActivity activity = (MainActivity) getActivity();
+                    BottomBar myBottomBar = activity.getBottomBar();
+                    myBottomBar.selectTabAtPosition(2);
                 }
             }
         };

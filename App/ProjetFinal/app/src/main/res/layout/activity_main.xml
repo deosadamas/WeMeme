@@ -8,7 +8,6 @@
     android:background="#141125"
     tools:context="wememe.ca.Activities.MainActivity">
 
-
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"

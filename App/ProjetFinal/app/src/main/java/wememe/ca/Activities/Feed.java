@@ -196,6 +196,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                     MainActivity activity = (MainActivity) getActivity();
                     BottomBar myBottomBar = activity.getBottomBar();
                     myBottomBar.selectTabAtPosition(1);
+                    ((MainActivity) getActivity()).getSupportActionBar().show();
                 }
             }
         };

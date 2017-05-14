@@ -12,7 +12,7 @@
         android:label="WeMeme"
         android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Theme.AppCompat">
         <activity android:name=".Activities.Connexion">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,12 +24,12 @@
         <activity android:name=".Activities.Splash" />
         <activity android:name=".Activities.VerificationCompte" />
         <activity
-            android:name=".Activities.MainActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".Activities.MainActivity" />
         <activity android:name=".Activities.Report" />
         <activity android:name=".Activities.ProfilModifier" />
         <activity android:name=".Activities.BigImage"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+
     </application>
 
 </manifest>

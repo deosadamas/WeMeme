@@ -19,6 +19,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -41,7 +43,7 @@ import okhttp3.Request;
 import wememe.ca.Class.Utilisateur;
 import wememe.ca.R;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends AppCompatActivity {
 
     private float x1,x2;
     static final int MIN_DISTANCE = 150;
@@ -73,7 +75,7 @@ public class MainActivity extends FragmentActivity {
     public static int id_user_post;
     public Bitmap bitmap;
     public Bitmap bitmapResize;
-    private boolean bottomBarGone = false;
+    private boolean menu = false;
 
     private Uri filePath;
 
@@ -83,6 +85,8 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().hide();
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorlayout);
         connectionDectetor = new ConnectionDectetor(this);
         utilisateur = Splash.utilisateur;
@@ -97,6 +101,7 @@ public class MainActivity extends FragmentActivity {
                         {
                             load_data_from_server();
                             bottomBar.setActiveTabColor(getResources().getColor(R.color.colorAccent));
+                            menu = true;
                             changerFragment(new Feed());
                         }
                         else{
@@ -104,9 +109,11 @@ public class MainActivity extends FragmentActivity {
                         }
                         break;
                     case R.id.tab_recherche:
+                        menu = false;
                         changerFragment(new Recherche());
                         break;
                     case R.id.tab_tendances:
+                        menu = true;
                         changerFragment(new Tendances());
                         break;
                     case R.id.tab_profil:
@@ -115,6 +122,7 @@ public class MainActivity extends FragmentActivity {
                             load_data_from_server();
                             int id_utilisateur = utilisateur.getId();
                             id_user_post = id_utilisateur;
+                            menu = true;
                             changerFragment(new Profil());
                         }
                         else{
@@ -122,6 +130,7 @@ public class MainActivity extends FragmentActivity {
                         }
                         break;
                     case R.id.tab_publier:
+                        menu = true;
                         changerFragment(fragment);
                         break;
                 }
@@ -135,6 +144,12 @@ public class MainActivity extends FragmentActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
+        if (menu == false){
+            getSupportActionBar().show();
+        }
+        else {
+            getSupportActionBar().hide();
+        }
     }
 
     @Override
@@ -251,16 +266,19 @@ public class MainActivity extends FragmentActivity {
                     if (x2 > x1)
                     {
                         if (bottomBar.getCurrentTabPosition() == 1){
+                            getSupportActionBar().hide();
                             bottomBar.selectTabAtPosition(0);
-
                         }
                         else if (bottomBar.getCurrentTabPosition() == 2){
+                            getSupportActionBar().show();
                             bottomBar.selectTabAtPosition(1);
                         }
                         else if (bottomBar.getCurrentTabPosition() == 3){
+                            getSupportActionBar().hide();
                             bottomBar.selectTabAtPosition(2);
                         }
                         else if (bottomBar.getCurrentTabPosition() == 4) {
+                            getSupportActionBar().hide();
                             bottomBar.selectTabAtPosition(3);
                         }
                     }
@@ -269,16 +287,20 @@ public class MainActivity extends FragmentActivity {
                     else
                     {
                         if (bottomBar.getCurrentTabPosition() == 0){
+                            getSupportActionBar().show();
                             bottomBar.selectTabAtPosition(1);
 
                         }
                         else if (bottomBar.getCurrentTabPosition() == 1){
+                            getSupportActionBar().hide();
                             bottomBar.selectTabAtPosition(2);
                         }
                         else if (bottomBar.getCurrentTabPosition() == 2){
+                            getSupportActionBar().hide();
                             bottomBar.selectTabAtPosition(3);
                         }
                         else if (bottomBar.getCurrentTabPosition() == 3) {
+                            getSupportActionBar().hide();
                             bottomBar.selectTabAtPosition(4);
                         }
                     }
