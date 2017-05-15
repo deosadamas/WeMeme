@@ -1,11 +1,11 @@
 package wememe.ca.Activities;
 
 
-import android.app.ListFragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +18,8 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.roughike.bottombar.BottomBar;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,13 +27,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import wememe.ca.Class.DataLike;
-import wememe.ca.Class.Data_Feed;
-import wememe.ca.Class.Like;
 import wememe.ca.Class.RechercherProfil;
 import wememe.ca.R;
 
@@ -41,9 +39,11 @@ import wememe.ca.R;
 public class Recherche extends ListFragment implements android.widget.SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
     List<String> listeRecherche;
+    List<RechercherProfil> listeRechercheToute;
     private ArrayAdapter<String> mAdapter;
     private Context mContext;
     ListView listView;
+    MainActivity activity;
 
     public Recherche() {
     }
@@ -53,6 +53,7 @@ public class Recherche extends ListFragment implements android.widget.SearchView
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         setHasOptionsMenu(true);
+        activity = (MainActivity) getActivity();
         dataProfil();
     }
 
@@ -70,7 +71,16 @@ public class Recherche extends ListFragment implements android.widget.SearchView
     @Override
     public void onListItemClick(ListView listView, View v, int position, long id) {
         String item = (String) listView.getAdapter().getItem(position);
-        Toast.makeText(mContext, item, Toast.LENGTH_SHORT).show();
+        activity.changerFragment(new Profil());
+        for(RechercherProfil profil : listeRechercheToute)
+        {
+            if(profil.getUsername().equals(item))
+            {
+                BottomBar myBottomBar = activity.getBottomBar();
+                myBottomBar.selectTabAtPosition(4);
+                MainActivity.id_user_post = profil.getId();
+            }
+        }
         if (getActivity() instanceof OnItem1SelectedListener) {
             ((OnItem1SelectedListener) getActivity()).OnItem1SelectedListener(item);
         }
@@ -134,6 +144,7 @@ public class Recherche extends ListFragment implements android.widget.SearchView
 
     private void populateList(){
         listeRecherche = new ArrayList<>();
+        listeRechercheToute = new ArrayList<>();
         mAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, listeRecherche);
         listView.setAdapter(mAdapter);
     }
@@ -157,7 +168,9 @@ public class Recherche extends ListFragment implements android.widget.SearchView
                     for (int i = 0; i < array.length(); i++) {
 
                         JSONObject object = array.getJSONObject(i);
+                        RechercherProfil rechercherProfil = new RechercherProfil(object.getInt("id"), object.getString("username"));
                         listeRecherche.add(object.getString("username"));
+                        listeRechercheToute.add(rechercherProfil);
                     }
                 }catch (IOException e) {
                     e.printStackTrace();

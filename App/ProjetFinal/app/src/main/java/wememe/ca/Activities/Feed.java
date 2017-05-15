@@ -85,13 +85,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         // La premiere fois que ce fragement est utiliser elle va chercher l'id le plus haut dans la table Feed
         // La deuxieme fois que ce fragement est utiliser elle relance la requete pour aller chercher encore l'id le plus haut
         // Simplement rafraichit si il y a de nouvelle information dans la table Feed
-        if(Splash.id_max == Splash.id_max)
-        {
-            load_data_from_server(Splash.id_max);
-        }else
-        {
-            load_data_from_server(activity.id_max);
-        }
+        load_data_from_server(MainActivity.utilisateur.getId());
 
         //Dans le Custom adapter, celui-ci a besoin du context du layout feed, des 3 listes d'information et de le contexte de la MainActivity
         adapter = new CustomAdapter(view.getContext(),data_list, dataLike_list, like_list, activity);
@@ -99,7 +93,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
         // A chaque fois que la personne scroll down et atteind le dernier element afficher
         // la methode load_data_from_server est alors enclencher pour aller checher d'autre element
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+/*        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
@@ -107,7 +101,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                     load_data_from_server(data_list.get(data_list.size() - 1).getId());
                 }
             }
-        });
+        });*/
 
         initSwipe(recyclerView, view);
 
@@ -128,7 +122,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
                     OkHttpClient client = new OkHttpClient();
                     Request request = new Request.Builder()
-                            .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=feed&id=" + id)// Avec la requete php id descend de -3
+                            .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=feed_follow&id=" + id)// Avec la requete php id descend de -3
                             .build();                                                                // A chaque fois que la requete est appeller
                     try {
                         Response response = client.newCall(request).execute();
@@ -164,7 +158,6 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                             dataLike_list.add(dataLikes);
 
                         }
-                        activity.load_data_from_server();// Cette methode va chercher id_max du serveur en d'autre mot rafraichit
                     }catch (IOException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {
@@ -221,8 +214,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
             dataLike_list.clear();
             like_list.clear();
             // Remplit les liste avec de nouvelle information
-            activity.load_data_from_server();
-            load_data_from_server(activity.id_max);
+            load_data_from_server(MainActivity.utilisateur.getId());
 
             //Ajouter dans le CustomAdapter les nouvelle listes
             adapter = new CustomAdapter(getView().getContext(), data_list, dataLike_list, like_list, activity);

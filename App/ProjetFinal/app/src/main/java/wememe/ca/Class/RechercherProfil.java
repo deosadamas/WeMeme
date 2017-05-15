@@ -6,12 +6,11 @@ package wememe.ca.Class;
 
 public class RechercherProfil {
     int id;
-    String username, profilpic;
+    String username;
 
-    public RechercherProfil(int id, String username, String profilpic) {
+    public RechercherProfil(int id, String username) {
         this.id = id;
         this.username = username;
-        this.profilpic = profilpic;
     }
 
     public int getId() {
@@ -20,9 +19,5 @@ public class RechercherProfil {
 
     public String getUsername() {
         return username;
-    }
-
-    public String getProfilpic() {
-        return profilpic;
     }
 }

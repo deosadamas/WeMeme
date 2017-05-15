@@ -230,9 +230,9 @@ public class MainActivity extends AppCompatActivity {
                 HashMap<String,String> data = new HashMap<>();
 
                 data.put(UPLOAD_KEY, uploadImage);
-                data.put("sujet", "a");
-                data.put("nom", "nom");
-                data.put("description", "des");
+                data.put("sujet", "");
+                data.put("nom", utilisateur.getUsername());
+                data.put("description", "");
                 data.put("$id_user_post", String.valueOf(utilisateur.getId()));
                 data.put("$id_user_photo", utilisateur.getProfilpic());
                 String result = rh.sendPostRequest(UPLOAD_URL,data);
