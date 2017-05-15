@@ -172,7 +172,6 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                     }
                     return null;
                 }
-
                 //A chaque fois qu'il a de nouvelle information sa les ajoutes et rafraichit le recycleview
                 @Override
                 protected void onPostExecute(Void aVoid) {
