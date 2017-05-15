@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:layout_marginTop="8dp"
     tools:context="wememe.ca.Activities.Profil"
-    xmlns:card_view="http://schemas.android.com/tools">
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:background="@color/colorPrimaryDark" >
 
     <LinearLayout
         android:layout_width="match_parent"
