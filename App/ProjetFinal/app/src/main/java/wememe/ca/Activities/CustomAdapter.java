@@ -70,9 +70,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             @Override
             public void run() {
                 doubleClick = false;
-                handler.postDelayed(this, 500);
+                handler.postDelayed(this, 650);
             }
-        }, 500);
+        }, 650);
 
         //Selon la position  du onBindViewHolder
         // On recherche un objec selon la postion du onBinViewHolder et on lui
@@ -238,6 +238,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             @Override
             public void onClick(View v) {
                 if (doubleClick){
+                    BigImage.getImage(datameme_list.get(position).getImage_link());
                     Intent myIntent = new Intent(context, BigImage.class);
                     context.startActivity(myIntent);
                 }

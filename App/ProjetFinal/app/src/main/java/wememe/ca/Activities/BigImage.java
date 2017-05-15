@@ -11,11 +11,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import wememe.ca.R;
 
 public class BigImage extends AppCompatActivity {
 
     ImageView img;
+    static String b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +26,14 @@ public class BigImage extends AppCompatActivity {
         setContentView(R.layout.activity_big_image);
 
         img = (ImageView) findViewById(R.id.imgBigImage);
+        if(b != null)
+        {
+            Glide.with(getApplication()).load(b).into(img);
+        }
+    }
 
-        img.setImageDrawable(getResources().getDrawable(R.drawable.button));
-
+    public static void getImage(String a)
+    {
+        b = a;
     }
 }
