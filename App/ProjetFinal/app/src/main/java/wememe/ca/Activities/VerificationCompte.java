@@ -17,6 +17,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import wememe.ca.Class.SaveSharedPreference;
 import wememe.ca.R;
 import wememe.ca.Requetes.CodeRequest;
 
@@ -25,15 +26,12 @@ public class VerificationCompte extends AppCompatActivity {
     EditText codeText;
     View viewSnackbar;
     int code;
-    String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verification_compte);
 
-        Bundle data = getIntent().getExtras();
-        user = data.get("user").toString();
         codeText = (EditText) findViewById(R.id.fieldCodeVerification);
 
         Button btnVerification = (Button)findViewById(R.id.btnVerification);
@@ -44,7 +42,7 @@ public class VerificationCompte extends AppCompatActivity {
                 viewSnackbar = view;
                 code = Integer.parseInt(codeText.getText().toString());
                 RequestQueue queue = Volley.newRequestQueue(VerificationCompte.this);
-                CodeRequest codeRequest = new CodeRequest(user, code, new Response.Listener<String>() {
+                CodeRequest codeRequest = new CodeRequest(SaveSharedPreference.getUserName(getApplication()), code, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {

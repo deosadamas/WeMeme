@@ -121,7 +121,7 @@ public class Connexion extends AppCompatActivity {
                                         if(validationEmail)
                                         {
                                             Intent intent = new Intent(Connexion.this, VerificationCompte.class);
-                                            intent.putExtra("user", userText);
+                                            SaveSharedPreference.setUserName(getApplication(), userText);
                                             startActivity(intent);
                                         }
                                         else if(!validationEmail)
@@ -137,7 +137,7 @@ public class Connexion extends AppCompatActivity {
                                         if(validationNom)
                                         {
                                             Intent intent = new Intent(Connexion.this, VerificationCompte.class);
-                                            intent.putExtra("user", userText);
+                                            SaveSharedPreference.setUserName(getApplication(), userText);
                                             startActivity(intent);
                                         }
                                         else if(!validationNom)
