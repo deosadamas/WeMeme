@@ -1,24 +1,21 @@
 package wememe.ca.Activities;
 
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.GestureDetector;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 
 import wememe.ca.R;
 
 public class BigImage extends AppCompatActivity {
 
+    /*
+        Cette activity va simplement prendre l'image de la personne qui a doubleclick sur une et l'ouvrir dans
+        une nouvelle activity pour la mettre en plein ecran
+    */
+
     ImageView img;
-    static String b;
+    static String imageFeed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,14 +23,19 @@ public class BigImage extends AppCompatActivity {
         setContentView(R.layout.activity_big_image);
 
         img = (ImageView) findViewById(R.id.imgBigImage);
-        if(b != null)
+
+        if(imageFeed != null)//Si l'image est pas trouver donc null ou l'affiche pas dans l'imageview
         {
-            Glide.with(getApplication()).load(b).into(img);
+            //Cette fonction de Glide nous perment simplement d'assoicier un image pour l'inserer dans un ImageView
+            Glide.with(getApplication()).load(imageFeed).into(img);
         }
     }
 
-    public static void getImage(String a)
+    //Cette Fonction nous permet d'aller chercher l'image doubleclick par l'utilisateur
+    //En paramettre un String (url) de l'image le Glide est une librairie qui va prendre le
+    // String de l'image est la faire afficher
+    public static void getImage(String image)
     {
-        b = a;
+        imageFeed = image;
     }
 }

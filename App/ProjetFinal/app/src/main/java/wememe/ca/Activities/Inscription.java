@@ -52,6 +52,7 @@ public class Inscription extends AppCompatActivity {
         dateInscription = (EditText) findViewById(R.id.fieldDateInscription);
         final Button btnInscription = (Button) findViewById(R.id.btnInscription);
 
+        //SetFocusEvent pour le emailInscription
         emailInscription.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -62,6 +63,7 @@ public class Inscription extends AppCompatActivity {
                 dateInscription.setCompoundDrawablesWithIntrinsicBounds(R.drawable.inscription_date_no_focus, 0, 0, 0);
             }
         });
+        //SetFocusEvent pour le usernameInscription
         usernameInscription.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -72,6 +74,7 @@ public class Inscription extends AppCompatActivity {
                 dateInscription.setCompoundDrawablesWithIntrinsicBounds(R.drawable.inscription_date_no_focus, 0, 0, 0);
             }
         });
+        //SetFocusEvent pour le mdpInscription
         mdpInscription.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -82,6 +85,7 @@ public class Inscription extends AppCompatActivity {
                 dateInscription.setCompoundDrawablesWithIntrinsicBounds(R.drawable.inscription_date_no_focus, 0, 0, 0);
             }
         });
+        //SetFocusEvent pour le verifierMDPInscription
         verifierMDPInscription.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -92,6 +96,7 @@ public class Inscription extends AppCompatActivity {
                 dateInscription.setCompoundDrawablesWithIntrinsicBounds(R.drawable.inscription_date_no_focus, 0, 0, 0);
             }
         });
+        //SetFocusEvent pour le dateInscription
         dateInscription.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -104,28 +109,33 @@ public class Inscription extends AppCompatActivity {
         });
     }
 
+    //La fonction lorsque que l'utilisateur clique sur le button Inscrition
     public void Ins(View view)
     {
         viewsnack = view;
+        //Va chercher le text dans EditText
         final String emailText = emailInscription.getText().toString();
         final String usernameText = usernameInscription.getText().toString();
         final String mdpText = mdpInscription.getText().toString();
         final String mdpVerifierText = verifierMDPInscription.getText().toString();
         final String dateText = dateInscription.getText().toString();
+
+        //Remet tout les focus a 0
         emailInscription.setCompoundDrawablesWithIntrinsicBounds(R.drawable.inscription_email_no_focus, 0, 0, 0);
         usernameInscription.setCompoundDrawablesWithIntrinsicBounds(R.drawable.inscription_username_no_focus, 0, 0, 0);
         mdpInscription.setCompoundDrawablesWithIntrinsicBounds(R.drawable.connexion_lock_no_focus, 0, 0, 0);
         verifierMDPInscription.setCompoundDrawablesWithIntrinsicBounds(R.drawable.connexion_lock_no_focus, 0, 0, 0);
         dateInscription.setCompoundDrawablesWithIntrinsicBounds(R.drawable.inscription_date_no_focus, 0, 0, 0);
 
+        // Reponse Listener simplement la reponse du serveur
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
+                    //On converti la reponse du serveur en JSONObject
                     JSONObject jsonResponse = new JSONObject(response);
-                    boolean suc = jsonResponse.getBoolean("success");
-                    boolean email = jsonResponse.getBoolean("email");
-
+                    boolean suc = jsonResponse.getBoolean("success"); // Si l'inscription est valide
+                    boolean email = jsonResponse.getBoolean("email"); // Si le couriel a ete envoyer
 
                     if(suc)
                     {
@@ -136,6 +146,7 @@ public class Inscription extends AppCompatActivity {
                             viewsnack = snackbar.getView();
                             viewsnack.setBackgroundColor(Color.parseColor("#371e6d"));
                             snackbar.show();
+                            //On creer un thread avec un delais de 2 sec pour faire afficher la snackbar avec de changer d'activity
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -168,18 +179,18 @@ public class Inscription extends AppCompatActivity {
         };
 
         if(isValid(dateText) && isValidPassWord(mdpText, mdpVerifierText)) {
-
-            code = rdn.nextInt(9999 - 1000) + 1000;
-
+            code = rdn.nextInt(9999 - 1000) + 1000;//Genere un code aleatoire
             RequestQueue queue = Volley.newRequestQueue(Inscription.this);
+            // Apelle de la classe RegisterRequest
             RegisterRequest registerRequest = new RegisterRequest(emailText, usernameText, mdpText, dateText, code, responseListener);
-            int socketTimeout = 30000;//30 seconds
-            RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+            // Vraiment long a expliquer mais http://stackoverflow.com/questions/17094718/change-volley-timeout-duration
+            RetryPolicy policy = new DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
             registerRequest.setRetryPolicy(policy);
             queue.add(registerRequest);
         }
     }
 
+    // Un fonction boolean qui regarde si la date est valide
     public boolean isValid(String date) {
         if (date.matches("^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.)(?:0?[1,3-9]|1[0-2])\\2))" +
                 "(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(\\/|-|\\.)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))" +
@@ -196,6 +207,7 @@ public class Inscription extends AppCompatActivity {
         }
     }
 
+    // Regarde si le password sont identique
     public boolean isValidPassWord(String p1, String p2){
         if(p1.equals(p2)){
             return true;

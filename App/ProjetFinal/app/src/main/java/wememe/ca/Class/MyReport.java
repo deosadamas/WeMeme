@@ -5,10 +5,10 @@ package wememe.ca.Class;
  */
 
 public class MyReport {
-
+    //Variable de la classe MyReport
     private int id,R_1,R_2,R_3,R_4;
 
-
+    //Constructeur de la classe MyReport
     public MyReport(int id, int r_1, int r_2, int r_3, int r_4) {
         this.id = id;
         R_1 = r_1;
@@ -16,7 +16,7 @@ public class MyReport {
         R_3 = r_3;
         R_4 = r_4;
     }
-
+    //Methode pour get les paramettre de la classe MyReport
     public int getId() {
         return id;
     }

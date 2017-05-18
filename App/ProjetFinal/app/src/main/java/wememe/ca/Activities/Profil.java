@@ -109,6 +109,7 @@ public class Profil extends Fragment implements SwipeRefreshLayout.OnRefreshList
         load_data_from_server(view.getContext());
         load_data__profil(view.getContext());
 
+        // Verifie si c'est l'utilisateur qui va sur sont profil si oui on afficher l'option que celui-ci peux modifier sont profil
         if(!(MainActivity.id_user_post == MainActivity.utilisateur.getId()))
         {
             txtModfierProfil.setVisibility(View.GONE);

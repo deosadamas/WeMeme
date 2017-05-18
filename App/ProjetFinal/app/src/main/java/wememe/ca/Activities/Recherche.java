@@ -38,8 +38,8 @@ import wememe.ca.R;
  */
 public class Recherche extends ListFragment implements android.widget.SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
 
-    List<String> listeRecherche;
-    List<RechercherProfil> listeRechercheToute;
+    List<String> listeRecherche;// Liste des noms
+    List<RechercherProfil> listeRechercheToute;// Liste des noms et id
     private ArrayAdapter<String> mAdapter;
     private Context mContext;
     ListView listView;
@@ -54,7 +54,7 @@ public class Recherche extends ListFragment implements android.widget.SearchView
         mContext = getActivity();
         setHasOptionsMenu(true);
         activity = (MainActivity) getActivity();
-        dataProfil();
+        dataProfil();//Load et ajouter dans la liste les informations du serveurs
     }
 
 
@@ -72,6 +72,8 @@ public class Recherche extends ListFragment implements android.widget.SearchView
     public void onListItemClick(ListView listView, View v, int position, long id) {
         String item = (String) listView.getAdapter().getItem(position);
         activity.changerFragment(new Profil());
+        // Cette boucle va simplement regarde sur personne a cliquer l'utilisateur
+        // Et va faire aller sur le fragement Profil selon la personne qu'il a cliquer dessus
         for(RechercherProfil profil : listeRechercheToute)
         {
             if(profil.getUsername().equals(item))
@@ -91,16 +93,16 @@ public class Recherche extends ListFragment implements android.widget.SearchView
         void OnItem1SelectedListener(String item);
     }
 
+    //Cette methode nous affiche en haut (Menu) la barre de recherche
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.search_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(this);
-        searchView.setQueryHint("Search");
+        searchView.setQueryHint("Recherche");//Le hint du SearchView
 
         super.onCreateOptionsMenu(menu, inflater);
-
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -119,13 +121,17 @@ public class Recherche extends ListFragment implements android.widget.SearchView
         return true;
     }
 
+    //Cette methode Override qui va faire tout le processus de ce fragment pour trier l'information
+    // selon ce que l'utilisateur a ecris dans la barre de recherche
     @Override
     public boolean onQueryTextChange(String newText) {
+        //Regarde si le texte n'est pas vide
         if (newText == null || newText.trim().isEmpty()) {
             resetSearch();
             return false;
         }
-
+        //Va simplement parcourir la listeRecherche (Les listes qui contient tout les noms de la base de donnes)
+        // Va la trier en fonction de ce que l'utilisateur a ecris
         List<String> filteredValues = new ArrayList<String>(listeRecherche);
         for (String value : listeRecherche) {
             if (!value.toLowerCase().contains(newText.toLowerCase())) {
@@ -133,15 +139,18 @@ public class Recherche extends ListFragment implements android.widget.SearchView
             }
         }
 
+        //Va refresh ou update la liste
         mAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, filteredValues);
         listView.setAdapter(mAdapter);
         return false;
     }
+    //Reset a 0 (Recommence au debut) la liste
     public void resetSearch() {
         mAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, listeRecherche);
         listView.setAdapter(mAdapter);
     }
 
+    // Initialisation des listes
     private void populateList(){
         listeRecherche = new ArrayList<>();
         listeRechercheToute = new ArrayList<>();
@@ -158,8 +167,8 @@ public class Recherche extends ListFragment implements android.widget.SearchView
 
                 OkHttpClient client = new OkHttpClient();
                 Request request = new Request.Builder()
-                        .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=recherche")// Avec la requete php id descend de -3
-                        .build();                                                                // A chaque fois que la requete est appeller
+                        .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=recherche")// La requete pour tout les information des personnes
+                        .build();
                 try {
                     Response response = client.newCall(request).execute();
 
@@ -169,7 +178,7 @@ public class Recherche extends ListFragment implements android.widget.SearchView
 
                         JSONObject object = array.getJSONObject(i);
                         RechercherProfil rechercherProfil = new RechercherProfil(object.getInt("id"), object.getString("username"));
-                        listeRecherche.add(object.getString("username"));
+                        listeRecherche.add(object.getString("username")); // Ajoute simplement le nom pour etre capable de tirier par la suite
                         listeRechercheToute.add(rechercherProfil);
                     }
                 }catch (IOException e) {

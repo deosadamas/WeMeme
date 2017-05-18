@@ -69,15 +69,7 @@ public class Tendances extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(this);
-        //////////////////////////////////
-        /////////////////////////////////
-        /////////////////////////////////
-        /////////////////////////////////
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);//MODIFIER
-        /////////////////////////////////
-        /////////////////////////////////
-        /////////////////////////////////
-        /////////////////////////////////
 
 
         gridLayoutManager = new GridLayoutManager(view.getContext(), 1);

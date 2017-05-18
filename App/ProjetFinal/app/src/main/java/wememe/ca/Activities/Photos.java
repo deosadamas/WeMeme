@@ -40,7 +40,6 @@ public class Photos extends Fragment {
             public void onClick(View view) {
                 MainActivity activity = (MainActivity)getActivity();
                 activity.showFileChooser();
-                //  image.setImageBitmap(activity.bitmap);
             }
         });
         btnUpload.setOnClickListener(new View.OnClickListener() {

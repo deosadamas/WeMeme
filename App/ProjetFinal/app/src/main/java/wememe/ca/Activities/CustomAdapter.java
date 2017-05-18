@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -31,9 +30,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     //Declaration des variables
     private Context context;
-    private List<Data_Feed> datameme_list;
-    private List<DataLike> dataLike_list;
-    private List<Like> like_list;
+    private List<Data_Feed> datameme_list; // Liste qui contient tout les Memes
+    private List<DataLike> dataLike_list; // Liste qui contient toute la table de like selon l'id de l'utilisateur
+    private List<Like> like_list; // Liste qui contient le nombre de like selon le Meme en question
     private int id;
     private MainActivity activity;
     Utilisateur utilisateur;
@@ -65,6 +64,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
+        //Ce thread handler remplace simplement le doubleclick
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -77,15 +77,20 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         //Selon la position  du onBindViewHolder
         // On recherche un objec selon la postion du onBinViewHolder et on lui
         // assigne son type selon les choses qu'ont veux
-        id = datameme_list.get(position).getId();
-        holder.Option.setImageResource(R.drawable.troispoints);
-        holder.nom.setText(datameme_list.get(position).getNom());
+        id = datameme_list.get(position).getId(); // Id du meme
+        holder.Option.setImageResource(R.drawable.troispoints);// L'image en haut a droite de la cardView l'option Report un Meme
+        holder.nom.setText(datameme_list.get(position).getNom());// Le nom de la personne qui a poster ce Meme
+
+        //Simplement lors des test on regarder si les memes est dans le bon ordre et on regarde si
+        // le like etait a la bonne place.
         holder.id_user_post.setText(String.valueOf(datameme_list.get(position).getId_user_post()));
-        holder.like.setText(String.valueOf(like_list.get(position).getLike()));
         holder.ID.setText(String.valueOf(datameme_list.get(position).getId()));
-        Glide.with(context).load(datameme_list.get(position).getImage_link()).into(holder.imagePhoto);
-        Glide.with(context).load(datameme_list.get(position).getImage_link()).into(holder.imageView);
-        Glide.with(context).load(R.drawable.nonelike).into(holder.Like);
+
+        holder.like.setText(String.valueOf(like_list.get(position).getLike()));// Le nombre de like du Meme
+        // Le Glide est une librairie https://inthecheesefactory.com/blog/get-to-know-glide-recommended-by-google/en
+        Glide.with(context).load(datameme_list.get(position).getImage_link()).into(holder.imagePhoto);//L'image de photo de la personne qui a poster le Meme
+        Glide.with(context).load(datameme_list.get(position).getImage_link()).into(holder.imageView);// L'image du Meme
+        Glide.with(context).load(R.drawable.nonelike).into(holder.Like);// l'image du like R.drawable.nonelike est simplement ceux qui sont pas like
 
         //Cette boucle parcoure la liste dataLike
         // Celle-ci a un condition si le meme est égale a l'id de la postion de la liste (datameme_list) ET
@@ -226,18 +231,22 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             }
         });
 
+        //Lorsque que l'utilisateur clique sur les trois-petit-point
         holder.Option.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              int id_meme = datameme_list.get(position).getId();
-                activity.StartReport(id_meme);
+                int id_meme = datameme_list.get(position).getId();
+                activity.StartReport(id_meme);//On commence l'activity report et en paramettre on prends l'id du meme en question
             }
         });
 
+        //Lorsqu'on clique sur la photo (image) du meme
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Regarde si la personne a bien doubleClick sur l'image
                 if (doubleClick){
+                    //On appelle la methode static de l'activity de BigImage et on met en paramettre le String de l'image
                     BigImage.getImage(datameme_list.get(position).getImage_link());
                     Intent myIntent = new Intent(context, BigImage.class);
                     context.startActivity(myIntent);

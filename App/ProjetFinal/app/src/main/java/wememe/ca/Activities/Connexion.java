@@ -37,12 +37,12 @@ public class Connexion extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connexion);
 
-        userConnexion = (EditText)findViewById(R.id.fieldUserConnexion);
-        mdpConnexion = (EditText)findViewById(R.id.fieldMDPConnexion);
+        //On Get le texte dans les EditText
+        userConnexion = (EditText)findViewById(R.id.fieldUserConnexion); //Le nom ou email de l'utilisateur
+        mdpConnexion = (EditText)findViewById(R.id.fieldMDPConnexion); // Le mot de passe de l'utilisateur
 
         //Une condition qui vérifie si l'utilisateur est déja connecter
         if(SaveSharedPreference.getUserName(Connexion.this).length() == 0 && SaveSharedPreference.getUserPassword(Connexion.this).length()== 0)
-
         {
             //Initialisation des variables
             userConnexion.getBackground().setColorFilter(getResources().getColor(R.color.colorTexte), PorterDuff.Mode.SRC_IN);
@@ -98,6 +98,10 @@ public class Connexion extends AppCompatActivity {
                                 //Varibales
                                 JSONObject jsonResponse = new JSONObject(response);
                                 boolean success = jsonResponse.getBoolean("success");
+                                //Le validationNomNull et validationEmailNull sont nommer Null a la fin car
+                                // lors de la connection on donne 2 choix a l'utilisateur soit il ce connecte avec
+                                // son nom ou par son email donc si c'est par son nom le email va etre null donc on
+                                // s'assure que le validationEmail reste null
                                 Boolean validationNomNull = jsonResponse.getBoolean("validationNomNull");
                                 Boolean validationEmailNull = jsonResponse.getBoolean("validationEmailNull");
                                 Boolean validationEmail = null;
@@ -113,37 +117,47 @@ public class Connexion extends AppCompatActivity {
                                     validationNom = jsonResponse.getBoolean("validationNom");
                                 }
                                 //
-                                //Verifier si la connexion est valide
+                                //Verifier si la connexion du compte est valide
                                 if(success)
                                 {
+                                    //On verifie si le boolean validationEmail n'est pas null Si il est null sa veut dire que l'utilisateur a
+                                    // entrer son nom pour ce connecter.
                                     if(validationEmail != null)
                                     {
+                                        //Cette condition verifie si l'utilisateur se connecte pour la premiere fois
+                                        // Si oui, on ouvre une nouvelle activity pour verifier son compte
+                                        // Lors de l'inscription on envoit un code par email
                                         if(validationEmail)
                                         {
                                             Intent intent = new Intent(Connexion.this, VerificationCompte.class);
-                                            SaveSharedPreference.setUserName(getApplication(), userText);
+                                            SaveSharedPreference.setUserName(getApplication(), userText);//Sauvegarde dans l'application sont username
+                                            SaveSharedPreference.setPassword(getApplication(), mdpText);//Sauvegarde dans l'application sont password
                                             startActivity(intent);
                                         }
-                                        else if(!validationEmail)
+                                        else if(!validationEmail)//Son compte a deja ete confirmer et verifier
                                         {
                                             Intent intent3 = new Intent(Connexion.this, MainActivity.class);
-                                            SaveSharedPreference.setUserName(getApplication(), userText);
-                                            SaveSharedPreference.setPassword(getApplication(), mdpText);
+                                            SaveSharedPreference.setUserName(getApplication(), userText);//Sauvegarde dans l'application sont username
+                                            SaveSharedPreference.setPassword(getApplication(), mdpText);//Sauvegarde dans l'application sont password
                                             startActivity(intent3);
                                         }
                                     }
                                     if(validationNom != null)
                                     {
+                                        //Cette condition verifie si l'utilisateur se connecte pour la premiere fois
+                                        // Si oui, on ouvre une nouvelle activity pour verifier son compte
+                                        // Lors de l'inscription on envoit un code par email
                                         if(validationNom)
                                         {
                                             Intent intent = new Intent(Connexion.this, VerificationCompte.class);
-                                            SaveSharedPreference.setUserName(getApplication(), userText);
+                                            SaveSharedPreference.setUserName(getApplication(), userText);//Sauvegarde dans l'application sont username
+                                            SaveSharedPreference.setPassword(getApplication(), mdpText);//Sauvegarde dans l'application sont password
                                             startActivity(intent);
                                         }
-                                        else if(!validationNom)
+                                        else if(!validationNom)//Son compte a deja ete confirmer et verifier
                                         {
-                                            SaveSharedPreference.setUserName(getApplication(), userText);
-                                            SaveSharedPreference.setPassword(getApplication(), mdpText);
+                                            SaveSharedPreference.setUserName(getApplication(), userText);//Sauvegarde dans l'application sont username
+                                            SaveSharedPreference.setPassword(getApplication(), mdpText);//Sauvegarde dans l'application sont password
                                             Intent intent3 = new Intent(Connexion.this, Splash.class);
                                             startActivity(intent3);
                                         }
@@ -162,7 +176,6 @@ public class Connexion extends AppCompatActivity {
                         }
                     };
                     // Une requete qui vérifie si les informations de la personne sont correcte
-
                     LoginRequest loginRequest = new LoginRequest(userText, mdpText, responseListener);
                     RequestQueue queue = Volley.newRequestQueue(Connexion.this);
                     queue.add(loginRequest);
@@ -171,7 +184,7 @@ public class Connexion extends AppCompatActivity {
         }
         else
         {
-                //Ajouter l'information nécessaire dans la prochaine activité pour sauvegarder les informations de l'utilisateur
+                // Les informations de l'utilisateur sont deja sauvegarder dans l'application le SaveSharedPreference du username et du password
                 Intent intent = new Intent(Connexion.this, Splash.class);
                 startActivity(intent);
         }

@@ -65,43 +65,24 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_viewFeed);
 
+        //Lorsque que l'utilisateur veut refresh le recyclerView
+        // On doit implements SwipeRefreshLayout.OnRefreshListener ce qui va nous faire un fonction onRefresh()
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(this);
-        //////////////////////////////////
-        /////////////////////////////////
-        /////////////////////////////////
-        /////////////////////////////////
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);//MODIFIER
-        /////////////////////////////////
-        /////////////////////////////////
-        /////////////////////////////////
-        /////////////////////////////////
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
 
 
         gridLayoutManager = new GridLayoutManager(view.getContext(), 1);
         recyclerView.setLayoutManager(gridLayoutManager);
         activity = (MainActivity) getActivity();
         connectionDectetor = new ConnectionDectetor(activity);
-        // La premiere fois que ce fragement est utiliser elle va chercher l'id le plus haut dans la table Feed
-        // La deuxieme fois que ce fragement est utiliser elle relance la requete pour aller chercher encore l'id le plus haut
-        // Simplement rafraichit si il y a de nouvelle information dans la table Feed
+        //Va aller chercher tout les memes des personnes que l'utlisateur follow
+        // Pour cette raison qu'ont met en paramettre l'id de l'utilisateur
         load_data_from_server(MainActivity.utilisateur.getId());
 
         //Dans le Custom adapter, celui-ci a besoin du context du layout feed, des 3 listes d'information et de le contexte de la MainActivity
         adapter = new CustomAdapter(view.getContext(),data_list, dataLike_list, like_list, activity);
         recyclerView.setAdapter(adapter);
-
-        // A chaque fois que la personne scroll down et atteind le dernier element afficher
-        // la methode load_data_from_server est alors enclencher pour aller checher d'autre element
-/*        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
-                if (gridLayoutManager.findLastCompletelyVisibleItemPosition() == data_list.size() - 1) {
-                    load_data_from_server(data_list.get(data_list.size() - 1).getId());
-                }
-            }
-        });*/
 
         initSwipe(recyclerView, view);
 
@@ -122,8 +103,8 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
                     OkHttpClient client = new OkHttpClient();
                     Request request = new Request.Builder()
-                            .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=feed_follow&id=" + id)// Avec la requete php id descend de -3
-                            .build();                                                                // A chaque fois que la requete est appeller
+                            .url("http://wememe.ca/mobile_app/index.php?prefix=json&p=feed_follow&id=" + id)// id de l'utilisateur
+                            .build();
                     try {
                         Response response = client.newCall(request).execute();
 
@@ -198,7 +179,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
     //Cette method rafraichit les donnees du serveur va chercher les nouvelle information s'il y en a
     public void onRefresh() {
-        if(connectionDectetor.isConnected())
+        if(connectionDectetor.isConnected())// Regarde si l'utilisateur est connecter a internet
         {
             //Un thread qui force un delai de 1,5 seconde pour que cette méthode soit utiliser a nouveau
             swipeRefreshLayout.setRefreshing(true);
@@ -222,7 +203,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         }else
         {
             swipeRefreshLayout.setRefreshing(false);
-            activity.showSnack();
+            activity.showSnack();// On affiche la snackBar pour montrer que l'utilisateur n'est pas connecter a Internet
         }
     }
 }

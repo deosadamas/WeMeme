@@ -49,23 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private float x1,x2;
     static final int MIN_DISTANCE = 150;
     public CoordinatorLayout coordinatorLayout;
-    /////////////////////////////
-    ////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////
     private Fragment fragment = new Photos();
-    ////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////
-
-
-    public static final String UPLOAD_URL = "http://wememe.ca/image_serveur/image_upload.php";
-    public static final String UPLOAD_KEY = "image";
-
     private int PICK_IMAGE_REQUEST = 1;
 
     ConnectionDectetor connectionDectetor;
@@ -88,19 +72,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorlayout);
-        connectionDectetor = new ConnectionDectetor(this);
-        utilisateur = Splash.utilisateur;
+
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorlayout);//Simplement pour la snackbar a etre afficher
+        connectionDectetor = new ConnectionDectetor(this); // Classe pour verifier la connection Internet
+        utilisateur = Splash.utilisateur; // Assigner l'utilisateur du splash a l'utilisateur dans la variable static
         bottomBar = (BottomBar)findViewById(R.id.bottomBar);
-        load_data_from_server();
+
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
                 switch (tabId){
                     case R.id.tab_feed:
-                        if(connectionDectetor.isConnected())
+                        if(connectionDectetor.isConnected())// Si l'utilisateur est connecter a internet
                         {
-                            load_data_from_server();
                             bottomBar.setActiveTabColor(getResources().getColor(R.color.colorAccent));
                             menu = true;
                             changerFragment(new Feed());
@@ -115,14 +99,14 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.tab_tendances:
                         menu = true;
+                        load_data_from_server();//Va chercher id_max pour l'utiliser ensuite dans le fragement Tendances
                         changerFragment(new Tendances());
                         break;
                     case R.id.tab_profil:
-                        if(connectionDectetor.isConnected())
+                        if(connectionDectetor.isConnected())// Si l'utilisateur est connecter a internet
                         {
-                            load_data_from_server();
                             int id_utilisateur = utilisateur.getId();
-                            id_user_post = id_utilisateur;
+                            id_user_post = id_utilisateur;// Simplent si c'est l'utilisateur qui veut voir son profil
                             menu = true;
                             changerFragment(new Profil());
                         }
@@ -172,20 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
             filePath = data.getData();
             try {
-                ////////////////////////////////////////////////////////////////
-                ////////////////////////////////////////////////////////////////
-                ////////////////////////////////////////////////////////////////
-                ////////////////////////////////////////////////////////////////
-                ////////////////////////////////////////////////////////////////
-                ////////////////////////////////////////////////////////////////
                 imageView = (ImageView) fragment.getView().findViewById(R.id.imageGallery);
-                ////////////////////////////////////////////////////////////////
-                ////////////////////////////////////////////////////////////////
-                ////////////////////////////////////////////////////////////////
-                ////////////////////////////////////////////////////////////////
-                ////////////////////////////////////////////////////////////////
-                ////////////////////////////////////////////////////////////////
-                ////////////////////////////////////////////////////////////////
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 bitmapResize = bitmap.createScaledBitmap(bitmap, 1000, 1000, true);
                 imageView.setImageBitmap(bitmapResize);
@@ -229,13 +200,13 @@ public class MainActivity extends AppCompatActivity {
 
                 HashMap<String,String> data = new HashMap<>();
 
-                data.put(UPLOAD_KEY, uploadImage);
+                data.put("image", uploadImage);
                 data.put("sujet", "");
                 data.put("nom", utilisateur.getUsername());
                 data.put("description", "");
                 data.put("$id_user_post", String.valueOf(utilisateur.getId()));
                 data.put("$id_user_photo", utilisateur.getProfilpic());
-                String result = rh.sendPostRequest(UPLOAD_URL,data);
+                String result = rh.sendPostRequest("http://wememe.ca/image_serveur/image_upload.php",data);
                 return result;
             }
         }
@@ -319,6 +290,7 @@ public class MainActivity extends AppCompatActivity {
         return bottomBar;
     }
 
+    // Cette fonction va simplement aller chercher l'id Max de la table Feed_test pour le fragment Tendance
     public int load_data_from_server() {
         AsyncTask<Integer, Integer, Integer> task = new AsyncTask<Integer, Integer, Integer>() {
             @Override
@@ -331,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
                     okhttp3.Response response = client.newCall(request).execute();
                     JSONArray array = new JSONArray(response.body().string());
                     JSONObject object = array.getJSONObject(0);
-                    id_max = object.getInt("MAX(id)")+1;
+                    id_max = object.getInt("MAX(id)")+1; // Va l'assigner dans une variable static id_max
                 }catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -344,20 +316,22 @@ public class MainActivity extends AppCompatActivity {
         return id_max;
     }
 
+    //Commencer l'activty du Report et qui passe l'id en extra
     public void StartReport(int id){
         Intent intent = new Intent(MainActivity.this, Report.class);
         intent.putExtra("id",id);
         startActivity(intent);
     }
 
+    // Commencer l'activty du Profil a modifier
     public void StartProfilModifier(){
         Intent intent = new Intent(MainActivity.this, ProfilModifier.class);
         startActivity(intent);
     }
 
 
+    // La snackbar qui affiche que l'utilisateur n'est pas connecter a internet
     public void showSnack() {
-        /*bottomBar.setVisibility(View.INVISIBLE);*/
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

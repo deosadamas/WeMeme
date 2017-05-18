@@ -23,6 +23,9 @@ import wememe.ca.Requetes.CodeRequest;
 
 public class VerificationCompte extends AppCompatActivity {
 
+    /*
+        Cette acitvity va simplement regarder le code dans le compte de l'utilisateur si corresponds a celui qui vient d'ecrire
+    */
     EditText codeText;
     View viewSnackbar;
     int code;
@@ -42,13 +45,14 @@ public class VerificationCompte extends AppCompatActivity {
                 viewSnackbar = view;
                 code = Integer.parseInt(codeText.getText().toString());
                 RequestQueue queue = Volley.newRequestQueue(VerificationCompte.this);
+                //Requete envoyer au serveur pour regarder si le code est identique
                 CodeRequest codeRequest = new CodeRequest(SaveSharedPreference.getUserName(getApplication()), code, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
-                            if(success)
+                            if(success) // Le code est bien idenditque au passa a la prochaine activity
                             {
                                 Snackbar snackbar;
                                 snackbar = Snackbar.make(viewSnackbar, "Le code est valider", Snackbar.LENGTH_LONG);
@@ -63,7 +67,7 @@ public class VerificationCompte extends AppCompatActivity {
                                     }
                                 }, 2000);
                             }
-                            else
+                            else// Le code est invalide il doit recommencer
                             {
                                 Snackbar snackbar;
                                 snackbar = Snackbar.make(viewSnackbar, "Erreur : Code invalide", Snackbar.LENGTH_LONG);
