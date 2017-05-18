@@ -157,20 +157,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        // Condition qui s'assure que l'image a bien ete selection
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
-            filePath = data.getData();
+            filePath = data.getData(); //Le data de l'image choisi
             try {
                 imageView = (ImageView) fragment.getView().findViewById(R.id.imageGallery);
+                //Converti l'image data en bitmap
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                // Resize image avant de l'envoyer au serveur
                 bitmapResize = bitmap.createScaledBitmap(bitmap, 1000, 1000, true);
-                imageView.setImageBitmap(bitmapResize);
+                imageView.setImageBitmap(bitmapResize);//Set l'image dans ImageViews
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    //Converti l'image en String
     public String getStringImage(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG, 100, baos);
@@ -179,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
         return encodedImage;
     }
 
+    //Upload l'image au serveur
     public void uploadImage(){
         class UploadImage extends AsyncTask<Bitmap,Void,String> {
 
@@ -188,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+                //Lorsque que c'est methode est appeller
                 loading = ProgressDialog.show(MainActivity.this, "Uploading...", null,true,true);
             }
 
@@ -198,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
             }
 
+            //Methode qui prendre les paramettre et les envoit au ficher php
             @Override
             protected String doInBackground(Bitmap... params) {
                 Bitmap bitmap = params[0];
@@ -219,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
         ui.execute(bitmapResize);
     }
 
+    //Cette methode ouvre la gallerie du telephone
     public void showFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
