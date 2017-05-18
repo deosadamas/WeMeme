@@ -45,7 +45,7 @@ public class ProfilModifier extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profil_modifier);
-
+        //Variables
         password = (EditText) findViewById(R.id.txt_Pass_Modif_Profil);
         password1 = (EditText) findViewById(R.id.txt_Pass_Modif_Profil2);
         btnEnregistrer= (Button)findViewById(R.id.btn_Enregistre_Modi_Profil);
@@ -69,10 +69,10 @@ public class ProfilModifier extends AppCompatActivity {
         btnEnregistrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //Verifier la correspandance des mots de passes
+                //Ensuite, utiliser la requete pour changer le mot de passe du compte
                 if(password.getText().toString().equals(password1.getText().toString()))
                 {
-
                     ModificationProfilRequest modificationProfilRequest = new ModificationProfilRequest(MainActivity.utilisateur.getId(), password.getText().toString(), new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -91,7 +91,6 @@ public class ProfilModifier extends AppCompatActivity {
                 }
             }
         });
-
     }
 
 
@@ -99,6 +98,7 @@ public class ProfilModifier extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //Verifier si la requete s'est bien effectué, ensuite changer l'image de la photo de profil
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             filePath = data.getData();
@@ -139,6 +139,7 @@ public class ProfilModifier extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
             }
 
+            //Gérer la requete dans le background de l'utilisateur
             @Override
             protected String doInBackground(Bitmap... params) {
                 Bitmap bitmap = params[0];

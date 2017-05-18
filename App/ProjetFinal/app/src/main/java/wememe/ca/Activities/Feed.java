@@ -84,7 +84,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         adapter = new CustomAdapter(view.getContext(),data_list, dataLike_list, like_list, activity);
         recyclerView.setAdapter(adapter);
 
-        initSwipe(recyclerView, view);
+        initSwipe(recyclerView);
 
         return view;
 
@@ -155,7 +155,8 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
             task.execute(id);//Execute la asynctaks
     }
 
-    private void initSwipe(RecyclerView recyclerView, final View view){
+    private void initSwipe(RecyclerView recyclerView){
+        //ItemTouchHelper.SimpleCallback est un enballage qui retien les mouvements fait par l'utilisateur
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
             @Override
@@ -163,6 +164,9 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 return false;
             }
 
+            //La methode onSwiped definit si l'utilisateur fait un swipe
+            //Ensuite, l'emballage ItemTouchHelper.SimpleCallback detecte le mouvement qui a été swipe (RIGHT OR LEFT)
+            //Ensuite on change de tab
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT){

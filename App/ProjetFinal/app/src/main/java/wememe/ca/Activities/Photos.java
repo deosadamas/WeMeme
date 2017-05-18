@@ -23,18 +23,19 @@ public class Photos extends Fragment {
     View view;
 
     public Photos() {
-        // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        //Variables
         view = inflater.inflate(R.layout.fragment_photo, container, false);
         btnGallery = (Button)view.findViewById(R.id.btnGallery);
         btnUpload = (Button)view.findViewById(R.id.btnUpload);
         edtDescription = (EditText)view.findViewById(R.id.fieldDescription);
         edtDescription.getBackground().setColorFilter(getResources().getColor(R.color.colorTexte), PorterDuff.Mode.SRC_IN);
+        //Le boutton gallery sert a appeller la methode showFileChooser de la mainActivity pour montrer sa gallerie de photo
+        //à l'utilisateur
         btnGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -42,6 +43,7 @@ public class Photos extends Fragment {
                 activity.showFileChooser();
             }
         });
+        //le button upload appelle uploadImage pour envoyer une image au serveur
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,6 +51,7 @@ public class Photos extends Fragment {
                 activity.uploadImage();
             }
         });
+        //Changer la couleur du texte box selon s'il est selectionné ou pas
         edtDescription.setOnFocusChangeListener(new View.OnFocusChangeListener()
         {
             @Override

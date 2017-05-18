@@ -46,7 +46,10 @@ import wememe.ca.R;
 
 public class MainActivity extends AppCompatActivity {
 
+    //Les x representent la position des click de l'utilisateur(selon l'axe des abscisses) sur l'ecran
     private float x1,x2;
+    //MIN_DISTANCE represente la distance minimale qui doit séparer les deux x pour que le mouvement soit
+    //considéré comme un swipe
     static final int MIN_DISTANCE = 150;
     public CoordinatorLayout coordinatorLayout;
     private Fragment fragment = new Photos();
@@ -124,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
         bottomBar.selectTabAtPosition(0);
     }
 
+    //Cette fonction sert a changer le fragment a afficher
     public void changerFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -137,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Fermer l'application quand on back, pour ne pas aller a l'activity connexion
     @Override
     public void onBackPressed() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -234,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (Math.abs(deltaX) > MIN_DISTANCE)
                 {
-                    // Left to Right swipe action
+                    // Left to Right swipe selon la position de la bottombar
                     if (x2 > x1)
                     {
                         if (bottomBar.getCurrentTabPosition() == 1){
@@ -255,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 
-                    // Right to left swipe action
+                    // Right to left swipe selon la position de la bottombar
                     else
                     {
                         if (bottomBar.getCurrentTabPosition() == 0){
@@ -276,10 +281,6 @@ public class MainActivity extends AppCompatActivity {
                             bottomBar.selectTabAtPosition(4);
                         }
                     }
-                }
-                else
-                {
-                    // consider as something else - a screen tap for example
                 }
                 break;
         }
